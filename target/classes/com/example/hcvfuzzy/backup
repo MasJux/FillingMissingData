@@ -1,0 +1,145 @@
+package com.example.hcvfuzzy;
+
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+public final class loadDataBase extends TableView<List<SimpleObjectProperty<Object>>> {
+    private List<List<SimpleObjectProperty<Object>>> data;
+    public loadDataBase(String delimiter, File file) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get(file.toURI()));
+        String[] firstRow = lines.get(0).split(delimiter);
+
+        for (String columnName : firstRow) {
+            TableColumn<List<SimpleObjectProperty<Object>>, Object> column = new TableColumn<>(columnName.replace("\"", ""));
+            this.getColumns().add(column);
+
+            column.setCellValueFactory(cellDataFeatures -> {
+                List<SimpleObjectProperty<Object>> values = cellDataFeatures.getValue();
+                int columnIndex = cellDataFeatures.getTableView().getColumns().indexOf(cellDataFeatures.getTableColumn());
+                if (columnIndex < values.size()) {
+                    return values.get(columnIndex);
+                } else {
+                    return new SimpleObjectProperty<>("");
+                }
+            });
+
+            loadData(lines, delimiter);
+            this.setItems(FXCollections.observableArrayList(data));
+            this.getItems().remove(0);
+            setEditable(true);
+            setPrefWidth(1200);
+            setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            //printData();
+        }
+    }
+    private void loadData(List<String> lines, String delimiter) {
+        data = FXCollections.observableArrayList(); // Zmiana tutaj
+
+        for (int i = 1; i < lines.size(); i++) {
+            String values = lines.get(i).replaceAll("\"", "");
+            String[] cells = values.split(delimiter);
+
+            List<SimpleObjectProperty<Object>> row = FXCollections.observableArrayList();
+            for (String cell : cells) {
+                row.add(new SimpleObjectProperty<>(cell));
+            }
+
+            data.add(row);
+        }
+    }
+    public List<List<SimpleObjectProperty<Object>>> getData() {
+        return data;
+    }
+    public void printData() {
+        List<List<SimpleObjectProperty<Object>>> data = this.getItems();
+
+        for (List<SimpleObjectProperty<Object>> row : data) {
+            for (SimpleObjectProperty<Object> cell : row) {
+                System.out.print(cell.getValue() + "\t");  // Wypisanie wartości komórki na konsolę
+            }
+            System.out.println();  // Nowa linia dla każdego wiersza
+        }
+    }
+
+}
+----------------------
+
+public class NavigationController implements Initializable {
+    @FXML
+    private BorderPane borderPane;
+    @FXML
+    private AnchorPane anchorPane;
+    File file = new File("src/main/resources/mammographic.csv");
+    private loadDataBase tableView;
+
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb){
+        try {
+            tableView = new loadDataBase(",", file);
+            tableView.setEditable(true);
+            List<TableColumn<List<SimpleObjectProperty<Object>>, ?>> columns = tableView.getColumns();
+            System.out.println(columns);
+            anchorPane.getChildren().add(tableView);
+            AnchorPane.setLeftAnchor(tableView, (anchorPane.getWidth() - tableView.getWidth()) / 2);
+            AnchorPane.setRightAnchor(tableView, (anchorPane.getWidth() - tableView.getWidth()) / 2);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @FXML
+    private void home(MouseEvent event){
+        borderPane.setCenter(anchorPane);
+    }
+    @FXML
+    private void page1(MouseEvent event){
+        loadPane("page1");
+    }
+    private void loadPane(String page){
+        Parent root = null;
+
+        try{
+            root = FXMLLoader.load(getClass().getResource(page+".fxml"));
+        }catch(IOException ex){
+            Logger.getLogger(NavigationController.class.getName()).log(Level.SEVERE,null,ex);
+        }
+
+        borderPane.setCenter(root);
+    }
+    private loadDataBase createCSVTableView() {
+        try {
+            if (file != null) {
+                return new loadDataBase(",", file);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    @FXML
+    private void editData(MouseEvent event) throws IOException {
+        List<List<SimpleObjectProperty<Object>>> data = tableView.getData();
+
+        // Teraz możesz przetwarzać dane z tabeli, np.:
+        for (List<SimpleObjectProperty<Object>> row : data) {
+            for (SimpleObjectProperty<Object> cell : row) {
+                // Przykładowa operacja na danych (możesz dostosować to do swoich potrzeb)
+                Object value = cell.getValue();
+                // Wykonaj obliczenia lub inne operacje na wartościach
+                System.out.print(value+" ");
+            }
+        }
+    }
+}
