@@ -3,6 +3,7 @@ package com.example.hcvfuzzy;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -33,6 +34,11 @@ public class loadDataBase extends TableView<String> {
 
         setTableView(tableView);
 
+        TableColumn<Record, Integer> idColumn = new TableColumn<>("ID");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        tableView.getColumns().add(idColumn);
+
+        //ustawienie nazwy kolumny z pierwszego wiersza
         for (String columnName : firstRow) {
             TableColumn<Record, String> column = new TableColumn<>(columnName);
             tableView.getColumns().add(column);
@@ -42,15 +48,22 @@ public class loadDataBase extends TableView<String> {
         for (int i = 1; i < lines.size(); i++) {
             String[] cells = lines.get(i).split(delimiter);
             Record record = new Record(
+                    i,
                     cells[0],
                     cells[1],
                     cells[2],
                     cells[3],
                     cells[4],
-                    cells[5]
-            );
+                    cells[5],
+                    cells[6],
+                    cells[7],
+                    cells[8],
+                    cells[9]
+                    );
+
             dataList.add(record);
         }
+
         tableView.setItems(dataList);
         return tableView;
 

@@ -1,96 +1,164 @@
 package com.example.hcvfuzzy;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Record {
-    //Assume each record have 6 elements, all String
-    private SimpleStringProperty BIRADSassessment;
-    private SimpleStringProperty Age;
-    private SimpleStringProperty Shape;
-    private SimpleStringProperty Margin;
-    private SimpleStringProperty Density;
-    private SimpleStringProperty Severity;
+    private SimpleIntegerProperty ID;
+    private SimpleStringProperty Radius;
+    private SimpleStringProperty Texture;
+    private SimpleStringProperty Perimeter;
+    private SimpleStringProperty Area;
+    private SimpleStringProperty Smoothness;
+    private SimpleStringProperty Compactness;
+    private SimpleStringProperty Concavity;
+    private SimpleStringProperty ConcavePoints;
+    private SimpleStringProperty Symmetry;
+    private SimpleStringProperty FractalDimension;
 
-    public String getBIRADSassessment() {
-        return BIRADSassessment.get();
+    public int getID() {
+        return ID.get();
     }
 
-    public SimpleStringProperty BIRADSassessmentProperty() {
-        return BIRADSassessment;
+    public SimpleIntegerProperty IDProperty() {
+        return ID;
     }
 
-    public void setBIRADSassessment(String BIRADSassessment) {
-        this.BIRADSassessment.set(BIRADSassessment);
+    public void setID(int ID) {
+        this.ID.set(ID);
     }
 
-    public String getAge() {
-        return Age.get();
+    public String getRadius() {
+        return Radius.get();
     }
 
-    public SimpleStringProperty ageProperty() {
-        return Age;
+    public SimpleStringProperty radiusProperty() {
+        return Radius;
     }
 
-    public void setAge(String age) {
-        this.Age.set(age);
+    public void setRadius(String radius) {
+        this.Radius.set(radius);
     }
 
-    public String getShape() {
-        return Shape.get();
+    public String getTexture() {
+        return Texture.get();
     }
 
-    public SimpleStringProperty shapeProperty() {
-        return Shape;
+    public SimpleStringProperty textureProperty() {
+        return Texture;
     }
 
-    public void setShape(String shape) {
-        this.Shape.set(shape);
+    public void setTexture(String texture) {
+        this.Texture.set(texture);
     }
 
-    public String getMargin() {
-        return Margin.get();
+    public String getPerimeter() {
+        return Perimeter.get();
     }
 
-    public SimpleStringProperty marginProperty() {
-        return Margin;
+    public SimpleStringProperty perimeterProperty() {
+        return Perimeter;
     }
 
-    public void setMargin(String margin) {
-        this.Margin.set(margin);
+    public void setPerimeter(String perimeter) {
+        this.Perimeter.set(perimeter);
     }
 
-    public String getDensity() {
-        return Density.get();
+    public String getArea() {
+        return Area.get();
     }
 
-    public SimpleStringProperty densityProperty() {
-        return Density;
+    public SimpleStringProperty areaProperty() {
+        return Area;
     }
 
-    public void setDensity(String density) {
-        this.Density.set(density);
+    public void setArea(String area) {
+        this.Area.set(area);
     }
 
-    public String getSeverity() {
-        return Severity.get();
+    public String getSmoothness() {
+        return Smoothness.get();
     }
 
-    public SimpleStringProperty severityProperty() {
-        return Severity;
+    public SimpleStringProperty smoothnessProperty() {
+        return Smoothness;
     }
 
-    public void setSeverity(String severity) {
-        this.Severity.set(severity);
+    public void setSmoothness(String smoothness) {
+        this.Smoothness.set(smoothness);
     }
 
+    public String getCompactness() {
+        return Compactness.get();
+    }
 
+    public SimpleStringProperty compactnessProperty() {
+        return Compactness;
+    }
 
-    public Record(String BIRADSassessment, String age, String shape, String margin, String density, String severity) {
-        this.BIRADSassessment = new SimpleStringProperty(BIRADSassessment);
-        this.Age = new SimpleStringProperty(age);
-        this.Shape = new SimpleStringProperty(shape);
-        this.Margin = new SimpleStringProperty(margin);
-        this.Density = new SimpleStringProperty(density);
-        this.Severity = new SimpleStringProperty(severity);
+    public void setCompactness(String compactness) {
+        this.Compactness.set(compactness);
+    }
+
+    public String getConcavity() {
+        return Concavity.get();
+    }
+
+    public SimpleStringProperty concavityProperty() {
+        return Concavity;
+    }
+
+    public void setConcavity(String concavity) {
+        this.Concavity.set(concavity);
+    }
+
+    public String getConcavePoints() {
+        return ConcavePoints.get();
+    }
+
+    public SimpleStringProperty concavePointsProperty() {
+        return ConcavePoints;
+    }
+
+    public void setConcavePoints(String concavePoints) {
+        this.ConcavePoints.set(concavePoints);
+    }
+
+    public String getSymmetry() {
+        return Symmetry.get();
+    }
+
+    public SimpleStringProperty symmetryProperty() {
+        return Symmetry;
+    }
+
+    public void setSymmetry(String symmetry) {
+        this.Symmetry.set(symmetry);
+    }
+
+    public String getFractalDimension() {
+        return FractalDimension.get();
+    }
+
+    public SimpleStringProperty fractalDimensionProperty() {
+        return FractalDimension;
+    }
+
+    public void setFractalDimension(String fractalDimension) {
+        this.FractalDimension.set(fractalDimension);
+    }
+
+    public Record(int id,String radius, String texture, String perimeter, String area, String smoothness, String compactness, String concavity, String concavePoints, String symmetry, String fractalDimension) {
+        this.ID = new SimpleIntegerProperty(id);
+        this.Radius = new SimpleStringProperty(radius);
+        this.Texture = new SimpleStringProperty(texture);
+        this.Perimeter = new SimpleStringProperty(perimeter);
+        this.Area = new SimpleStringProperty(area);
+        this.Smoothness = new SimpleStringProperty(smoothness);
+        this.Compactness = new SimpleStringProperty(compactness);
+        this.Concavity = new SimpleStringProperty(concavity);
+        this.ConcavePoints = new SimpleStringProperty(concavePoints);
+        this.Symmetry = new SimpleStringProperty(symmetry);
+        this.FractalDimension = new SimpleStringProperty(fractalDimension);
     }
 }
