@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -21,16 +20,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class NavigationController implements Initializable {
+    loadDataBase dataBase = new loadDataBase();
+    TableView<Record> tableView;
+    File file = new File("src/main/resources/database/breastCancer.csv");
     @FXML
     private BorderPane borderPane;
     @FXML
     private AnchorPane anchorPane;
-    loadDataBase dataBase = new loadDataBase();
     private Record selectedRecord;
-    TableView<Record> tableView;
     private int id;
-    private String radius,texture,perimeter,area, smoothness,compactness,concavity,concavePoints,symmetry,fractalDimension;
-    File file = new File("src/main/resources/database/breastCancer.csv");
+    private String radius, texture, perimeter, area, smoothness, compactness, concavity, concavePoints, symmetry, fractalDimension;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -47,25 +46,37 @@ public class NavigationController implements Initializable {
             }
         });
     }
+
     @FXML
-    private void home(MouseEvent event){
+    private void home(MouseEvent event) {
         borderPane.setCenter(anchorPane);
     }
+
     @FXML
-    private void page1(MouseEvent event){
-        loadPane("page1");
+    private void deletingPane(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("deleting-pane.fxml"));
+            Parent root = loader.load();
+            DeletingCellsController controller = loader.getController();
+            controller.setTableView(tableView);
+            borderPane.setCenter(root);
+        } catch (IOException ex) {
+            Logger.getLogger(NavigationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    private void loadPane(String page){
+
+    private void loadPane(String page) {
         Parent root = null;
 
-        try{
-            root = FXMLLoader.load(getClass().getResource(page+".fxml"));
-        }catch(IOException ex){
-            Logger.getLogger(NavigationController.class.getName()).log(Level.SEVERE,null,ex);
+        try {
+            root = FXMLLoader.load(getClass().getResource(page + ".fxml"));
+        } catch (IOException ex) {
+            Logger.getLogger(NavigationController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         borderPane.setCenter(root);
     }
+
     private void loadData() {
         try {
             TableView<Record> createdTableView = dataBase.readCSV(file, ",");
@@ -74,6 +85,7 @@ public class NavigationController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void handleSelection(Record selectedRecord) throws IOException {
         this.selectedRecord = selectedRecord;
         id = selectedRecord.getID();
@@ -88,21 +100,22 @@ public class NavigationController implements Initializable {
         symmetry = selectedRecord.getSymmetry();
         fractalDimension = selectedRecord.getFractalDimension();
 
-        System.out.println("ID: "+id);
+        System.out.println("ID: " + id);
         System.out.println("Radius: " + radius);
         System.out.println("Texture: " + texture);
-        System.out.println("Perimeter: "+perimeter);
-        System.out.println("area: "+area);
-        System.out.println("smooth: "+smoothness);
-        System.out.println("compactness: "+compactness);
-        System.out.println("concavity: "+concavity);
-        System.out.println("concave Points: "+concavePoints);
-        System.out.println("symmetry: "+symmetry);
-        System.out.println("fractal: "+fractalDimension);
+        System.out.println("Perimeter: " + perimeter);
+        System.out.println("area: " + area);
+        System.out.println("smooth: " + smoothness);
+        System.out.println("compactness: " + compactness);
+        System.out.println("concavity: " + concavity);
+        System.out.println("concave Points: " + concavePoints);
+        System.out.println("symmetry: " + symmetry);
+        System.out.println("fractal: " + fractalDimension);
     }
+
     @FXML
     private void editRow() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EditWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("editing-pane.fxml"));
         Parent root = loader.load();
         EditWindowController controller = loader.getController();
         controller.initData(selectedRecord);
@@ -115,8 +128,9 @@ public class NavigationController implements Initializable {
         stage.setAlwaysOnTop(true);
         stage.show();
     }
+
     @FXML
-    private void resetTableView(){
+    private void resetTableView() {
         tableView.getItems().clear();
         loadData();
         tableView = dataBase.getTableView();

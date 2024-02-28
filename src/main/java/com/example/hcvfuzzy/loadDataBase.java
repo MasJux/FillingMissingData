@@ -1,9 +1,7 @@
 package com.example.hcvfuzzy;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -59,7 +57,7 @@ public class loadDataBase extends TableView<String> {
                     cells[7],
                     cells[8],
                     cells[9]
-                    );
+            );
 
             dataList.add(record);
         }

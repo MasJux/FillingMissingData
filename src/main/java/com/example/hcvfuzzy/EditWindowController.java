@@ -11,15 +11,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class EditWindowController implements Initializable {
+    @FXML
+    TextField RadiusField, TextureField, PerimeterField, AreaField, SmoothnessField;
+    @FXML
+    TextField CompactnessField, ConcavityField, ConcavePointsField, SymmetryField, FractalDimensionField;
     private Record selectedRecord;
     private AnchorPane anchorPane;
     private TableView<Record> tableView;
     private Stage stage;
 
-    @FXML
-    TextField RadiusField, TextureField, PerimeterField, AreaField, SmoothnessField;
-    @FXML
-    TextField CompactnessField, ConcavityField, ConcavePointsField, SymmetryField, FractalDimensionField;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
@@ -37,20 +37,24 @@ public class EditWindowController implements Initializable {
         SymmetryField.setText(selectedRecord.getSymmetry());
         FractalDimensionField.setText(selectedRecord.getFractalDimension());
     }
+
     public void setAnchorPane(AnchorPane anchorPane) {
-    this.anchorPane = anchorPane;
+        this.anchorPane = anchorPane;
     }
+
     public void setStage(Stage stage) {
         this.stage = stage;
         this.stage.setOnCloseRequest(windowEvent -> {
             anchorPane.setDisable(false);
         });
     }
+
     public void setTableView(TableView<Record> tableView) {
         this.tableView = tableView;
     }
+
     @FXML
-    private void updateRow(){
+    private void updateRow() {
         anchorPane.setDisable(false);
         int newRadius = Integer.parseInt(RadiusField.getText());
         int newTextureField = Integer.parseInt(TextureField.getText());

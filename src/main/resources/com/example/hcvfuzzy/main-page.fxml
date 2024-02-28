@@ -13,7 +13,7 @@
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onMouseClicked="#home" prefHeight="49.0" prefWidth="106.0" text="Home" />
-            <Button mnemonicParsing="false" onMouseClicked="#page1" prefHeight="57.0" prefWidth="107.0" text="page1" />
+            <Button mnemonicParsing="false" onMouseClicked="#deletingPane" prefHeight="57.0" prefWidth="107.0" text="Deleting panel" />
             <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="103.0" text="page2" />
          </children>
       </VBox>
