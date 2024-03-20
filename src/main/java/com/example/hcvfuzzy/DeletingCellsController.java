@@ -64,7 +64,7 @@ public class DeletingCellsController implements Initializable {
                 } while (usedColumnIndexes.contains(columnIndex));
 
                 usedColumnIndexes.add(columnIndex);
-                String newValue = "0";
+                int newValue = 0;
                 switch (columnIndex) {
                     case 1 -> record.setRadius(newValue);
                     case 2 -> record.setTexture(newValue);

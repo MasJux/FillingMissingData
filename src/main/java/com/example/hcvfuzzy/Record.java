@@ -1,33 +1,37 @@
 package com.example.hcvfuzzy;
 
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 public class Record {
-    private final SimpleIntegerProperty ID;
-    private final SimpleStringProperty Radius;
-    private final SimpleStringProperty Texture;
-    private final SimpleStringProperty Perimeter;
-    private final SimpleStringProperty Area;
-    private final SimpleStringProperty Smoothness;
-    private final SimpleStringProperty Compactness;
-    private final SimpleStringProperty Concavity;
-    private final SimpleStringProperty ConcavePoints;
-    private final SimpleStringProperty Symmetry;
-    private final SimpleStringProperty FractalDimension;
 
-    public Record(int id, String radius, String texture, String perimeter, String area, String smoothness, String compactness, String concavity, String concavePoints, String symmetry, String fractalDimension) {
+
+    private final SimpleIntegerProperty ID;
+    private final SimpleIntegerProperty Decision;
+    private final SimpleIntegerProperty Radius;
+    private final SimpleIntegerProperty Texture;
+    private final SimpleIntegerProperty Perimeter;
+    private final SimpleIntegerProperty Area;
+    private final SimpleIntegerProperty Smoothness;
+    private final SimpleIntegerProperty Compactness;
+    private final SimpleIntegerProperty Concavity;
+    private final SimpleIntegerProperty ConcavePoints;
+    private final SimpleIntegerProperty Symmetry;
+    private final SimpleIntegerProperty FractalDimension;
+
+    public Record(int id, int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension,int decision) {
         this.ID = new SimpleIntegerProperty(id);
-        this.Radius = new SimpleStringProperty(radius);
-        this.Texture = new SimpleStringProperty(texture);
-        this.Perimeter = new SimpleStringProperty(perimeter);
-        this.Area = new SimpleStringProperty(area);
-        this.Smoothness = new SimpleStringProperty(smoothness);
-        this.Compactness = new SimpleStringProperty(compactness);
-        this.Concavity = new SimpleStringProperty(concavity);
-        this.ConcavePoints = new SimpleStringProperty(concavePoints);
-        this.Symmetry = new SimpleStringProperty(symmetry);
-        this.FractalDimension = new SimpleStringProperty(fractalDimension);
+        this.Radius = new SimpleIntegerProperty(radius);
+        this.Texture = new SimpleIntegerProperty(texture);
+        this.Perimeter = new SimpleIntegerProperty(perimeter);
+        this.Area = new SimpleIntegerProperty(area);
+        this.Smoothness = new SimpleIntegerProperty(smoothness);
+        this.Compactness = new SimpleIntegerProperty(compactness);
+        this.Concavity = new SimpleIntegerProperty(concavity);
+        this.ConcavePoints = new SimpleIntegerProperty(concavePoints);
+        this.Symmetry = new SimpleIntegerProperty(symmetry);
+        this.FractalDimension = new SimpleIntegerProperty(fractalDimension);
+        this.Decision = new SimpleIntegerProperty(decision);
+
     }
 
     public int getID() {
@@ -42,123 +46,142 @@ public class Record {
         return ID;
     }
 
-    public String getRadius() {
+    public int getRadius() {
         return Radius.get();
     }
 
-    public void setRadius(String radius) {
+    public void setRadius(int radius) {
         this.Radius.set(radius);
     }
 
-    public SimpleStringProperty radiusProperty() {
+    public SimpleIntegerProperty radiusProperty() {
         return Radius;
     }
 
-    public String getTexture() {
+    public int getTexture() {
         return Texture.get();
     }
 
-    public void setTexture(String texture) {
+    public void setTexture(int texture) {
         this.Texture.set(texture);
     }
 
-    public SimpleStringProperty textureProperty() {
+    public SimpleIntegerProperty textureProperty() {
         return Texture;
     }
 
-    public String getPerimeter() {
+    public int getPerimeter() {
         return Perimeter.get();
     }
 
-    public void setPerimeter(String perimeter) {
+    public void setPerimeter(int perimeter) {
         this.Perimeter.set(perimeter);
     }
 
-    public SimpleStringProperty perimeterProperty() {
+    public SimpleIntegerProperty perimeterProperty() {
         return Perimeter;
     }
 
-    public String getArea() {
+    public int getArea() {
         return Area.get();
     }
 
-    public void setArea(String area) {
+    public void setArea(int area) {
         this.Area.set(area);
     }
 
-    public SimpleStringProperty areaProperty() {
+    public SimpleIntegerProperty areaProperty() {
         return Area;
     }
 
-    public String getSmoothness() {
+    public int getSmoothness() {
         return Smoothness.get();
     }
 
-    public void setSmoothness(String smoothness) {
+    public void setSmoothness(int smoothness) {
         this.Smoothness.set(smoothness);
     }
 
-    public SimpleStringProperty smoothnessProperty() {
+    public SimpleIntegerProperty smoothnessProperty() {
         return Smoothness;
     }
 
-    public String getCompactness() {
+    public int getCompactness() {
         return Compactness.get();
     }
 
-    public void setCompactness(String compactness) {
+    public void setCompactness(int compactness) {
         this.Compactness.set(compactness);
     }
 
-    public SimpleStringProperty compactnessProperty() {
+    public SimpleIntegerProperty compactnessProperty() {
         return Compactness;
     }
 
-    public String getConcavity() {
+    public int getConcavity() {
         return Concavity.get();
     }
 
-    public void setConcavity(String concavity) {
+    public void setConcavity(int concavity) {
         this.Concavity.set(concavity);
     }
 
-    public SimpleStringProperty concavityProperty() {
+    public SimpleIntegerProperty concavityProperty() {
         return Concavity;
     }
 
-    public String getConcavePoints() {
+    public int getConcavePoints() {
         return ConcavePoints.get();
     }
 
-    public void setConcavePoints(String concavePoints) {
+    public void setConcavePoints(int concavePoints) {
         this.ConcavePoints.set(concavePoints);
     }
 
-    public SimpleStringProperty concavePointsProperty() {
+    public SimpleIntegerProperty concavePointsProperty() {
         return ConcavePoints;
     }
 
-    public String getSymmetry() {
+    public int getSymmetry() {
         return Symmetry.get();
     }
 
-    public void setSymmetry(String symmetry) {
+    public void setSymmetry(int symmetry) {
         this.Symmetry.set(symmetry);
     }
 
-    public SimpleStringProperty symmetryProperty() {
+    public SimpleIntegerProperty symmetryProperty() {
         return Symmetry;
     }
 
-    public String getFractalDimension() {
+    public int getFractalDimension() {
         return FractalDimension.get();
     }
 
-    public void setFractalDimension(String fractalDimension) {
+    public void setFractalDimension(int fractalDimension) {
         this.FractalDimension.set(fractalDimension);
     }
 
-    public SimpleStringProperty fractalDimensionProperty() {
+    public SimpleIntegerProperty fractalDimensionProperty() {
         return FractalDimension;
     }
+
+    public int getDecision() {
+        return Decision.get();
+    }
+
+    public void setDecision(int decision) {
+        this.Decision.set(decision);
+    }
+
+    public SimpleIntegerProperty decisionProperty() {
+        return Decision;
+    }
+
+    public boolean checkIfEmpty() {
+        return Radius.get() == 0 || Texture.get() == 0 || Perimeter.get() == 0 || Area.get() == 0 || Smoothness.get() == 0 ||
+                Compactness.get() == 0 || Concavity.get() == 0 || ConcavePoints.get() == 0 || Symmetry.get() == 0 ||
+                FractalDimension.get() == 0;
+    }
+
 }

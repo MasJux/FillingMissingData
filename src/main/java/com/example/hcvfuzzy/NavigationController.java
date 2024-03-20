@@ -15,11 +15,14 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class NavigationController implements Initializable {
+    EntrophyMethods entrophyMethods = new EntrophyMethods();
     loadDataBase dataBase = new loadDataBase();
     TableView<Record> tableView;
     File file = new File("src/main/resources/database/breastCancer.csv");
@@ -29,7 +32,7 @@ public class NavigationController implements Initializable {
     private AnchorPane anchorPane;
     private Record selectedRecord;
     private int id;
-    private String radius, texture, perimeter, area, smoothness, compactness, concavity, concavePoints, symmetry, fractalDimension;
+    private int radius, texture, perimeter, area, smoothness, compactness, concavity, concavePoints, symmetry, fractalDimension;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -51,7 +54,6 @@ public class NavigationController implements Initializable {
     private void home(MouseEvent event) {
         borderPane.setCenter(anchorPane);
     }
-
     @FXML
     private void deletingPane(MouseEvent event) {
         try {
@@ -78,6 +80,7 @@ public class NavigationController implements Initializable {
     }
 
     private void loadData() {
+
         try {
             TableView<Record> createdTableView = dataBase.readCSV(file, ",");
             anchorPane.getChildren().add(createdTableView);
@@ -85,6 +88,7 @@ public class NavigationController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     private void handleSelection(Record selectedRecord) throws IOException {
         this.selectedRecord = selectedRecord;
@@ -133,7 +137,6 @@ public class NavigationController implements Initializable {
     private void resetTableView() {
         tableView.getItems().clear();
         loadData();
-        tableView = dataBase.getTableView();
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -144,6 +147,20 @@ public class NavigationController implements Initializable {
                 }
             }
         });
+        entrophyMethods.resetCounts();
+        entrophyMethods.resetSum();
+    }
+    @FXML
+    private void restoreData(){
+        List<Record> publicDataList = dataBase.getPublicDataList();
+
+        entrophyMethods.secondMethod(publicDataList);
+        entrophyMethods.resetCounts();
+        entrophyMethods.resetSum();
+        tableView.refresh();
+
+        //entrophyMethods.getMinMaxValues(publicDataList);
+        //entrophyMethods.euclidesDistance(publicDataList);
     }
 }
 

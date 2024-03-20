@@ -41,6 +41,7 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button layoutX="358.0" layoutY="415.0" mnemonicParsing="false" onAction="#restoreData" prefHeight="30.0" prefWidth="80.0" text="Restore" />
          </children></AnchorPane>
    </center>
 </BorderPane>

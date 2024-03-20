@@ -26,16 +26,16 @@ public class EditWindowController implements Initializable {
 
     public void initData(Record selectedRecord) {
         this.selectedRecord = selectedRecord;
-        RadiusField.setText(selectedRecord.getRadius());
-        TextureField.setText(selectedRecord.getTexture());
-        PerimeterField.setText(selectedRecord.getPerimeter());
-        AreaField.setText(selectedRecord.getArea());
-        SmoothnessField.setText(selectedRecord.getSmoothness());
-        CompactnessField.setText(selectedRecord.getCompactness());
-        ConcavityField.setText(selectedRecord.getConcavity());
-        ConcavePointsField.setText(selectedRecord.getConcavePoints());
-        SymmetryField.setText(selectedRecord.getSymmetry());
-        FractalDimensionField.setText(selectedRecord.getFractalDimension());
+        RadiusField.setText(String.valueOf(selectedRecord.getRadius()));
+        TextureField.setText(String.valueOf(selectedRecord.getTexture()));
+        PerimeterField.setText(String.valueOf(selectedRecord.getPerimeter()));
+        AreaField.setText(String.valueOf(selectedRecord.getArea()));
+        SmoothnessField.setText(String.valueOf(selectedRecord.getSmoothness()));
+        CompactnessField.setText(String.valueOf(selectedRecord.getCompactness()));
+        ConcavityField.setText(String.valueOf(selectedRecord.getConcavity()));
+        ConcavePointsField.setText(String.valueOf(selectedRecord.getConcavePoints()));
+        SymmetryField.setText(String.valueOf(selectedRecord.getSymmetry()));
+        FractalDimensionField.setText(String.valueOf(selectedRecord.getFractalDimension()));
     }
 
     public void setAnchorPane(AnchorPane anchorPane) {
@@ -66,16 +66,16 @@ public class EditWindowController implements Initializable {
         int newConcavePoints = Integer.parseInt(ConcavePointsField.getText());
         int newSymmetry = Integer.parseInt(SymmetryField.getText());
         int newFractalDimension = Integer.parseInt(FractalDimensionField.getText());
-        selectedRecord.setRadius(String.valueOf(newRadius));
-        selectedRecord.setTexture(String.valueOf(newTextureField));
-        selectedRecord.setPerimeter(String.valueOf(newPerimeter));
-        selectedRecord.setArea(String.valueOf(newArea));
-        selectedRecord.setSmoothness(String.valueOf(newSmoothness));
-        selectedRecord.setCompactness(String.valueOf(newCompactness));
-        selectedRecord.setConcavity(String.valueOf(newConcavity));
-        selectedRecord.setConcavePoints(String.valueOf(newConcavePoints));
-        selectedRecord.setSymmetry(String.valueOf(newSymmetry));
-        selectedRecord.setFractalDimension(String.valueOf(newFractalDimension));
+        selectedRecord.setRadius(newRadius);
+        selectedRecord.setTexture(newTextureField);
+        selectedRecord.setPerimeter(newPerimeter);
+        selectedRecord.setArea(newArea);
+        selectedRecord.setSmoothness(newSmoothness);
+        selectedRecord.setCompactness(newCompactness);
+        selectedRecord.setConcavity(newConcavity);
+        selectedRecord.setConcavePoints(newConcavePoints);
+        selectedRecord.setSymmetry(newSymmetry);
+        selectedRecord.setFractalDimension(newFractalDimension);
         tableView.refresh();
         stage.close();
     }
