@@ -6,10 +6,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="718.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hcvfuzzy.DeletingCellsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="718.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hcvfuzzy.Controllers.DeletingCellsController">
    <children>
       <Slider fx:id="rowSlider" layoutX="289.0" layoutY="157.0" prefHeight="24.0" prefWidth="242.0" />
-      <Slider fx:id="cellSlider" layoutX="288.0" layoutY="252.0" max="10.0" prefWidth="242.0" />
+      <Slider fx:id="cellSlider" layoutX="288.0" layoutY="252.0" max="1.0" prefWidth="242.0" />
       <Text layoutX="196.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount of rows" />
       <Text layoutX="196.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount of cells" />
       <Label fx:id="rowLabel" alignment="CENTER" layoutX="396.0" layoutY="181.0" text="0" />

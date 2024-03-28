@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hcvfuzzy.NavigationController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hcvfuzzy.Controllers.NavigationController">
    <left>
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
          <children>
@@ -41,7 +41,9 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="358.0" layoutY="415.0" mnemonicParsing="false" onAction="#restoreData" prefHeight="30.0" prefWidth="80.0" text="Restore" />
+            <Button layoutX="320.0" layoutY="453.0" mnemonicParsing="false" onAction="#restoreSecondMethod" prefHeight="30.0" prefWidth="119.0" text="Filling Method II" />
+            <Button layoutX="320.0" layoutY="491.0" mnemonicParsing="false" onAction="#restoreThirdMethod" prefHeight="30.0" prefWidth="119.0" text="Filling Method III" />
+            <Button layoutX="138.0" layoutY="468.0" mnemonicParsing="false" onAction="#testButton" text="test" />
          </children></AnchorPane>
    </center>
 </BorderPane>

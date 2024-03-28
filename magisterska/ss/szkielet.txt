@@ -1,0 +1,39 @@
+package com.example.hcvfuzzy.FillingMethods;
+
+import com.example.hcvfuzzy.Constructors.Record;
+
+import java.util.List;
+
+public class FourthMethod {
+
+    public void entropyFillingMethod(List<Record> dataList, int l) {
+        for (Record oz : dataList) {
+            if (oz.hasMissingValue()) { // Sprawdzenie, czy obiekt ma brakującą wartość
+                String missingAttribute = oz.getMissingAttribute(); // Pobranie nazwy brakującego atrybutu
+                double minEntropy = Double.MAX_VALUE; // Inicjalizacja minEntropy dużą wartością
+                Record mostSimilarObject = null; // Przechowywanie obiektu z najmniejszą entropią
+
+                // Iteracja przez wszystkie obiekty w danych
+                for (Record oi : dataList) {
+                    if (oi.getDecision() == oz.getDecision()) { // Sprawdzenie, czy decyzje są takie same
+                        double entropyOi = calculateEntropy(oi, dataList, l); // Obliczenie entropii dla obiektu oi
+                        if (entropyOi < minEntropy) {
+                            minEntropy = entropyOi; // Aktualizacja minEntropy, jeśli entropia oi jest mniejsza
+                            mostSimilarObject = oi; // Aktualizacja obiektu z najmniejszą entropią
+                        }
+                    }
+                }
+
+                if (mostSimilarObject != null) {
+                    // Uzupełnienie brakującej wartości dla obiektu oz na podstawie obiektu mostSimilarObject
+                    oz.setMissingAttributeValue(mostSimilarObject.getAttributeValue(missingAttribute));
+                }
+            }
+        }
+    }
+
+    // Metoda do obliczania entropii dla danego obiektu
+    private double calculateEntropy(Record record, List<Record> dataList, int l) {
+        // Implementacja obliczeń entropii na podstawie algorytmu opisanego w Twoim fragmencie kodu
+    }
+}
