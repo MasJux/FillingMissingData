@@ -1,187 +1,217 @@
 package com.example.hcvfuzzy.Constructors;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Record {
+    private int ID;
+    private int Radius;
+    private int Texture;
+    private int Perimeter;
+    private int Area;
+    private int Smoothness;
+    private int Compactness;
+    private int Concavity;
+    private int ConcavePoints;
+    private int Symmetry;
+    private int FractalDimension;
+    private int Decision;
+    private double withDeletedRadius;
+    private double withDeletedTexture;
+    private double withDeletedPerimeter;
+    private double withDeletedArea;
+    private double withDeletedSmoothness;
+    private double withDeletedCompactness;
+    private double withDeletedConcavity;
+    private double withDeletedConcavePoints;
+    private double withDeletedSymmetry;
+    private double withDeletedFractalDimension;
 
+    public Record(int ID, int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension, int decision) {
+        this.ID = ID;
+        this.Radius = radius;
+        this.Texture = texture;
+        this.Perimeter = perimeter;
+        this.Area = area;
+        this.Smoothness = smoothness;
+        this.Compactness = compactness;
+        this.Concavity = concavity;
+        this.ConcavePoints = concavePoints;
+        this.Symmetry = symmetry;
+        this.FractalDimension = fractalDimension;
+        this.Decision = decision;
+    }
 
-    private final SimpleIntegerProperty ID;
-    private final SimpleIntegerProperty Decision;
-    private final SimpleIntegerProperty Radius;
-    private final SimpleIntegerProperty Texture;
-    private final SimpleIntegerProperty Perimeter;
-    private final SimpleIntegerProperty Area;
-    private final SimpleIntegerProperty Smoothness;
-    private final SimpleIntegerProperty Compactness;
-    private final SimpleIntegerProperty Concavity;
-    private final SimpleIntegerProperty ConcavePoints;
-    private final SimpleIntegerProperty Symmetry;
-    private final SimpleIntegerProperty FractalDimension;
-
-    public Record(int id, int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension,int decision) {
-        this.ID = new SimpleIntegerProperty(id);
-        this.Radius = new SimpleIntegerProperty(radius);
-        this.Texture = new SimpleIntegerProperty(texture);
-        this.Perimeter = new SimpleIntegerProperty(perimeter);
-        this.Area = new SimpleIntegerProperty(area);
-        this.Smoothness = new SimpleIntegerProperty(smoothness);
-        this.Compactness = new SimpleIntegerProperty(compactness);
-        this.Concavity = new SimpleIntegerProperty(concavity);
-        this.ConcavePoints = new SimpleIntegerProperty(concavePoints);
-        this.Symmetry = new SimpleIntegerProperty(symmetry);
-        this.FractalDimension = new SimpleIntegerProperty(fractalDimension);
-        this.Decision = new SimpleIntegerProperty(decision);
-
+    public int getAttributeValue(String attributeName) {
+        switch (attributeName) {
+            case "radius":
+                return Radius;
+            case "texture":
+                return Texture;
+            case "perimeter":
+                return Perimeter;
+            case "area":
+                return Area;
+            case "smoothness":
+                return Smoothness;
+            case "compactness":
+                return Compactness;
+            case "concavity":
+                return Concavity;
+            case "concavePoints":
+                return ConcavePoints;
+            case "symmetry":
+                return Symmetry;
+            case "fractalDimension":
+                return FractalDimension;
+            default:
+                throw new IllegalArgumentException("Nieprawidłowa nazwa atrybutu: " + attributeName);
+        }
     }
 
     public int getID() {
-        return ID.get();
-    }
-
-    public void setID(int ID) {
-        this.ID.set(ID);
-    }
-
-    public SimpleIntegerProperty IDProperty() {
         return ID;
     }
 
-    public int getRadius() {
-        return Radius.get();
-    }
-
-    public void setRadius(int radius) {
-        this.Radius.set(radius);
-    }
-
-    public SimpleIntegerProperty radiusProperty() {
-        return Radius;
-    }
-
-    public int getTexture() {
-        return Texture.get();
-    }
-
-    public void setTexture(int texture) {
-        this.Texture.set(texture);
-    }
-
-    public SimpleIntegerProperty textureProperty() {
-        return Texture;
-    }
-
-    public int getPerimeter() {
-        return Perimeter.get();
-    }
-
-    public void setPerimeter(int perimeter) {
-        this.Perimeter.set(perimeter);
-    }
-
-    public SimpleIntegerProperty perimeterProperty() {
-        return Perimeter;
-    }
-
-    public int getArea() {
-        return Area.get();
-    }
-
-    public void setArea(int area) {
-        this.Area.set(area);
-    }
-
-    public SimpleIntegerProperty areaProperty() {
-        return Area;
-    }
-
-    public int getSmoothness() {
-        return Smoothness.get();
-    }
-
-    public void setSmoothness(int smoothness) {
-        this.Smoothness.set(smoothness);
-    }
-
-    public SimpleIntegerProperty smoothnessProperty() {
-        return Smoothness;
-    }
-
-    public int getCompactness() {
-        return Compactness.get();
-    }
-
-    public void setCompactness(int compactness) {
-        this.Compactness.set(compactness);
-    }
-
-    public SimpleIntegerProperty compactnessProperty() {
-        return Compactness;
-    }
-
-    public int getConcavity() {
-        return Concavity.get();
-    }
-
-    public void setConcavity(int concavity) {
-        this.Concavity.set(concavity);
-    }
-
-    public SimpleIntegerProperty concavityProperty() {
-        return Concavity;
-    }
-
-    public int getConcavePoints() {
-        return ConcavePoints.get();
-    }
-
-    public void setConcavePoints(int concavePoints) {
-        this.ConcavePoints.set(concavePoints);
-    }
-
-    public SimpleIntegerProperty concavePointsProperty() {
-        return ConcavePoints;
-    }
-
-    public int getSymmetry() {
-        return Symmetry.get();
-    }
-
-    public void setSymmetry(int symmetry) {
-        this.Symmetry.set(symmetry);
-    }
-
-    public SimpleIntegerProperty symmetryProperty() {
-        return Symmetry;
-    }
-
-    public int getFractalDimension() {
-        return FractalDimension.get();
-    }
-
-    public void setFractalDimension(int fractalDimension) {
-        this.FractalDimension.set(fractalDimension);
-    }
-
-    public SimpleIntegerProperty fractalDimensionProperty() {
-        return FractalDimension;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public int getDecision() {
-        return Decision.get();
-    }
-
-    public void setDecision(int decision) {
-        this.Decision.set(decision);
-    }
-
-    public SimpleIntegerProperty decisionProperty() {
         return Decision;
     }
 
-    public boolean checkIfEmpty() {
-        return Radius.get() == 0 || Texture.get() == 0 || Perimeter.get() == 0 || Area.get() == 0 || Smoothness.get() == 0 ||
-                Compactness.get() == 0 || Concavity.get() == 0 || ConcavePoints.get() == 0 || Symmetry.get() == 0 ||
-                FractalDimension.get() == 0;
+    public void setDecision(int decision) {
+        Decision = decision;
     }
 
+    public int getRadius() {
+        return Radius;
+    }
+
+    public void setRadius(int radius) {
+        Radius = radius;
+    }
+
+    public int getTexture() {
+        return Texture;
+    }
+
+    public void setTexture(int texture) {
+        Texture = texture;
+    }
+
+    public int getPerimeter() {
+        return Perimeter;
+    }
+
+    public void setPerimeter(int perimeter) {
+        Perimeter = perimeter;
+    }
+
+    public int getArea() {
+        return Area;
+    }
+
+    public void setArea(int area) {
+        Area = area;
+    }
+
+    public int getSmoothness() {
+        return Smoothness;
+    }
+
+    public void setSmoothness(int smoothness) {
+        Smoothness = smoothness;
+    }
+
+    public int getCompactness() {
+        return Compactness;
+    }
+
+    public void setCompactness(int compactness) {
+        Compactness = compactness;
+    }
+
+    public int getConcavity() {
+        return Concavity;
+    }
+
+    public void setConcavity(int concavity) {
+        Concavity = concavity;
+    }
+
+    public int getConcavePoints() {
+        return ConcavePoints;
+    }
+
+    public void setConcavePoints(int concavePoints) {
+        ConcavePoints = concavePoints;
+    }
+
+    public int getSymmetry() {
+        return Symmetry;
+    }
+
+    public void setSymmetry(int symmetry) {
+        Symmetry = symmetry;
+    }
+
+    public int getFractalDimension() {
+        return FractalDimension;
+    }
+
+    public void setFractalDimension(int fractalDimension) {
+        FractalDimension = fractalDimension;
+    }
 }
+//    public void normalizeData(List<Record> dataList) throws IllegalAccessException, NoSuchFieldException {
+//
+//        List<String> FieldsArray = new ArrayList<>(Arrays.asList("Radius","Texture"));
+//
+//        Class<?> objClass = getClass();
+//
+//        // Get all fields of the class including private fields
+//        Field[] fields = objClass.getDeclaredFields();
+//
+//        // Iterate over the fields
+//        for (Field field : fields) {
+//            int minRecordObject= Integer.MAX_VALUE;
+//            int maxRecordObject= Integer.MIN_VALUE;
+//            field.setAccessible(true); // Make the private field accessible
+//            if(FieldsArray.contains(field.getName())){
+//                Field field1 = objClass.getDeclaredField("Normalized"+field.getName());
+//                int value = Integer.parseInt(field.get(this).toString();
+//                if (value < minRecordObject) {
+//                    minRecordObject = value;
+//                }
+//                if (value > maxRecordObject) {
+//                    maxRecordObject = value;
+//                }
+//            }
+//            Object value = field.get(this); // Get the value of the field from the object
+//            System.out.println(field.getName() + ": " + value);
+//        }
+//
+//
+//
+//
+//        for (int i = 0; i < dataList.size(); i++) {
+//            Record record = dataList.get(i);
+//
+//            int recordObject = extractor.apply(dataList.get(i));
+//            //System.out.println("recordObject: "+recordObject);
+//            System.out.println("Max: " + maxRecordObject + " - Min: " + minRecordObject);
+//            double normalized = (((double) recordObject - minRecordObject) / (maxRecordObject - minRecordObject));
+//            String formattedValue = String.format("%.5f", normalized);
+//            System.out.println(i + 1 + " - " + formattedValue);
+//        }
+//    }
+
+
+

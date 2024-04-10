@@ -1,9 +1,10 @@
 package com.example.hcvfuzzy.Controllers;
 
-import com.example.hcvfuzzy.FillingMethods.Normalization;
-import com.example.hcvfuzzy.FillingMethods.SecondMethod;
+import com.example.hcvfuzzy.Constructors.NormalizedRecord;
 import com.example.hcvfuzzy.Constructors.Record;
 import com.example.hcvfuzzy.Database.loadDataBase;
+import com.example.hcvfuzzy.FillingMethods.Normalization;
+import com.example.hcvfuzzy.FillingMethods.SecondMethod;
 import com.example.hcvfuzzy.FillingMethods.ThirdMethod;
 import com.example.hcvfuzzy.main;
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -32,7 +34,9 @@ public class NavigationController implements Initializable {
     SecondMethod secondMethod = new SecondMethod();
     ThirdMethod thirdMethod = new ThirdMethod();
     loadDataBase dataBase = new loadDataBase();
+    Normalization normalizedDataBase = new Normalization();
     TableView<Record> tableView;
+    TableView<NormalizedRecord> normalizedTableView;
     File file = new File("src/main/resources/database/breastCancer.csv");
     @FXML
     private BorderPane borderPane;
@@ -184,9 +188,14 @@ public class NavigationController implements Initializable {
         thirdMethod.resetCountsThirdMethod();
     }
     @FXML
-    private void testButton(){
+    private void testButton() throws ParseException {
         List<Record> publicDataList = dataBase.getPublicDataList();
-        normalization.normalizeData(publicDataList);
+        List<NormalizedRecord> publicNormalizedList = normalizedDataBase.getPublicNormalizedDataList();
+        //normalization.normalizeData(publicDataList);
+        //normalization.updateTableViewWithNormalizedData(publicDataList,publicNormalizedList);
+        anchorPane.getChildren().remove(tableView);
+        TableView<NormalizedRecord> newTableView = normalization.updateTableViewWithNormalizedData(publicDataList);
+        anchorPane.getChildren().add(newTableView);
     }
 }
 
