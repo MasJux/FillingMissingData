@@ -200,4 +200,28 @@ public class NormalizedRecord {
         }
         return false;
     }
+    public String getMissingAttributeName() {
+        String[] attributeNames = {
+                "radius",
+                "texture",
+                "perimeter",
+                "area",
+                "smoothness",
+                "compactness",
+                "concavity",
+                "concavePoints",
+                "symmetry",
+                "fractalDimension"
+        };
+
+        double[] attributes = getAttributes();
+
+        for (int i = 0; i < attributes.length; i++) {
+            if (attributes[i] == -1) {
+                return attributeNames[i];
+            }
+        }
+
+        return null; // Zwraca null, jeśli nie znaleziono brakującej danej
+    }
 }

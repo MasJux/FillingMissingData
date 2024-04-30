@@ -16,10 +16,12 @@ public class EntropyMethod {
             double[] attributes = record.getAttributes();
             if (record.containsMissingValue(attributes)) {
                 objectWithMissingValue = record;
-                System.out.println("brakujaca dana: " + objectWithMissingValue);
+                //System.out.println("brakujaca dana: " + objectWithMissingValue);
+                System.out.println("Brakująca dana: " + objectWithMissingValue.getMissingAttributeName());
             } else {
                 continue;
             }
+
             for (NormalizedRecord object : listObjectWithMissingValue) {
                 if (!(object == objectWithMissingValue)) {
                     double entropy = calculateEntropy(objectWithMissingValue, object);
@@ -42,7 +44,6 @@ public class EntropyMethod {
     private static double calculateEntropy(NormalizedRecord missingAttributeObject, NormalizedRecord fullAttributesObject) {
         double[] attributesWithMissingValue = missingAttributeObject.getAttributes();
         double[] attributesWithoutMissingValue = fullAttributesObject.getAttributes();
-
         // euklides
         double distance = calculateDistance(attributesWithMissingValue, attributesWithoutMissingValue);
         // wychwycenie najmniejszej entropii
@@ -62,6 +63,7 @@ public class EntropyMethod {
 
         return distance;
     }
+
 }
 /**
  * liczenie odległości euklidesowej między obiektem z brakującymi danymi a resztą obiektów(ta sama klasa decyzyjna)
@@ -72,10 +74,11 @@ public class EntropyMethod {
  * Czy ma być np. 100 wierszy z jedną brakującą daną? Czy na cały dataset ma miec 1 brakująca.
  * Czy metoda licząca jest odpowiednia.
  * TODO
+ * !IMPORTANT uporządkować metody w normalizedRecord i wykonać:
+ * (Jezeli mamy obiekt w ktorym brakuje radius to przy przeszukiwaniu odrzucamy wszystkie obiekty w których jest brak innych
+ *      atrybutów np.
+ *      obiekt z brakiem radius - 0
+ *      odrzucamy obiekt z brakiem concavity - 0)
  * Różne entropie lub rozne miary (jako element badawczy) mozna odwrocic ten distance zeby nie szualo najmniejszego tylko
  * najwieksze pradopodobienstwo
- * Jezeli mamy obiekt w ktorym brakuje radius to przy przeszukiwaniu odrzucamy wszystkie obiekty w których jest brak innych
- * atrybutów np.
- * obiekt z brakiem radius - 0
- * odrzucamy obiekt z brakiem concavity - 0
  */

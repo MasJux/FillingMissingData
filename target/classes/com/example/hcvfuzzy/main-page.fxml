@@ -8,12 +8,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hcvfuzzy.Controllers.NavigationController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hcvfuzzy.Controllers.NavigationController">
    <left>
       <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: grey;" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onMouseClicked="#home" prefHeight="49.0" prefWidth="106.0" text="Home" />
-            <Button mnemonicParsing="false" onMouseClicked="#deletingPane" prefHeight="57.0" prefWidth="107.0" text="Deleting panel" />
+            <Button fx:id="deletingPanelButton" disable="true" mnemonicParsing="false" onMouseClicked="#deletingPane" prefHeight="57.0" prefWidth="107.0" text="Deleting panel" />
             <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="103.0" text="page2" />
          </children>
       </VBox>
@@ -24,7 +24,7 @@
             <Insets />
          </BorderPane.margin>
          <children>
-            <Button layoutX="466.0" layoutY="415.0" mnemonicParsing="false" onAction="#editRow" prefHeight="30.0" prefWidth="80.0" text="Edit">
+            <Button disable="true" layoutX="466.0" layoutY="415.0" mnemonicParsing="false" onAction="#editRow" prefHeight="30.0" prefWidth="80.0" text="Edit">
                <graphic>
                   <ImageView fitHeight="21.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -41,11 +41,11 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="320.0" layoutY="453.0" mnemonicParsing="false" onAction="#restoreSecondMethod" prefHeight="30.0" prefWidth="119.0" text="Filling Method II" />
-            <Button layoutX="320.0" layoutY="491.0" mnemonicParsing="false" onAction="#restoreThirdMethod" prefHeight="30.0" prefWidth="119.0" text="Filling Method III" />
+            <Button fx:id="secondMethodButton" disable="true" layoutX="320.0" layoutY="453.0" mnemonicParsing="false" onAction="#restoreSecondMethod" prefHeight="30.0" prefWidth="119.0" text="Filling Method II" />
+            <Button fx:id="thirdMethodButton" disable="true" layoutX="320.0" layoutY="491.0" mnemonicParsing="false" onAction="#restoreThirdMethod" prefHeight="30.0" prefWidth="119.0" text="Filling Method III" />
             <Button fx:id="normalizeButton" layoutX="87.0" layoutY="471.0" mnemonicParsing="false" onAction="#normalizeData" text="Normalize Data" />
             <Button fx:id="test" disable="true" layoutX="111.0" layoutY="433.0" mnemonicParsing="false" onAction="#testButton" text="test" />
-            <Button layoutX="85.0" layoutY="509.0" mnemonicParsing="false" onAction="#showInitialData" text="Show initial data" />
+            <Button fx:id="showInitialDataButton" disable="true" layoutX="85.0" layoutY="509.0" mnemonicParsing="false" onAction="#showInitialData" text="Show initial data" />
          </children></AnchorPane>
    </center>
 </BorderPane>

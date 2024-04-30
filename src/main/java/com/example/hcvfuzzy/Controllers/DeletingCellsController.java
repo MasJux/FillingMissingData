@@ -14,6 +14,7 @@ public class DeletingCellsController implements Initializable {
     private boolean deletionFlag = false;
     int amountRows;
     int amountCells;
+    private Button secondMethodButton, thirdMethodButton;
     @FXML
     private Slider rowSlider, cellSlider;
     @FXML
@@ -40,6 +41,10 @@ public class DeletingCellsController implements Initializable {
             }
         });
     }
+    public void setMethodButton(Button secondMethodButton, Button thirdMethodButton) {
+        this.secondMethodButton = secondMethodButton;
+        this.thirdMethodButton = thirdMethodButton;
+    }
     public void setTableView(TableView<NormalizedRecord> newTableView) {
         this.newTableView = newTableView;
     }
@@ -49,7 +54,6 @@ public class DeletingCellsController implements Initializable {
         int rowIndex;
         int columnIndex;
         deletionFlag = true;
-        //TODO ustawić unikalne randomy
         Random random = new Random();
         ArrayList<Integer> listOfRows = new ArrayList<>();
 
@@ -87,6 +91,8 @@ public class DeletingCellsController implements Initializable {
         }
         updateRecords();
         deleteButton.setDisable(isDeletionPerformed());
+        secondMethodButton.setDisable(false);
+        thirdMethodButton.setDisable(false);
         if(amountRows == 0 || amountCells==0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Warning!");

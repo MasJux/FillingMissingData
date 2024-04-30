@@ -41,7 +41,15 @@ public class NavigationController implements Initializable {
     @FXML
     Button test;
     @FXML
+    Button deletingPanelButton;
+    @FXML
     Button normalizeButton;
+    @FXML
+    Button showInitialDataButton;
+    @FXML
+    Button secondMethodButton;
+    @FXML
+    Button thirdMethodButton;
     File file = new File("src/main/resources/database/breastCancer.csv");
     boolean isDataNormalized = false;
     boolean isNormalizedTableViewExist = false;
@@ -49,6 +57,7 @@ public class NavigationController implements Initializable {
     SecondMethod secondMethod = new SecondMethod();
     ThirdMethod thirdMethod = new ThirdMethod();
     loadDataBase dataBase = new loadDataBase();
+    DeletingCellsController buttonsController = new DeletingCellsController();
     private DeletingCellsController deletingCellsController;
     private EntropyMethod entropyMethod = new EntropyMethod();
     TableView<Record> tableView;
@@ -146,6 +155,7 @@ public class NavigationController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(main.class.getResource("deleting-pane.fxml"));
                 deletingPaneRoot = loader.load();
                 deletingCellsController = loader.getController();
+                deletingCellsController.setMethodButton(secondMethodButton, thirdMethodButton);
                 deletingCellsController.setTableView(newTableView);
                 borderPane.setCenter(deletingPaneRoot);
             }else{
@@ -216,6 +226,8 @@ public class NavigationController implements Initializable {
             normalization.normalizeData(publicDataList);
             isDataNormalized = true;
             test.setDisable(false);
+            deletingPanelButton.setDisable(false);
+            showInitialDataButton.setDisable(false);
             normalizeButton.setDisable(true);
             System.out.println("wykonanie normalizeData()");
         }
