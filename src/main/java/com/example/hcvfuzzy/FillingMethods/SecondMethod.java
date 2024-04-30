@@ -1,46 +1,48 @@
 package com.example.hcvfuzzy.FillingMethods;
 
+import com.example.hcvfuzzy.Constructors.NormalizedRecord;
 import com.example.hcvfuzzy.Constructors.Record;
-import com.example.hcvfuzzy.Database.loadDataBase;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 
 public class SecondMethod {
-    int sumRadius = 0;
-    int sumTexture = 0;
-    int sumPerimeter = 0;
-    int sumArea = 0;
-    int sumSmoothness = 0;
-    int sumCompactness = 0;
-    int sumConcavity = 0;
-    int sumConcavePoints = 0;
-    int sumSymmetry = 0;
-    int sumFractalDimension = 0;
-    int countRadius = 0;
-    int countTexture = 0;
-    int countPerimeter = 0;
-    int countArea = 0;
-    int countSmoothness = 0;
-    int countCompactness = 0;
-    int countConcavity = 0;
-    int countConcavePoints = 0;
-    int countSymmetry = 0;
-    int countFractalDimension = 0;
+    double sumRadius = 0;
+    double sumTexture = 0;
+    double sumPerimeter = 0;
+    double sumArea = 0;
+    double sumSmoothness = 0;
+    double sumCompactness = 0;
+    double sumConcavity = 0;
+    double sumConcavePoints = 0;
+    double sumSymmetry = 0;
+    double sumFractalDimension = 0;
+    double countRadius = 0;
+    double countTexture = 0;
+    double countPerimeter = 0;
+    double countArea = 0;
+    double countSmoothness = 0;
+    double countCompactness = 0;
+    double countConcavity = 0;
+    double countConcavePoints = 0;
+    double countSymmetry = 0;
+    double countFractalDimension = 0;
 
-    public void secondFillingMethod(List<Record> dataList) {
+    public void secondFillingMethod(List<NormalizedRecord> dataList) {
         resetCounts();
         resetSum();
-        for (Record rec : dataList) {
-            int radius = rec.getRadius();
-            int texture = rec.getTexture();
-            int perimeter = rec.getPerimeter();
-            int area = rec.getArea();
-            int smoothness = rec.getSmoothness();
-            int compactness = rec.getCompactness();
-            int concavity = rec.getConcavity();
-            int concavePoints = rec.getConcavePoints();
-            int symmetry = rec.getSymmetry();
-            int fractalDimension = rec.getFractalDimension();
+        for (NormalizedRecord rec : dataList) {
+            double radius = rec.getNormalizedRadius();
+            double texture = rec.getNormalizedTexture();
+            double perimeter = rec.getNormalizedPerimeter();
+            double area = rec.getNormalizedArea();
+            double smoothness = rec.getNormalizedSmoothness();
+            double compactness = rec.getNormalizedCompactness();
+            double concavity = rec.getNormalizedConcavity();
+            double concavePoints = rec.getNormalizedConcavePoints();
+            double symmetry = rec.getNormalizedSymmetry();
+            double fractalDimension = rec.getNormalizedFractalDimension();
             if (radius != -1) {
                 countRadius += 1;
                 sumRadius += radius;
@@ -82,52 +84,54 @@ public class SecondMethod {
                 sumFractalDimension += fractalDimension;
             }
         }
-
-    int avgRadius = sumRadius / countRadius;
-    int avgTexture = sumTexture / countTexture;
-    int avgPerimeter = sumPerimeter / countPerimeter;
-    int avgArea = sumArea / countArea;
-    int avgSmoothness = sumSmoothness / countSmoothness;
-    int avgCompactness = sumCompactness / countCompactness;
-    int avgConcavity = sumConcavity / countConcavity;
-    int avgConcavePoints = sumConcavePoints / countConcavePoints;
-    int avgSymmetry = sumSymmetry / countSymmetry;
-    int avgFractalDimension = sumFractalDimension / countFractalDimension;
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        symbols.setDecimalSeparator('.');
+        DecimalFormat df = new DecimalFormat("#.#####",symbols);
+        double avgRadius = Double.parseDouble(df.format((double)sumRadius / countRadius));
+        double avgTexture = Double.parseDouble(df.format((double)sumTexture / countTexture));
+        double avgPerimeter = Double.parseDouble(df.format((double)sumPerimeter / countPerimeter));
+        double avgArea = Double.parseDouble(df.format((double)sumArea / countArea));
+        double avgSmoothness = Double.parseDouble(df.format((double)sumSmoothness / countSmoothness));
+        double avgCompactness = Double.parseDouble(df.format((double)sumCompactness / countCompactness));
+        double avgConcavity = Double.parseDouble(df.format((double)sumConcavity / countConcavity));
+        double avgConcavePoints = Double.parseDouble(df.format((double)sumConcavePoints / countConcavePoints));
+        double avgSymmetry = Double.parseDouble(df.format((double)sumSymmetry / countSymmetry));
+        double avgFractalDimension = Double.parseDouble(df.format((double)sumFractalDimension / countFractalDimension));
         System.out.println("---------------------");
         System.out.println("Average Radius: "+avgRadius);
         System.out.println("Sum: "+sumRadius);
         System.out.println("Count: "+countRadius);
 
-        for (Record updateRecord : dataList) {
-            if (updateRecord.getRadius() == -1) {
-                updateRecord.setRadius(avgRadius);
+        for (NormalizedRecord updateRecord : dataList) {
+            if (updateRecord.getNormalizedRadius() == -1) {
+                updateRecord.setNormalizedRadius(avgRadius);
             }
-            if (updateRecord.getTexture() == -1) {
-                updateRecord.setTexture(avgTexture);
+            if (updateRecord.getNormalizedTexture() == -1) {
+                updateRecord.setNormalizedTexture(avgTexture);
             }
-            if (updateRecord.getPerimeter() == -1) {
-                updateRecord.setPerimeter(avgPerimeter);
+            if (updateRecord.getNormalizedPerimeter() == -1) {
+                updateRecord.setNormalizedPerimeter(avgPerimeter);
             }
-            if (updateRecord.getArea() == -1) {
-                updateRecord.setArea(avgArea);
+            if (updateRecord.getNormalizedArea() == -1) {
+                updateRecord.setNormalizedArea(avgArea);
             }
-            if (updateRecord.getSmoothness() == -1) {
-                updateRecord.setSmoothness(avgSmoothness);
+            if (updateRecord.getNormalizedSmoothness() == -1) {
+                updateRecord.setNormalizedSmoothness(avgSmoothness);
             }
-            if (updateRecord.getCompactness() == -1) {
-                updateRecord.setCompactness(avgCompactness);
+            if (updateRecord.getNormalizedCompactness() == -1) {
+                updateRecord.setNormalizedCompactness(avgCompactness);
             }
-            if (updateRecord.getConcavity() == -1) {
-                updateRecord.setConcavity(avgConcavity);
+            if (updateRecord.getNormalizedConcavity() == -1) {
+                updateRecord.setNormalizedConcavity(avgConcavity);
             }
-            if (updateRecord.getConcavePoints() == -1) {
-                updateRecord.setConcavePoints(avgConcavePoints);
+            if (updateRecord.getNormalizedConcavePoints() == -1) {
+                updateRecord.setNormalizedConcavePoints(avgConcavePoints);
             }
-            if (updateRecord.getSymmetry() == -1) {
-                updateRecord.setSymmetry(avgSymmetry);
+            if (updateRecord.getNormalizedSymmetry() == -1) {
+                updateRecord.setNormalizedSymmetry(avgSymmetry);
             }
-            if (updateRecord.getFractalDimension() == -1) {
-                updateRecord.setFractalDimension(avgFractalDimension);
+            if (updateRecord.getNormalizedFractalDimension() == -1) {
+                updateRecord.setNormalizedFractalDimension(avgFractalDimension);
             }
         }
     }

@@ -43,7 +43,9 @@
             </Button>
             <Button layoutX="320.0" layoutY="453.0" mnemonicParsing="false" onAction="#restoreSecondMethod" prefHeight="30.0" prefWidth="119.0" text="Filling Method II" />
             <Button layoutX="320.0" layoutY="491.0" mnemonicParsing="false" onAction="#restoreThirdMethod" prefHeight="30.0" prefWidth="119.0" text="Filling Method III" />
-            <Button layoutX="138.0" layoutY="468.0" mnemonicParsing="false" onAction="#testButton" text="test" />
+            <Button fx:id="normalizeButton" layoutX="87.0" layoutY="471.0" mnemonicParsing="false" onAction="#normalizeData" text="Normalize Data" />
+            <Button fx:id="test" disable="true" layoutX="111.0" layoutY="433.0" mnemonicParsing="false" onAction="#testButton" text="test" />
+            <Button layoutX="85.0" layoutY="509.0" mnemonicParsing="false" onAction="#showInitialData" text="Show initial data" />
          </children></AnchorPane>
    </center>
 </BorderPane>

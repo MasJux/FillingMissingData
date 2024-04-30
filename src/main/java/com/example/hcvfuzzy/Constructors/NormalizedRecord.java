@@ -15,6 +15,7 @@ public class NormalizedRecord {
     private int Decision;
 
     public NormalizedRecord() {
+
     }
     public double getAttributeValue(String attributeName) {
         switch (attributeName) {
@@ -174,5 +175,29 @@ public class NormalizedRecord {
 
     public void setDecision(int decision) {
         Decision = decision;
+    }
+
+    public double[] getAttributes() {
+        double[] attributes = {
+                NormalizedRadius,
+                NormalizedTexture,
+                NormalizedPerimeter,
+                NormalizedArea,
+                NormalizedSmoothness,
+                NormalizedCompactness,
+                NormalizedConcavity,
+                NormalizedConcavePoints,
+                NormalizedSymmetry,
+                NormalizedFractalDimension
+        };
+        return attributes;
+    }
+    public boolean containsMissingValue(double[] attributes) {
+        for (double attribute : attributes) {
+            if (attribute == -1) {
+                return true;
+            }
+        }
+        return false;
     }
 }

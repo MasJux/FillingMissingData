@@ -21,16 +21,6 @@ public class Record {
     private int Symmetry;
     private int FractalDimension;
     private int Decision;
-    private double withDeletedRadius;
-    private double withDeletedTexture;
-    private double withDeletedPerimeter;
-    private double withDeletedArea;
-    private double withDeletedSmoothness;
-    private double withDeletedCompactness;
-    private double withDeletedConcavity;
-    private double withDeletedConcavePoints;
-    private double withDeletedSymmetry;
-    private double withDeletedFractalDimension;
 
     public Record(int ID, int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension, int decision) {
         this.ID = ID;

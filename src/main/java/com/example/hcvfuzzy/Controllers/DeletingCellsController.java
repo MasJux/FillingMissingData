@@ -1,6 +1,6 @@
 package com.example.hcvfuzzy.Controllers;
 
-import com.example.hcvfuzzy.Constructors.Record;
+import com.example.hcvfuzzy.Constructors.NormalizedRecord;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -20,11 +20,11 @@ public class DeletingCellsController implements Initializable {
     private Label rowLabel, cellLabel;
     @FXML
     private Button deleteButton;
-    private TableView<Record> tableView;
+    private TableView<NormalizedRecord> newTableView;
+    private List<NormalizedRecord> updatedRecords = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println(deletionFlag);
         rowSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -40,25 +40,27 @@ public class DeletingCellsController implements Initializable {
             }
         });
     }
-    public void setTableView(TableView<Record> tableView) {
-        this.tableView = tableView;
+    public void setTableView(TableView<NormalizedRecord> newTableView) {
+        this.newTableView = newTableView;
     }
-
     @FXML
     private void deleteRowsAndCells() {
-        int rowCount = tableView.getItems().size();
+        int rowCount = newTableView.getItems().size();
         int rowIndex;
         int columnIndex;
         deletionFlag = true;
+        //TODO ustawić unikalne randomy
         Random random = new Random();
         ArrayList<Integer> listOfRows = new ArrayList<>();
 
         for (int i = 0; i < amountRows; i++) {
-            rowIndex = random.nextInt(rowCount);
+            do {
+                rowIndex = random.nextInt(rowCount);
+            } while (listOfRows.contains(rowIndex)); // Sprawdź, czy rowIndex już istnieje w liście
             listOfRows.add(rowIndex);
         }
         for (int row : listOfRows) {
-            Record record = tableView.getItems().get(row);
+            NormalizedRecord record = newTableView.getItems().get(row);
             Set<Integer> usedColumnIndexes = new HashSet<>();
             for (int n = 0; n < amountCells; n++) {
                 do {
@@ -68,22 +70,23 @@ public class DeletingCellsController implements Initializable {
                 usedColumnIndexes.add(columnIndex);
                 int newValue = -1;
                 switch (columnIndex) {
-                    case 1 -> record.setRadius(newValue);
-                    case 2 -> record.setTexture(newValue);
-                    case 3 -> record.setPerimeter(newValue);
-                    case 4 -> record.setArea(newValue);
-                    case 5 -> record.setSmoothness(newValue);
-                    case 6 -> record.setCompactness(newValue);
-                    case 7 -> record.setConcavity(newValue);
-                    case 8 -> record.setConcavePoints(newValue);
-                    case 9 -> record.setSymmetry(newValue);
-                    case 10 -> record.setFractalDimension(newValue);
+                    case 1 -> record.setNormalizedRadius(newValue);
+                    case 2 -> record.setNormalizedTexture(newValue);
+                    case 3 -> record.setNormalizedPerimeter(newValue);
+                    case 4 -> record.setNormalizedArea(newValue);
+                    case 5 -> record.setNormalizedSmoothness(newValue);
+                    case 6 -> record.setNormalizedCompactness(newValue);
+                    case 7 -> record.setNormalizedConcavity(newValue);
+                    case 8 -> record.setNormalizedConcavePoints(newValue);
+                    case 9 -> record.setNormalizedSymmetry(newValue);
+                    case 10 -> record.setNormalizedFractalDimension(newValue);
                 }
-                tableView.refresh();
+                newTableView.refresh();
             }
+
         }
+        updateRecords();
         deleteButton.setDisable(isDeletionPerformed());
-        System.out.println(getDeleteButton());
         if(amountRows == 0 || amountCells==0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Warning!");
@@ -92,12 +95,31 @@ public class DeletingCellsController implements Initializable {
             alert.showAndWait();
             deleteButton.setDisable(false);
         }
-
-//        System.out.println(rowCount+": Row Count");
-//        System.out.println(rowIndex+1+": Row Index");
-//        System.out.println(columnIndex+": Column Index");
-//        System.out.println(columnName+" - "+value);
     }
+    private void updateRecords() {
+        for (NormalizedRecord record : newTableView.getItems()) {
+            NormalizedRecord recordAfterDeleting = new NormalizedRecord();
+            recordAfterDeleting.setID(record.getID());
+            recordAfterDeleting.setNormalizedRadius(record.getNormalizedRadius());
+            recordAfterDeleting.setNormalizedTexture(record.getNormalizedTexture());
+            recordAfterDeleting.setNormalizedPerimeter(record.getNormalizedPerimeter());
+            recordAfterDeleting.setNormalizedArea(record.getNormalizedArea());
+            recordAfterDeleting.setNormalizedSmoothness(record.getNormalizedSmoothness());
+            recordAfterDeleting.setNormalizedCompactness(record.getNormalizedCompactness());
+            recordAfterDeleting.setNormalizedConcavity(record.getNormalizedConcavity());
+            recordAfterDeleting.setNormalizedConcavePoints(record.getNormalizedConcavePoints());
+            recordAfterDeleting.setNormalizedSymmetry(record.getNormalizedSymmetry());
+            recordAfterDeleting.setNormalizedFractalDimension(record.getNormalizedFractalDimension());
+            recordAfterDeleting.setDecision(record.getDecision());
+
+            updatedRecords.add(recordAfterDeleting);
+        }
+    }
+//Lista rekordów po usunięciu niektórych atrybutów
+    public List<NormalizedRecord> getUpdatedRecords() {
+        return updatedRecords;
+    }
+//Blokowanie DeleteButton
     public boolean isDeletionPerformed() {
         return deletionFlag;
     }

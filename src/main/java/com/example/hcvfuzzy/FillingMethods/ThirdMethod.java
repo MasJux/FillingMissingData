@@ -1,47 +1,51 @@
 package com.example.hcvfuzzy.FillingMethods;
 
+import com.example.hcvfuzzy.Constructors.NormalizedRecord;
 import com.example.hcvfuzzy.Constructors.Record;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 
 public class ThirdMethod {
 
-    int sumRadiusDecisionTwo, sumRadiusDecisionFour = 0;
-    int sumTextureDecisionTwo, sumTextureDecisionFour = 0;
-    int sumPerimeterDecisionTwo, sumPerimeterDecisionFour = 0;
-    int sumAreaDecisionTwo, sumAreaDecisionFour = 0;
-    int sumSmoothnessDecisionTwo, sumSmoothnessDecisionFour = 0;
-    int sumCompactnessDecisionTwo, sumCompactnessDecisionFour = 0;
-    int sumConcavityDecisionTwo, sumConcavityDecisionFour = 0;
-    int sumConcavePointsDecisionTwo, sumConcavePointsDecisionFour = 0;
-    int sumSymmetryDecisionTwo, sumSymmetryDecisionFour = 0;
-    int sumFractalDimensionDecisionTwo, sumFractalDimensionDecisionFour = 0;
-    int countRadiusDecisionTwo, countRadiusDecisionFour = 0;
-    int countTextureDecisionTwo, countTextureDecisionFour = 0;
-    int countPerimeterDecisionTwo, countPerimeterDecisionFour = 0;
-    int countAreaDecisionTwo, countAreaDecisionFour = 0;
-    int countSmoothnessDecisionTwo, countSmoothnessDecisionFour = 0;
-    int countCompactnessDecisionTwo, countCompactnessDecisionFour = 0;
-    int countConcavityDecisionTwo, countConcavityDecisionFour = 0;
-    int countConcavePointsDecisionTwo, countConcavePointsDecisionFour = 0;
-    int countSymmetryDecisionTwo, countSymmetryDecisionFour = 0;
-    int countFractalDimensionDecisionTwo, countFractalDimensionDecisionFour = 0;
+    double sumRadiusDecisionTwo, sumRadiusDecisionFour = 0.0;
+    double sumTextureDecisionTwo, sumTextureDecisionFour = 0.0;
+    double sumPerimeterDecisionTwo, sumPerimeterDecisionFour = 0.0;
+    double sumAreaDecisionTwo, sumAreaDecisionFour = 0.0;
+    double sumSmoothnessDecisionTwo, sumSmoothnessDecisionFour = 0.0;
+    double sumCompactnessDecisionTwo, sumCompactnessDecisionFour = 0.0;
+    double sumConcavityDecisionTwo, sumConcavityDecisionFour = 0.0;
+    double sumConcavePointsDecisionTwo, sumConcavePointsDecisionFour = 0.0;
+    double sumSymmetryDecisionTwo, sumSymmetryDecisionFour = 0.0;
+    double sumFractalDimensionDecisionTwo, sumFractalDimensionDecisionFour = 0.0;
+    double countRadiusDecisionTwo, countRadiusDecisionFour = 0.0;
+    double countTextureDecisionTwo, countTextureDecisionFour = 0.0;
+    double countPerimeterDecisionTwo, countPerimeterDecisionFour = 0.0;
+    double countAreaDecisionTwo, countAreaDecisionFour = 0.0;
+    double countSmoothnessDecisionTwo, countSmoothnessDecisionFour = 0.0;
+    double countCompactnessDecisionTwo, countCompactnessDecisionFour = 0.0;
+    double countConcavityDecisionTwo, countConcavityDecisionFour = 0.0;
+    double countConcavePointsDecisionTwo, countConcavePointsDecisionFour = 0.0;
+    double countSymmetryDecisionTwo, countSymmetryDecisionFour = 0.0;
+    double countFractalDimensionDecisionTwo, countFractalDimensionDecisionFour = 0.0;
 
-    public void thirdFillingMethod(List<Record> dataList) {
+    public void thirdFillingMethod(List<NormalizedRecord> dataList) {
         resetCountsThirdMethod();
         resetSumThirdMethod();
-        for (Record rec : dataList) {
+        for (NormalizedRecord rec : dataList) {
             int id = rec.getID();
-            int radius = rec.getRadius();
-            int texture = rec.getTexture();
-            int perimeter = rec.getPerimeter();
-            int area = rec.getArea();
-            int smoothness = rec.getSmoothness();
-            int compactness = rec.getCompactness();
-            int concavity = rec.getConcavity();
-            int concavePoints = rec.getConcavePoints();
-            int symmetry = rec.getSymmetry();
-            int fractalDimension = rec.getFractalDimension();
+            double radius = rec.getNormalizedRadius();
+            double texture = rec.getNormalizedTexture();
+            double perimeter = rec.getNormalizedPerimeter();
+            double area = rec.getNormalizedArea();
+            double smoothness = rec.getNormalizedSmoothness();
+            double compactness = rec.getNormalizedCompactness();
+            double concavity = rec.getNormalizedConcavity();
+            double concavePoints = rec.getNormalizedConcavePoints();
+            double symmetry = rec.getNormalizedSymmetry();
+            double fractalDimension = rec.getNormalizedFractalDimension();
             int decision = rec.getDecision();
 
             if (decision == 2) {
@@ -129,27 +133,30 @@ public class ThirdMethod {
                 }
             }
         }
-        int avgRadiusDecisionTwo = sumRadiusDecisionTwo / countRadiusDecisionTwo;
-        int avgTextureDecisionTwo = sumTextureDecisionTwo / countTextureDecisionTwo;
-        int avgPerimeterDecisionTwo = sumPerimeterDecisionTwo / countPerimeterDecisionTwo;
-        int avgAreaDecisionTwo = sumAreaDecisionTwo / countAreaDecisionTwo;
-        int avgSmoothnessDecisionTwo = sumSmoothnessDecisionTwo / countSmoothnessDecisionTwo;
-        int avgCompactnessDecisionTwo = sumCompactnessDecisionTwo / countCompactnessDecisionTwo;
-        int avgConcavityDecisionTwo = sumConcavityDecisionTwo / countConcavityDecisionTwo;
-        int avgConcavePointsDecisionTwo = sumConcavePointsDecisionTwo / countConcavePointsDecisionTwo;
-        int avgSymmetryDecisionTwo = sumSymmetryDecisionTwo / countSymmetryDecisionTwo;
-        int avgFractalDimensionDecisionTwo = sumFractalDimensionDecisionTwo / countFractalDimensionDecisionTwo;
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        symbols.setDecimalSeparator('.');
+        DecimalFormat df = new DecimalFormat("#.#####",symbols);
+        double avgRadiusDecisionTwo = Double.parseDouble(df.format((double)sumRadiusDecisionTwo / countRadiusDecisionTwo));
+        double avgTextureDecisionTwo = Double.parseDouble(df.format((double)sumTextureDecisionTwo / countTextureDecisionTwo));
+        double avgPerimeterDecisionTwo = Double.parseDouble(df.format((double)sumPerimeterDecisionTwo / countPerimeterDecisionTwo));
+        double avgAreaDecisionTwo = Double.parseDouble(df.format((double)sumAreaDecisionTwo / countAreaDecisionTwo));
+        double avgSmoothnessDecisionTwo = Double.parseDouble(df.format((double)sumSmoothnessDecisionTwo / countSmoothnessDecisionTwo));
+        double avgCompactnessDecisionTwo = Double.parseDouble(df.format((double)sumCompactnessDecisionTwo / countCompactnessDecisionTwo));
+        double avgConcavityDecisionTwo = Double.parseDouble(df.format((double)sumConcavityDecisionTwo / countConcavityDecisionTwo));
+        double avgConcavePointsDecisionTwo = Double.parseDouble(df.format((double)sumConcavePointsDecisionTwo / countConcavePointsDecisionTwo));
+        double avgSymmetryDecisionTwo = Double.parseDouble(df.format((double)sumSymmetryDecisionTwo / countSymmetryDecisionTwo));
+        double avgFractalDimensionDecisionTwo = Double.parseDouble(df.format((double)sumFractalDimensionDecisionTwo / countFractalDimensionDecisionTwo));
 
-        int avgRadiusDecisionFour = sumRadiusDecisionFour / countRadiusDecisionFour;
-        int avgTextureDecisionFour = sumTextureDecisionFour / countTextureDecisionFour;
-        int avgPerimeterDecisionFour = sumPerimeterDecisionFour / countPerimeterDecisionFour;
-        int avgAreaDecisionFour = sumAreaDecisionFour / countAreaDecisionFour;
-        int avgSmoothnessDecisionFour = sumSmoothnessDecisionFour / countSmoothnessDecisionFour;
-        int avgCompactnessDecisionFour = sumCompactnessDecisionFour / countCompactnessDecisionFour;
-        int avgConcavityDecisionFour = sumConcavityDecisionFour / countConcavityDecisionFour;
-        int avgConcavePointsDecisionFour = sumConcavePointsDecisionFour / countConcavePointsDecisionFour;
-        int avgSymmetryDecisionFour = sumSymmetryDecisionFour / countSymmetryDecisionFour;
-        int avgFractalDimensionDecisionFour = sumFractalDimensionDecisionFour / countFractalDimensionDecisionFour;
+        double avgRadiusDecisionFour = Double.parseDouble(df.format((double)sumRadiusDecisionFour / countRadiusDecisionFour));
+        double avgTextureDecisionFour = Double.parseDouble(df.format((double)sumTextureDecisionFour / countTextureDecisionFour));
+        double avgPerimeterDecisionFour = Double.parseDouble(df.format((double)sumPerimeterDecisionFour / countPerimeterDecisionFour));
+        double avgAreaDecisionFour = Double.parseDouble(df.format((double)sumAreaDecisionFour / countAreaDecisionFour));
+        double avgSmoothnessDecisionFour = Double.parseDouble(df.format((double)sumSmoothnessDecisionFour / countSmoothnessDecisionFour));
+        double avgCompactnessDecisionFour = Double.parseDouble(df.format((double)sumCompactnessDecisionFour / countCompactnessDecisionFour));
+        double avgConcavityDecisionFour = Double.parseDouble(df.format((double)sumConcavityDecisionFour / countConcavityDecisionFour));
+        double avgConcavePointsDecisionFour = Double.parseDouble(df.format((double)sumConcavePointsDecisionFour / countConcavePointsDecisionFour));
+        double avgSymmetryDecisionFour = Double.parseDouble(df.format((double)sumSymmetryDecisionFour / countSymmetryDecisionFour));
+        double avgFractalDimensionDecisionFour = Double.parseDouble(df.format((double)sumFractalDimensionDecisionFour / countFractalDimensionDecisionFour));
 
         System.out.println("--------------------");
         System.out.println("Average Radius for decision two: "+avgRadiusDecisionTwo);
@@ -158,69 +165,69 @@ public class ThirdMethod {
         System.out.println("Sum and Count D4: "+sumRadiusDecisionFour+" - "+countRadiusDecisionFour);
 
 
-        for (Record updateRecord : dataList) {
+        for (NormalizedRecord updateRecord : dataList) {
             if (updateRecord.getDecision() == 2) {
-                if (updateRecord.getRadius() == -1) {
-                    updateRecord.setRadius(avgRadiusDecisionTwo);
+                if (updateRecord.getNormalizedRadius() == -1) {
+                    updateRecord.setNormalizedRadius(avgRadiusDecisionTwo);
                 }
-                if (updateRecord.getTexture() == -1) {
-                    updateRecord.setTexture(avgTextureDecisionTwo);
+                if (updateRecord.getNormalizedTexture() == -1) {
+                    updateRecord.setNormalizedTexture(avgTextureDecisionTwo);
                 }
-                if (updateRecord.getPerimeter() == -1) {
-                    updateRecord.setPerimeter(avgPerimeterDecisionTwo);
+                if (updateRecord.getNormalizedPerimeter() == -1) {
+                    updateRecord.setNormalizedPerimeter(avgPerimeterDecisionTwo);
                 }
-                if (updateRecord.getArea() == -1) {
-                    updateRecord.setArea(avgAreaDecisionTwo);
+                if (updateRecord.getNormalizedArea() == -1) {
+                    updateRecord.setNormalizedArea(avgAreaDecisionTwo);
                 }
-                if (updateRecord.getSmoothness() == -1) {
-                    updateRecord.setSmoothness(avgSmoothnessDecisionTwo);
+                if (updateRecord.getNormalizedSmoothness() == -1) {
+                    updateRecord.setNormalizedSmoothness(avgSmoothnessDecisionTwo);
                 }
-                if (updateRecord.getCompactness() == -1) {
-                    updateRecord.setCompactness(avgCompactnessDecisionTwo);
+                if (updateRecord.getNormalizedCompactness() == -1) {
+                    updateRecord.setNormalizedCompactness(avgCompactnessDecisionTwo);
                 }
-                if (updateRecord.getConcavity() == -1) {
-                    updateRecord.setConcavity(avgConcavityDecisionTwo);
+                if (updateRecord.getNormalizedConcavity() == -1) {
+                    updateRecord.setNormalizedConcavity(avgConcavityDecisionTwo);
                 }
-                if (updateRecord.getConcavePoints() == -1) {
-                    updateRecord.setConcavePoints(avgConcavePointsDecisionTwo);
+                if (updateRecord.getNormalizedConcavePoints() == -1) {
+                    updateRecord.setNormalizedConcavePoints(avgConcavePointsDecisionTwo);
                 }
-                if (updateRecord.getSymmetry() == -1) {
-                    updateRecord.setSymmetry(avgSymmetryDecisionTwo);
+                if (updateRecord.getNormalizedSymmetry() == -1) {
+                    updateRecord.setNormalizedSymmetry(avgSymmetryDecisionTwo);
                 }
-                if (updateRecord.getFractalDimension() == -1) {
-                    updateRecord.setFractalDimension(avgFractalDimensionDecisionTwo);
+                if (updateRecord.getNormalizedFractalDimension() == -1) {
+                    updateRecord.setNormalizedFractalDimension(avgFractalDimensionDecisionTwo);
                 }
             }
             if (updateRecord.getDecision() == 4){
-                if (updateRecord.getRadius() == -1) {
-                    updateRecord.setRadius(avgRadiusDecisionFour);
+                if (updateRecord.getNormalizedRadius() == -1) {
+                    updateRecord.setNormalizedRadius(avgRadiusDecisionFour);
                 }
-                if (updateRecord.getTexture() == -1) {
-                    updateRecord.setTexture(avgTextureDecisionFour);
+                if (updateRecord.getNormalizedTexture() == -1) {
+                    updateRecord.setNormalizedTexture(avgTextureDecisionFour);
                 }
-                if (updateRecord.getPerimeter() == -1) {
-                    updateRecord.setPerimeter(avgPerimeterDecisionFour);
+                if (updateRecord.getNormalizedPerimeter() == -1) {
+                    updateRecord.setNormalizedPerimeter(avgPerimeterDecisionFour);
                 }
-                if (updateRecord.getArea() == -1) {
-                    updateRecord.setArea(avgAreaDecisionFour);
+                if (updateRecord.getNormalizedArea() == -1) {
+                    updateRecord.setNormalizedArea(avgAreaDecisionFour);
                 }
-                if (updateRecord.getSmoothness() == -1) {
-                    updateRecord.setSmoothness(avgSmoothnessDecisionFour);
+                if (updateRecord.getNormalizedSmoothness() == -1) {
+                    updateRecord.setNormalizedSmoothness(avgSmoothnessDecisionFour);
                 }
-                if (updateRecord.getCompactness() == -1) {
-                    updateRecord.setCompactness(avgCompactnessDecisionFour);
+                if (updateRecord.getNormalizedCompactness() == -1) {
+                    updateRecord.setNormalizedCompactness(avgCompactnessDecisionFour);
                 }
-                if (updateRecord.getConcavity() == -1) {
-                    updateRecord.setConcavity(avgConcavityDecisionFour);
+                if (updateRecord.getNormalizedConcavity() == -1) {
+                    updateRecord.setNormalizedConcavity(avgConcavityDecisionFour);
                 }
-                if (updateRecord.getConcavePoints() == -1) {
-                    updateRecord.setConcavePoints(avgConcavePointsDecisionFour);
+                if (updateRecord.getNormalizedConcavePoints() == -1) {
+                    updateRecord.setNormalizedConcavePoints(avgConcavePointsDecisionFour);
                 }
-                if (updateRecord.getSymmetry() == -1) {
-                    updateRecord.setSymmetry(avgSymmetryDecisionFour);
+                if (updateRecord.getNormalizedSymmetry() == -1) {
+                    updateRecord.setNormalizedSymmetry(avgSymmetryDecisionFour);
                 }
-                if (updateRecord.getFractalDimension() == -1) {
-                    updateRecord.setFractalDimension(avgFractalDimensionDecisionFour);
+                if (updateRecord.getNormalizedFractalDimension() == -1) {
+                    updateRecord.setNormalizedFractalDimension(avgFractalDimensionDecisionFour);
                 }
             }
         }
