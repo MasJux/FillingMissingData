@@ -6,41 +6,67 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 public class EntropyMethod {
+    HashMap<NormalizedRecord,NormalizedRecord> bestObjectAndEntropy;
     public HashMap completeMissingValue(List<NormalizedRecord> listObjectWithMissingValue) {
-        HashMap<NormalizedRecord,NormalizedRecord> bestObjectAndEntropy = new HashMap<>();
+        bestObjectAndEntropy = new HashMap<>();
         NormalizedRecord objectWithMissingValue;
         NormalizedRecord winningRecord = null;
+        String nameOfMissingAttribute;
+        int missingObjectDecision;
+
         // Szukamy obiektu z brakujaca dana
         for (NormalizedRecord record : listObjectWithMissingValue) {
             double minEntropy = Double.MAX_VALUE;
             double[] attributes = record.getAttributes();
             if (record.containsMissingValue(attributes)) {
                 objectWithMissingValue = record;
-                //System.out.println("brakujaca dana: " + objectWithMissingValue);
-                System.out.println("Brakująca dana: " + objectWithMissingValue.getMissingAttributeName());
+                nameOfMissingAttribute = objectWithMissingValue.getMissingAttributeName();
+                missingObjectDecision = objectWithMissingValue.getDecision();
+                System.out.println("=============New Iteration===============");
+                System.out.println("Brakująca dana: " + nameOfMissingAttribute+" z ID: "+objectWithMissingValue.getID()+" z decyzją: "+missingObjectDecision);
             } else {
                 continue;
             }
 
             for (NormalizedRecord object : listObjectWithMissingValue) {
-                if (!(object == objectWithMissingValue)) {
+                String checkingNameOfMissingAttribute = null;
+                int checkingObjectDecision;
+                checkingObjectDecision = object.getDecision();
+                if(object.containsMissingValue(attributes)){
+                   checkingNameOfMissingAttribute = object.getMissingAttributeName();
+                   System.out.println("ID: "+object.getID()+". Missing Value: "+checkingNameOfMissingAttribute);
+                }
+                if (!(object.equals(objectWithMissingValue)) && (checkingNameOfMissingAttribute==null || checkingNameOfMissingAttribute.equals(nameOfMissingAttribute)) && missingObjectDecision == checkingObjectDecision) {
                     double entropy = calculateEntropy(objectWithMissingValue, object);
                     //System.out.println("objmissin: " + objectWithMissingValue + " - " + object);
-                    //System.out.println("Entropia:" + entropy);
+//                    System.out.println("Entropia:" + entropy);
                     // aktualizacja wartosci entropii
                     if (entropy < minEntropy) {
                         minEntropy = entropy;
                         winningRecord = object;
-                        System.out.println(object+" - "+minEntropy);
+//                        System.out.println(objectWithMissingValueID+" - "+winningRecordID);
+                       System.out.println("[[ID Best Object: "+object.getID()+". Best Object:"+object+". ID Missing Object"+objectWithMissingValue.getID()+". Missing Object: "+objectWithMissingValue+". Entropy: "+minEntropy);
                     }
+                }else{
+                    System.out.println("nie moge wykonac");
                 }
             }
             bestObjectAndEntropy.put(objectWithMissingValue,winningRecord);
         }
-        System.out.println(bestObjectAndEntropy);
+        fillMissingValues();
+        System.out.println("Best Object and Entropy: "+bestObjectAndEntropy);
         System.out.println(bestObjectAndEntropy.size());
             return bestObjectAndEntropy;
         }
+    private void fillMissingValues(){
+        for (NormalizedRecord recordWithMissingValue : bestObjectAndEntropy.keySet()) {
+            NormalizedRecord recordWithBestValue = bestObjectAndEntropy.get(recordWithMissingValue);
+            String nameRecordWithMissingValue = recordWithMissingValue.getMissingAttributeName();
+            double value = recordWithBestValue.getAttributeValue(nameRecordWithMissingValue);
+            System.out.println();
+            System.out.println("Value: " +value +" from "+recordWithBestValue.getID()+"attribute name: "+nameRecordWithMissingValue+". Filling object: "+recordWithMissingValue.getID());
+        }
+    }
     private static double calculateEntropy(NormalizedRecord missingAttributeObject, NormalizedRecord fullAttributesObject) {
         double[] attributesWithMissingValue = missingAttributeObject.getAttributes();
         double[] attributesWithoutMissingValue = fullAttributesObject.getAttributes();

@@ -192,6 +192,7 @@ public class NormalizedRecord {
         };
         return attributes;
     }
+    //sprawdz czy w rekodzie jest brakująca dana(bez nazw tylko wartosci)
     public boolean containsMissingValue(double[] attributes) {
         for (double attribute : attributes) {
             if (attribute == -1) {
@@ -200,6 +201,7 @@ public class NormalizedRecord {
         }
         return false;
     }
+    //sprawdz w ktory atrybut jest brakujący i wypisz jego nazwe
     public String getMissingAttributeName() {
         String[] attributeNames = {
                 "radius",
