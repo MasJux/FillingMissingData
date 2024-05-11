@@ -22,6 +22,7 @@ public class Record {
     private int FractalDimension;
     private int Decision;
 
+
     public Record(int ID, int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension, int decision) {
         this.ID = ID;
         this.Radius = radius;
@@ -38,31 +39,21 @@ public class Record {
     }
 
     public int getAttributeValue(String attributeName) {
-        switch (attributeName) {
-            case "radius":
-                return Radius;
-            case "texture":
-                return Texture;
-            case "perimeter":
-                return Perimeter;
-            case "area":
-                return Area;
-            case "smoothness":
-                return Smoothness;
-            case "compactness":
-                return Compactness;
-            case "concavity":
-                return Concavity;
-            case "concavePoints":
-                return ConcavePoints;
-            case "symmetry":
-                return Symmetry;
-            case "fractalDimension":
-                return FractalDimension;
-            default:
-                throw new IllegalArgumentException("Nieprawidłowa nazwa atrybutu: " + attributeName);
-        }
+        return switch (attributeName) {
+            case "radius" -> Radius;
+            case "texture" -> Texture;
+            case "perimeter" -> Perimeter;
+            case "area" -> Area;
+            case "smoothness" -> Smoothness;
+            case "compactness" -> Compactness;
+            case "concavity" -> Concavity;
+            case "concavePoints" -> ConcavePoints;
+            case "symmetry" -> Symmetry;
+            case "fractalDimension" -> FractalDimension;
+            default -> throw new IllegalArgumentException("Nieprawidłowa nazwa atrybutu: " + attributeName);
+        };
     }
+
 
     public int getID() {
         return ID;

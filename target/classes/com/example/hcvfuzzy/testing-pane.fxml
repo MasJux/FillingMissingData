@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="609.0" prefWidth="718.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hcvfuzzy.Controllers.TestingController">
+   <children>
+      <ScrollPane layoutX="50.0" layoutY="14.0" prefHeight="162.0" prefWidth="647.0">
+         <content>
+            <VBox fx:id="firstVBox" prefHeight="162.0" prefWidth="632.0" />
+         </content>
+      </ScrollPane>
+      <ScrollPane layoutX="50.0" layoutY="194.0" prefHeight="162.0" prefWidth="647.0">
+         <content>
+            <VBox fx:id="secondVBox" prefHeight="200.0" prefWidth="632.0" />
+         </content>
+      </ScrollPane>
+      <ScrollPane layoutX="50.0" layoutY="374.0" prefHeight="162.0" prefWidth="647.0">
+         <content>
+            <VBox fx:id="thirdVBox" prefHeight="160.0" prefWidth="631.0" />
+         </content>
+      </ScrollPane>
+      <Button layoutX="348.0" layoutY="571.0" mnemonicParsing="false" onAction="#generateButton" text="Generate" />
+   </children>
+</AnchorPane>

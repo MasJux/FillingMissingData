@@ -1,6 +1,7 @@
 package com.example.hcvfuzzy.FillingMethods;
 import com.example.hcvfuzzy.Constructors.NormalizedRecord;
 import com.example.hcvfuzzy.Controllers.DeletingCellsController;
+import com.example.hcvfuzzy.Holders.DataAfterEntropyFilling;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -22,8 +23,8 @@ public class EntropyMethod {
                 objectWithMissingValue = record;
                 nameOfMissingAttribute = objectWithMissingValue.getMissingAttributeName();
                 missingObjectDecision = objectWithMissingValue.getDecision();
-                System.out.println("=============New Iteration===============");
-                System.out.println("Brakująca dana: " + nameOfMissingAttribute+" z ID: "+objectWithMissingValue.getID()+" z decyzją: "+missingObjectDecision);
+//                System.out.println("=============New Iteration===============");
+//                System.out.println("Brakująca dana: " + nameOfMissingAttribute+" z ID: "+objectWithMissingValue.getID()+" z decyzją: "+missingObjectDecision);
             } else {
                 continue;
             }
@@ -34,28 +35,23 @@ public class EntropyMethod {
                 checkingObjectDecision = object.getDecision();
                 if(object.containsMissingValue(attributes)){
                    checkingNameOfMissingAttribute = object.getMissingAttributeName();
-                   System.out.println("ID: "+object.getID()+". Missing Value: "+checkingNameOfMissingAttribute);
                 }
                 if (!(object.equals(objectWithMissingValue)) && (checkingNameOfMissingAttribute==null || checkingNameOfMissingAttribute.equals(nameOfMissingAttribute)) && missingObjectDecision == checkingObjectDecision) {
                     double entropy = calculateEntropy(objectWithMissingValue, object);
-                    //System.out.println("objmissin: " + objectWithMissingValue + " - " + object);
-//                    System.out.println("Entropia:" + entropy);
                     // aktualizacja wartosci entropii
                     if (entropy < minEntropy) {
                         minEntropy = entropy;
                         winningRecord = object;
-//                        System.out.println(objectWithMissingValueID+" - "+winningRecordID);
-                       System.out.println("[[ID Best Object: "+object.getID()+". Best Object:"+object+". ID Missing Object"+objectWithMissingValue.getID()+". Missing Object: "+objectWithMissingValue+". Entropy: "+minEntropy);
+//                       System.out.println("[[ID Best Object: "+object.getID()+". Best Object:"+object+". ID Missing Object"+objectWithMissingValue.getID()+". Missing Object: "+objectWithMissingValue+". Entropy: "+minEntropy);
                     }
-                }else{
-                    System.out.println("nie moge wykonac");
                 }
             }
             bestObjectAndEntropy.put(objectWithMissingValue,winningRecord);
         }
         fillMissingValues();
-        System.out.println("Best Object and Entropy: "+bestObjectAndEntropy);
-        System.out.println(bestObjectAndEntropy.size());
+        updateRecords(listObjectWithMissingValue, bestObjectAndEntropy);
+//        System.out.println("Best Object and Entropy: "+bestObjectAndEntropy);
+//        System.out.println(bestObjectAndEntropy.size());
             return bestObjectAndEntropy;
         }
     private void fillMissingValues(){
@@ -63,8 +59,27 @@ public class EntropyMethod {
             NormalizedRecord recordWithBestValue = bestObjectAndEntropy.get(recordWithMissingValue);
             String nameRecordWithMissingValue = recordWithMissingValue.getMissingAttributeName();
             double value = recordWithBestValue.getAttributeValue(nameRecordWithMissingValue);
-            System.out.println();
-            System.out.println("Value: " +value +" from "+recordWithBestValue.getID()+"attribute name: "+nameRecordWithMissingValue+". Filling object: "+recordWithMissingValue.getID());
+//            recordWithMissingValue.setAttributeValue(nameRecordWithMissingValue, value);
+//            System.out.println("Value: " +value +" from "+recordWithBestValue.getID()+"attribute name: "+nameRecordWithMissingValue+". Filling object: "+recordWithMissingValue.getID());
+        }
+    }
+    public void updateRecords(List<NormalizedRecord> listObjectWithMissingValue, Map<NormalizedRecord, NormalizedRecord> bestObjectAndEntropy) {
+
+        for (NormalizedRecord recordWithMissingValue : listObjectWithMissingValue) {
+            NormalizedRecord recordWithBestValue = bestObjectAndEntropy.get(recordWithMissingValue);
+            NormalizedRecord recordWithMissingValueCopy = new NormalizedRecord(recordWithMissingValue);
+            if (recordWithBestValue != null) {
+                String missingAttributeName = recordWithMissingValue.getMissingAttributeName();
+                double value = recordWithBestValue.getAttributeValue(missingAttributeName);
+
+                // Ustawianie zaktualizowanej wartości w odpowiednim atrybucie
+                recordWithMissingValueCopy.setAttributeValue(missingAttributeName, value);
+
+                DataAfterEntropyFilling.getDataAfterEntropyFilling().add(recordWithMissingValueCopy);
+            }else{
+                DataAfterEntropyFilling.getDataAfterEntropyFilling().add(recordWithMissingValueCopy);
+
+            }
         }
     }
     private static double calculateEntropy(NormalizedRecord missingAttributeObject, NormalizedRecord fullAttributesObject) {
@@ -85,9 +100,8 @@ public class EntropyMethod {
         }
 
         // pierwiastek sumy kwadratów różnic
-        double distance = Math.sqrt(sumSquaredDiff);
 
-        return distance;
+        return Math.sqrt(sumSquaredDiff);
     }
 
 }

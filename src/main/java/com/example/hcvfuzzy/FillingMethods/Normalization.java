@@ -2,6 +2,7 @@ package com.example.hcvfuzzy.FillingMethods;
 
 import com.example.hcvfuzzy.Constructors.NormalizedRecord;
 import com.example.hcvfuzzy.Constructors.Record;
+import com.example.hcvfuzzy.Holders.NormalizedDataBeforeDeletingHolder;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +15,7 @@ import java.util.*;
 
 public class Normalization {
     private final ObservableList<NormalizedRecord> normalizeDataList = FXCollections.observableArrayList();
-    public List<NormalizedRecord> defaultPublicNormalizedDataList = new ArrayList<>();
+    //public List<NormalizedRecord> defaultPublicNormalizedDataList = new ArrayList<>();
     private static final List<String> ATTRIBUTES = Arrays.asList("radius", "texture", "perimeter", "area", "smoothness", "compactness"
             , "concavity", "concavePoints", "symmetry", "fractalDimension");
 
@@ -43,14 +44,17 @@ public class Normalization {
 
             for (String attributeName : ATTRIBUTES) {
                 int id = record.getID();
+                int decision = record.getDecision();
                 int attributeValue = record.getAttributeValue(attributeName);
                 int minAttributeValue = minValues.get(attributeName);
                 int maxAttributeValue = maxValues.get(attributeName);
                 double normalizedValue = df.parse(df.format((double) (attributeValue - minAttributeValue) / (maxAttributeValue - minAttributeValue))).doubleValue();
                 normalizedRecord.setID(id);
                 normalizedRecord.setAttributeValue(attributeName, normalizedValue);
+                normalizedRecord.setDecision(decision);
             }
-            defaultPublicNormalizedDataList.add(normalizedRecord);
+//            defaultPublicNormalizedDataList.add(normalizedRecord);
+            NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList().add(normalizedRecord);
         }
 //        for (int i = 0; i < defaultPublicNormalizedDataList.size(); i++) {
 //            NormalizedRecord normalizedRecord = defaultPublicNormalizedDataList.get(i);
@@ -81,10 +85,10 @@ public class Normalization {
         newTableView.setItems(FXCollections.observableArrayList(normalizeDataList));
         newTableView.getColumns().add(decisionColumn);
 
-
-        for (int i = 0; i < defaultPublicNormalizedDataList.size(); i++) {
+        List<NormalizedRecord> normalizedDataList = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
+        for (int i = 0; i < normalizedDataList.size(); i++) {
             Record originalRecord = dataList.get(i);
-            NormalizedRecord normalizedRecord = defaultPublicNormalizedDataList.get(i);
+            NormalizedRecord normalizedRecord = normalizedDataList.get(i);
             NormalizedRecord newRecord = new NormalizedRecord();
 
             newRecord.setID(originalRecord.getID());

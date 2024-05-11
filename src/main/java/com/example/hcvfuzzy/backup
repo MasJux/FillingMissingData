@@ -1,0 +1,50 @@
+public class EntropyMethod {
+    // Metoda obliczająca ACC (Accuracy), SENS (Sensitivity), SPEC (Specificity), PREC (Precision) dla danej metody
+    public HashMap<String, Double> calculateMetrics(List<NormalizedRecord> originalData, List<NormalizedRecord> filledData) {
+        int totalInstances = originalData.size();
+        int correctPredictions = 0;
+        int truePositives = 0;
+        int trueNegatives = 0;
+        int falsePositives = 0;
+        int falseNegatives = 0;
+
+        // Obliczanie metryk na podstawie oryginalnych danych i danych uzupełnionych
+        for (int i = 0; i < totalInstances; i++) {
+            NormalizedRecord originalRecord = originalData.get(i);
+            NormalizedRecord filledRecord = filledData.get(i);
+
+            // Sprawdzenie czy decyzje się zgadzają
+            if (originalRecord.getDecision() == filledRecord.getDecision()) {
+                correctPredictions++;
+
+                // Sprawdzenie czy decyzja jest pozytywna czy negatywna
+                if (originalRecord.getDecision() == 1) {
+                    truePositives++;
+                } else {
+                    trueNegatives++;
+                }
+            } else {
+                // Sprawdzenie czy decyzja powinna być pozytywna czy negatywna
+                if (originalRecord.getDecision() == 1) {
+                    falseNegatives++;
+                } else {
+                    falsePositives++;
+                }
+            }
+        }
+
+        // Obliczenie wartości metryk
+        double accuracy = (double) correctPredictions / totalInstances;
+        double sensitivity = (double) truePositives / (truePositives + falseNegatives);
+        double specificity = (double) trueNegatives / (trueNegatives + falsePositives);
+        double precision = (double) truePositives / (truePositives + falsePositives);
+
+        // Umieszczenie wyników w mapie
+        HashMap<String, Double> metrics = new HashMap<>();
+        metrics.put("ACC", accuracy);
+        metrics.put("SENS", sensitivity);
+        metrics.put("SPEC", specificity);
+        metrics.put("PREC", precision);
+
+        return metrics;
+    }

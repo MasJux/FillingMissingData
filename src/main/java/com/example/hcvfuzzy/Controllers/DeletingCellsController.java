@@ -1,6 +1,8 @@
 package com.example.hcvfuzzy.Controllers;
 
 import com.example.hcvfuzzy.Constructors.NormalizedRecord;
+import com.example.hcvfuzzy.Holders.NormalizedDataAfterDeletingHolder;
+import com.example.hcvfuzzy.Holders.NormalizedDataBeforeDeletingHolder;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -22,7 +24,6 @@ public class DeletingCellsController implements Initializable {
     @FXML
     private Button deleteButton;
     private TableView<NormalizedRecord> newTableView;
-    private List<NormalizedRecord> updatedRecords = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -118,13 +119,10 @@ public class DeletingCellsController implements Initializable {
             recordAfterDeleting.setNormalizedFractalDimension(record.getNormalizedFractalDimension());
             recordAfterDeleting.setDecision(record.getDecision());
 
-            updatedRecords.add(recordAfterDeleting);
+            NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList().add(recordAfterDeleting);
         }
     }
-//Lista rekordów po usunięciu niektórych atrybutów
-    public List<NormalizedRecord> getUpdatedRecords() {
-        return updatedRecords;
-    }
+
 //Blokowanie DeleteButton
     public boolean isDeletionPerformed() {
         return deletionFlag;

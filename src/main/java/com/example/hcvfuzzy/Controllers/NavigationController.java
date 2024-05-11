@@ -1,5 +1,6 @@
 package com.example.hcvfuzzy.Controllers;
 
+import com.example.hcvfuzzy.AlgorithmkNN.Metrics;
 import com.example.hcvfuzzy.Constructors.NormalizedRecord;
 import com.example.hcvfuzzy.Constructors.Record;
 import com.example.hcvfuzzy.Database.loadDataBase;
@@ -7,6 +8,11 @@ import com.example.hcvfuzzy.FillingMethods.EntropyMethod;
 import com.example.hcvfuzzy.FillingMethods.Normalization;
 import com.example.hcvfuzzy.FillingMethods.SecondMethod;
 import com.example.hcvfuzzy.FillingMethods.ThirdMethod;
+import com.example.hcvfuzzy.Holders.DataAfterEntropyFilling;
+import com.example.hcvfuzzy.Holders.NormalizedDataAfterDeletingHolder;
+import com.example.hcvfuzzy.Holders.NormalizedDataBeforeDeletingHolder;
+import com.example.hcvfuzzy.AlgorithmkNN.Classification;
+import com.example.hcvfuzzy.AlgorithmkNN.TrainingTestingData;
 import com.example.hcvfuzzy.main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -56,9 +61,11 @@ public class NavigationController implements Initializable {
     Normalization normalization = new Normalization();
     SecondMethod secondMethod = new SecondMethod();
     ThirdMethod thirdMethod = new ThirdMethod();
+    TrainingTestingData trainingTestingData = new TrainingTestingData();
     loadDataBase dataBase = new loadDataBase();
     DeletingCellsController buttonsController = new DeletingCellsController();
     private DeletingCellsController deletingCellsController;
+    private TestingController testingController;
     private EntropyMethod entropyMethod = new EntropyMethod();
     TableView<Record> tableView;
     TableView<NormalizedRecord> newTableView;
@@ -68,6 +75,7 @@ public class NavigationController implements Initializable {
     private int id;
     private int radius, texture, perimeter, area, smoothness, compactness, concavity, concavePoints, symmetry, fractalDimension;
     private Parent deletingPaneRoot;
+    private Parent testingPane;
     public NavigationController() {
     }
 
@@ -166,6 +174,22 @@ public class NavigationController implements Initializable {
         }
     }
     @FXML
+    private void testingPane(MouseEvent event) throws IOException {
+        try {
+            if(testingController == null){
+                FXMLLoader loader = new FXMLLoader(main.class.getResource("testing-pane.fxml"));
+                TestingController controller = new TestingController();
+                testingPane = loader.load();
+                testingController = loader.getController();
+                borderPane.setCenter(testingPane);
+            }else{
+                borderPane.setCenter(testingPane);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(NavigationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    @FXML
     private void editRow() throws IOException {
         FXMLLoader loader = new FXMLLoader(main.class.getResource("editing-pane.fxml"));
         Parent root = loader.load();
@@ -204,7 +228,7 @@ public class NavigationController implements Initializable {
     @FXML
     private void restoreSecondMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
-        List<NormalizedRecord> listAfterDeleting = deletingCellsController.getUpdatedRecords();
+        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
         secondMethod.secondFillingMethod(listAfterDeleting);
         getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
         secondMethod.resetCounts();
@@ -213,7 +237,7 @@ public class NavigationController implements Initializable {
     @FXML
     private void restoreThirdMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
-        List<NormalizedRecord> listAfterDeleting = deletingCellsController.getUpdatedRecords();
+        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
         thirdMethod.thirdFillingMethod(listAfterDeleting);
         getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
         thirdMethod.resetSumThirdMethod();
@@ -243,15 +267,30 @@ public class NavigationController implements Initializable {
         }
     @FXML
     private void testButton(){
-        List<NormalizedRecord> listAfterDeleting = deletingCellsController.getUpdatedRecords();
+        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
 //        for(NormalizedRecord rec: listAfterDeleting){
 //            System.out.println(rec.getID()+" - "+ rec.getNormalizedRadius());
 //        }
-        entropyMethod.completeMissingValue(listAfterDeleting);
+//        entropyMethod.completeMissingValue(listAfterDeleting);
+//        trainingTestingData.splitTrainAndTestData();
+//        List<NormalizedRecord> listAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
+//        Classification classification = new Classification();
+//        for(NormalizedRecord norm : listAfterEntropy){
+//           classification.classifyNewObject(norm, listAfterEntropy, 5);
+//        }
+        Metrics metrics = new Metrics();
+        metrics.evaluateKNNWithEntropy(listAfterDeleting);
     }
     @FXML
     private void showInitialData(){
-        System.out.println(normalization.defaultPublicNormalizedDataList);
+        List<NormalizedRecord> normalizedDataList = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
+        System.out.println(normalizedDataList);
+        for(int i = 0; i<699;i++){
+            NormalizedRecord nr = normalizedDataList.get(i);
+            System.out.println(nr.getID());
+            System.out.println(nr.getNormalizedRadius());
+            System.out.println(nr.getNormalizedTexture());
+        }
     }
     /**
      * ustawienie metod uzupełniania pod znormalizowane dane (done)
@@ -263,6 +302,12 @@ public class NavigationController implements Initializable {
      * druga metoda entropii
      * podłączenie 3 Pane'a pod wykresy (kolumny, liniowe)
      * ew. analiza odchylenia standardowego 
+     */
+
+    /**
+     *         List<NormalizedRecord> normalizedDataList = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
+     *         System.out.println(normalizedDataList); - lista obiektów zawierająca znormalizowane wartości BEZ USUNIĘĆ.
+     * deletingCellsController.getAfterDeletingPublicNormalizedDataList(); - lista obiektów zaweirająca znormalizowane wartości Z USUNIĘCIAMI.
      */
 }
 

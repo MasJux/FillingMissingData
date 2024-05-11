@@ -17,6 +17,21 @@ public class NormalizedRecord {
     public NormalizedRecord() {
 
     }
+    public NormalizedRecord(NormalizedRecord record) {
+        this.ID = record.ID;
+        this.NormalizedRadius = record.NormalizedRadius;
+        this.NormalizedTexture = record.NormalizedTexture;
+        this.NormalizedPerimeter = record.NormalizedPerimeter;
+        this.NormalizedArea = record.NormalizedArea;
+        this.NormalizedSmoothness = record.NormalizedSmoothness ;
+        this.NormalizedCompactness = record.NormalizedCompactness;
+        this.NormalizedConcavity = record.NormalizedConcavity;
+        this.NormalizedConcavePoints = record.NormalizedConcavePoints;
+        this.NormalizedSymmetry = record.NormalizedSymmetry;
+        this.NormalizedFractalDimension = record.NormalizedFractalDimension;
+        this.Decision = record.Decision;
+
+    }
     public double getAttributeValue(String attributeName) {
         switch (attributeName) {
             case "radius":
