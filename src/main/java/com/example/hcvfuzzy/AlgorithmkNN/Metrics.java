@@ -12,13 +12,13 @@ public class Metrics {
     List<Integer> classifiedDecisionList = new ArrayList<>();
     public void evaluateKNNWithEntropy(List<NormalizedRecord> dataset) {
         double totalACC;
-        double totalSENS = 0.0;
-        double totalSPEC = 0.0;
-        double totalPREC = 0.0;
+        double totalSENS;
+        double totalSPEC;
+        double totalPREC;
 
         // 10-krotna walidacja krzyżowa
 //        List<NormalizedRecord> dataAfterEntropyFilling = DataAfterEntropyFilling.getDataAfterEntropyFilling();
-//TODO trzeba przetasować po kazdej iteracji
+//TODO mieszanie itr
         double trainPercentage = 0.7;
         List<NormalizedRecord> trainData = new ArrayList<>();
         List<NormalizedRecord> testData = new ArrayList<>();
@@ -54,10 +54,16 @@ public class Metrics {
             classifiedDecisionList.add(classifiedDecision);
         }
         totalACC = calculateAccuracy(originalDecisionList, classifiedDecisionList);
-        System.out.println(totalACC);
+        totalSENS = calculateSensivity(originalDecisionList, classifiedDecisionList);
+        totalSPEC = calculateSpecificity(originalDecisionList, classifiedDecisionList);
+        totalPREC = calculatePrecision(originalDecisionList, classifiedDecisionList);
+        System.out.println("ACC: "+totalACC);
+        System.out.println("SENS: "+totalSENS);
+        System.out.println("SPEC: "+totalSPEC);
+        System.out.println("PREC: "+totalPREC);
     }
 
-    //metryki
+    //metryka dokładności
     public static double calculateAccuracy(List<Integer> originalDecisionList, List <Integer> classifiedDecisionList) {
         int correctCount = 0;
         for (int i = 0; i < originalDecisionList.size(); i++) {
@@ -66,6 +72,48 @@ public class Metrics {
             }
         }
         return (double) correctCount / originalDecisionList.size();
+    }
+    //metryka czułości
+    public static double calculateSensivity(List<Integer> originalDecisionList, List <Integer> classifiedDecisionList){
+        int truePositive = 0;
+        int positiveCount = 0;
+        for(int i = 0; i< originalDecisionList.size();i++){
+            if(originalDecisionList.get(i) == 2){
+                positiveCount++;
+                if(classifiedDecisionList.get(i) == 2){
+                    truePositive++;
+                }
+            }
+        }
+        return (double) truePositive/positiveCount;
+    }
+    //metryka specyficzności
+    public static double calculateSpecificity(List<Integer> originalDecisionList, List <Integer> classifiedDecisionList){
+        int trueNegative = 0;
+        int negativeCount = 0;
+        for(int i = 0;i<originalDecisionList.size();i++){
+            if(originalDecisionList.get(i) == 4){
+                negativeCount++;
+                if(classifiedDecisionList.get(i) == 4){
+                    trueNegative++;
+                }
+            }
+        }
+        return (double) trueNegative/negativeCount;
+    }
+    //metryka precyzji
+    public static double calculatePrecision(List<Integer> originalDecisionList, List <Integer> classifiedDecisionList){
+        int truePositive = 0;
+        int positiveCount = 0;
+        for(int i = 0; i< classifiedDecisionList.size();i++){
+            if(classifiedDecisionList.get(i) == 2){
+                positiveCount++;
+                if(originalDecisionList.get(i)==2){
+                    truePositive++;
+                }
+            }
+        }
+        return (double) truePositive/positiveCount;
     }
 }
 

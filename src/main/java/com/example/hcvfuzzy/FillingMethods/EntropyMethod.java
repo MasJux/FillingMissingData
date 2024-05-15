@@ -85,9 +85,9 @@ public class EntropyMethod {
     private static double calculateEntropy(NormalizedRecord missingAttributeObject, NormalizedRecord fullAttributesObject) {
         double[] attributesWithMissingValue = missingAttributeObject.getAttributes();
         double[] attributesWithoutMissingValue = fullAttributesObject.getAttributes();
-        // euklides
+
         double distance = calculateDistance(attributesWithMissingValue, attributesWithoutMissingValue);
-        // wychwycenie najmniejszej entropii
+
         return 1 / distance;
     }
     private static double calculateDistance(double[] missingAttributeObject, double[] fullAttributesObject) {
@@ -100,7 +100,6 @@ public class EntropyMethod {
         }
 
         // pierwiastek sumy kwadratów różnic
-
         return Math.sqrt(sumSquaredDiff);
     }
 
@@ -110,15 +109,14 @@ public class EntropyMethod {
  * pozniej korzystając z odl. euklidesowej liczymy entropie, im mniejsza tym bardziej podobna.
  * Powinno zapisywać entropię do danego obiektu i wybierać najlepsze dopasowanie a pozniej uzupełnic tym dane.
  *
- * Oprócz tego powinno pomijać obiekty w których brakuje jakiejs danej(?)
- * Czy ma być np. 100 wierszy z jedną brakującą daną? Czy na cały dataset ma miec 1 brakująca.
- * Czy metoda licząca jest odpowiednia.
+
  * TODO
- * !IMPORTANT uporządkować metody w normalizedRecord i wykonać:
+ * uporządkować metody w normalizedRecord i wykonać:
  * (Jezeli mamy obiekt w ktorym brakuje radius to przy przeszukiwaniu odrzucamy wszystkie obiekty w których jest brak innych
  *      atrybutów np.
  *      obiekt z brakiem radius - 0
  *      odrzucamy obiekt z brakiem concavity - 0)
- * Różne entropie lub rozne miary (jako element badawczy) mozna odwrocic ten distance zeby nie szualo najmniejszego tylko
+ * Różne entropie lub rozne miary (jako element badawczy) mozna odwrocic ten distance zeby nie szukalo najmniejszego tylko
  * najwieksze pradopodobienstwo
+ *
  */
