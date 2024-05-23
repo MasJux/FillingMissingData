@@ -1,9 +1,7 @@
 package com.example.hcvfuzzy.FillingMethods;
-import com.example.hcvfuzzy.Constructors.NormalizedRecord;
-import com.example.hcvfuzzy.Controllers.DeletingCellsController;
+import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.Holders.DataAfterEntropyFilling;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class EntropyMethod {
@@ -18,21 +16,22 @@ public class EntropyMethod {
         // Szukamy obiektu z brakujaca dana
         for (NormalizedRecord record : listObjectWithMissingValue) {
             double minEntropy = Double.MAX_VALUE;
-            double[] attributes = record.getAttributes();
+            double[][] attributes = record.getAttributes();
+            System.out.println(record.getMissingAttributeName()+" name");
+            System.out.println(record.containsMissingValue(attributes));
             if (record.containsMissingValue(attributes)) {
                 objectWithMissingValue = record;
                 nameOfMissingAttribute = objectWithMissingValue.getMissingAttributeName();
                 missingObjectDecision = objectWithMissingValue.getDecision();
-//                System.out.println("=============New Iteration===============");
-//                System.out.println("Brakująca dana: " + nameOfMissingAttribute+" z ID: "+objectWithMissingValue.getID()+" z decyzją: "+missingObjectDecision);
+                System.out.println("=============New Iteration===============");
+                System.out.println("Brakująca dana: " + nameOfMissingAttribute+" z ID: "+objectWithMissingValue.getID()+" z decyzją: "+missingObjectDecision);
             } else {
                 continue;
             }
 
             for (NormalizedRecord object : listObjectWithMissingValue) {
                 String checkingNameOfMissingAttribute = null;
-                int checkingObjectDecision;
-                checkingObjectDecision = object.getDecision();
+                int checkingObjectDecision = object.getDecision();
                 if(object.containsMissingValue(attributes)){
                    checkingNameOfMissingAttribute = object.getMissingAttributeName();
                 }
@@ -47,6 +46,7 @@ public class EntropyMethod {
                 }
             }
             bestObjectAndEntropy.put(objectWithMissingValue,winningRecord);
+            System.out.println(bestObjectAndEntropy);
         }
         fillMissingValues();
         updateRecords(listObjectWithMissingValue, bestObjectAndEntropy);
@@ -58,7 +58,7 @@ public class EntropyMethod {
         for (NormalizedRecord recordWithMissingValue : bestObjectAndEntropy.keySet()) {
             NormalizedRecord recordWithBestValue = bestObjectAndEntropy.get(recordWithMissingValue);
             String nameRecordWithMissingValue = recordWithMissingValue.getMissingAttributeName();
-            double value = recordWithBestValue.getAttributeValue(nameRecordWithMissingValue);
+//            double value = recordWithBestValue.getAttributeValue(nameRecordWithMissingValue);
 //            recordWithMissingValue.setAttributeValue(nameRecordWithMissingValue, value);
 //            System.out.println("Value: " +value +" from "+recordWithBestValue.getID()+"attribute name: "+nameRecordWithMissingValue+". Filling object: "+recordWithMissingValue.getID());
         }
@@ -70,7 +70,7 @@ public class EntropyMethod {
             NormalizedRecord recordWithMissingValueCopy = new NormalizedRecord(recordWithMissingValue);
             if (recordWithBestValue != null) {
                 String missingAttributeName = recordWithMissingValue.getMissingAttributeName();
-                double value = recordWithBestValue.getAttributeValue(missingAttributeName);
+                double[] value = recordWithBestValue.getAttributeValue(missingAttributeName);
 
                 // Ustawianie zaktualizowanej wartości w odpowiednim atrybucie
                 recordWithMissingValueCopy.setAttributeValue(missingAttributeName, value);
@@ -83,26 +83,28 @@ public class EntropyMethod {
         }
     }
     private static double calculateEntropy(NormalizedRecord missingAttributeObject, NormalizedRecord fullAttributesObject) {
-        double[] attributesWithMissingValue = missingAttributeObject.getAttributes();
-        double[] attributesWithoutMissingValue = fullAttributesObject.getAttributes();
 
-        double distance = calculateDistance(attributesWithMissingValue, attributesWithoutMissingValue);
+        double distance = calculateDistance(missingAttributeObject, fullAttributesObject);
 
         return 1 / distance;
     }
-    private static double calculateDistance(double[] missingAttributeObject, double[] fullAttributesObject) {
-        double sumSquaredDiff = 0.0;
+    private static double calculateDistance(NormalizedRecord objectWithMissingAttribute, NormalizedRecord objectWithoutMissingAttribute) {
+        double[][] attributesWithMissingValue = objectWithMissingAttribute.getAttributes();
+        double[][] attributesWithoutMissingValue = objectWithoutMissingAttribute.getAttributes();
+        double sumOfSquares = 0.0;
+        int n = attributesWithMissingValue.length;
 
-        // roznica kwadratów
-        for (int i = 0; i < missingAttributeObject.length; i++) {
-            double diff = missingAttributeObject[i] - fullAttributesObject[i];
-            sumSquaredDiff += Math.pow(diff, 2);
+        for (int i = 0; i < n; i++) {
+            if (Arrays.equals(attributesWithMissingValue[i], new double[]{0, 0})) {
+                continue;
+            }
+            double lowerCompDiff = attributesWithMissingValue[i][0] - attributesWithoutMissingValue[i][0];
+            double upperCompDiff = attributesWithMissingValue[i][1] - attributesWithoutMissingValue[i][1];
+            double maxDiffSquared = Math.max(Math.pow(lowerCompDiff, 2), Math.pow(upperCompDiff, 2));
+            sumOfSquares += maxDiffSquared;
         }
-
-        // pierwiastek sumy kwadratów różnic
-        return Math.sqrt(sumSquaredDiff);
+        return Math.sqrt(sumOfSquares / n);
     }
-
 }
 /**
  * liczenie odległości euklidesowej między obiektem z brakującymi danymi a resztą obiektów(ta sama klasa decyzyjna)

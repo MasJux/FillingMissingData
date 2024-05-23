@@ -1,18 +1,16 @@
 package com.example.hcvfuzzy.Controllers;
 
 import com.example.hcvfuzzy.AlgorithmkNN.Metrics;
-import com.example.hcvfuzzy.Constructors.NormalizedRecord;
-import com.example.hcvfuzzy.Constructors.Record;
+import com.example.hcvfuzzy.Holders.DataAfterEntropyFilling;
+import com.example.hcvfuzzy.Objects.NormalizedRecord;
+import com.example.hcvfuzzy.Objects.Record;
 import com.example.hcvfuzzy.Database.loadDataBase;
 import com.example.hcvfuzzy.FillingMethods.EntropyMethod;
 import com.example.hcvfuzzy.FillingMethods.Normalization;
-import com.example.hcvfuzzy.FillingMethods.SecondMethod;
-import com.example.hcvfuzzy.FillingMethods.ThirdMethod;
-import com.example.hcvfuzzy.Holders.DataAfterEntropyFilling;
+//import com.example.hcvfuzzy.FillingMethods.SecondMethod;
+//import com.example.hcvfuzzy.FillingMethods.ThirdMethod;
 import com.example.hcvfuzzy.Holders.NormalizedDataAfterDeletingHolder;
 import com.example.hcvfuzzy.Holders.NormalizedDataBeforeDeletingHolder;
-import com.example.hcvfuzzy.AlgorithmkNN.Classification;
-import com.example.hcvfuzzy.AlgorithmkNN.TrainingTestingData;
 import com.example.hcvfuzzy.main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -59,9 +58,8 @@ public class NavigationController implements Initializable {
     boolean isDataNormalized = false;
     boolean isNormalizedTableViewExist = false;
     Normalization normalization = new Normalization();
-    SecondMethod secondMethod = new SecondMethod();
-    ThirdMethod thirdMethod = new ThirdMethod();
-    TrainingTestingData trainingTestingData = new TrainingTestingData();
+//    SecondMethod secondMethod = new SecondMethod();
+//    ThirdMethod thirdMethod = new ThirdMethod();
     loadDataBase dataBase = new loadDataBase();
     DeletingCellsController buttonsController = new DeletingCellsController();
     private DeletingCellsController deletingCellsController;
@@ -164,7 +162,7 @@ public class NavigationController implements Initializable {
                 deletingPaneRoot = loader.load();
                 deletingCellsController = loader.getController();
                 deletingCellsController.setMethodButton(secondMethodButton, thirdMethodButton);
-                deletingCellsController.setTableView(newTableView);
+                deletingCellsController.setTableView(tableView);
                 borderPane.setCenter(deletingPaneRoot);
             }else{
                 borderPane.setCenter(deletingPaneRoot);
@@ -228,20 +226,20 @@ public class NavigationController implements Initializable {
     @FXML
     private void restoreSecondMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
-        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
-        secondMethod.secondFillingMethod(listAfterDeleting);
-        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
-        secondMethod.resetCounts();
-        secondMethod.resetSum();
+//        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
+//        secondMethod.secondFillingMethod(listAfterDeleting);
+//        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
+//        secondMethod.resetCounts();
+//        secondMethod.resetSum();
     }
     @FXML
     private void restoreThirdMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
-        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
-        thirdMethod.thirdFillingMethod(listAfterDeleting);
-        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
-        thirdMethod.resetSumThirdMethod();
-        thirdMethod.resetCountsThirdMethod();
+//        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
+//        thirdMethod.thirdFillingMethod(listAfterDeleting);
+//        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
+//        thirdMethod.resetSumThirdMethod();
+//        thirdMethod.resetCountsThirdMethod();
     }
     @FXML
     private void normalizeData() throws ParseException {
@@ -267,6 +265,7 @@ public class NavigationController implements Initializable {
         }
     @FXML
     private void testButton(){
+        List<NormalizedRecord> listBeforeDeleting = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
         List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
 //        for(NormalizedRecord rec: listAfterDeleting){
 //            System.out.println(rec.getID()+" - "+ rec.getNormalizedRadius());
@@ -278,8 +277,24 @@ public class NavigationController implements Initializable {
 //        for(NormalizedRecord norm : listAfterEntropy){
 //           classification.classifyNewObject(norm, listAfterEntropy, 5);
 //        }
+
         Metrics metrics = new Metrics();
         metrics.evaluateKNNWithEntropy(listAfterDeleting);
+        //todo holdery do sprawdzenia pod panelem test
+    }
+    @FXML
+    private void checkList(){
+        List<NormalizedRecord> listAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
+        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
+        System.out.println("DELETING");
+        for(NormalizedRecord nr:listAfterDeleting){
+            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
+        }
+        System.out.println("ENTROPY");
+        for(NormalizedRecord nr:listAfterEntropy){
+            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
+        }
+
     }
     @FXML
     private void showInitialData(){

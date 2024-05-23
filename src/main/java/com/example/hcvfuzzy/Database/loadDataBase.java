@@ -1,6 +1,6 @@
 package com.example.hcvfuzzy.Database;
 
-import com.example.hcvfuzzy.Constructors.Record;
+import com.example.hcvfuzzy.Objects.Record;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;

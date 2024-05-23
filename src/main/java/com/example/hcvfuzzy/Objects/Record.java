@@ -1,12 +1,4 @@
-package com.example.hcvfuzzy.Constructors;
-
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+package com.example.hcvfuzzy.Objects;
 
 public class Record {
     private int ID;
@@ -22,6 +14,8 @@ public class Record {
     private int FractalDimension;
     private int Decision;
 
+    public Record() {
+    }
 
     public Record(int ID, int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension, int decision) {
         this.ID = ID;
@@ -36,6 +30,20 @@ public class Record {
         this.Symmetry = symmetry;
         this.FractalDimension = fractalDimension;
         this.Decision = decision;
+    }
+    public Record(Record record)    {
+        this.ID = record.ID;
+        this.Radius = record.Radius;
+        this.Texture = record.Texture;
+        this.Perimeter = record.Perimeter;
+        this.Area = record.Area;
+        this.Smoothness = record.Smoothness;
+        this.Compactness = record.Compactness;
+        this.Concavity = record.Concavity;
+        this.ConcavePoints = record.ConcavePoints;
+        this.Symmetry = record.Symmetry;
+        this.FractalDimension = record.FractalDimension;
+        this.Decision = record.Decision;
     }
 
     public int getAttributeValue(String attributeName) {
@@ -54,6 +62,21 @@ public class Record {
         };
     }
 
+    public int[] getRecordAttributes() {
+        int[] recordAttributes = {
+                Radius,
+                Texture,
+                Perimeter,
+                Area,
+                Smoothness,
+                Compactness,
+                Concavity,
+                ConcavePoints,
+                Symmetry,
+                FractalDimension
+        };
+        return recordAttributes;
+    }
 
     public int getID() {
         return ID;

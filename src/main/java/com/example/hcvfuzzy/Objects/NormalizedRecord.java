@@ -1,38 +1,42 @@
-package com.example.hcvfuzzy.Constructors;
+package com.example.hcvfuzzy.Objects;
 
 public class NormalizedRecord {
     private int ID;
-    private double NormalizedRadius;
-    private double NormalizedTexture;
-    private double NormalizedPerimeter;
-    private double NormalizedArea;
-    private double NormalizedSmoothness;
-    private double NormalizedCompactness;
-    private double NormalizedConcavity;
-    private double NormalizedConcavePoints;
-    private double NormalizedSymmetry;
-    private double NormalizedFractalDimension;
+    private double[] NormalizedRadius;
+    private double[] NormalizedTexture;
+    private double[] NormalizedPerimeter;
+    private double[] NormalizedArea;
+    private double[] NormalizedSmoothness;
+    private double[] NormalizedCompactness;
+    private double[] NormalizedConcavity;
+    private double[] NormalizedConcavePoints;
+    private double[] NormalizedSymmetry;
+    private double[] NormalizedFractalDimension;
     private int Decision;
 
     public NormalizedRecord() {
 
     }
-    public NormalizedRecord(NormalizedRecord record) {
-        this.ID = record.ID;
-        this.NormalizedRadius = record.NormalizedRadius;
-        this.NormalizedTexture = record.NormalizedTexture;
-        this.NormalizedPerimeter = record.NormalizedPerimeter;
-        this.NormalizedArea = record.NormalizedArea;
-        this.NormalizedSmoothness = record.NormalizedSmoothness ;
-        this.NormalizedCompactness = record.NormalizedCompactness;
-        this.NormalizedConcavity = record.NormalizedConcavity;
-        this.NormalizedConcavePoints = record.NormalizedConcavePoints;
-        this.NormalizedSymmetry = record.NormalizedSymmetry;
-        this.NormalizedFractalDimension = record.NormalizedFractalDimension;
-        this.Decision = record.Decision;
 
+    public NormalizedRecord(NormalizedRecord normalizedRecord) {
+        this.ID = normalizedRecord.ID;
+        this.NormalizedRadius = normalizedRecord.NormalizedRadius;
+        this.NormalizedTexture = normalizedRecord.NormalizedTexture;
+        this.NormalizedPerimeter = normalizedRecord.NormalizedPerimeter;
+        this.NormalizedArea = normalizedRecord.NormalizedArea;
+        this.NormalizedSmoothness = normalizedRecord.NormalizedSmoothness;
+        this.NormalizedCompactness = normalizedRecord.NormalizedCompactness;
+        this.NormalizedConcavity = normalizedRecord.NormalizedConcavity;
+        this.NormalizedConcavePoints = normalizedRecord.NormalizedConcavePoints;
+        this.NormalizedSymmetry = normalizedRecord.NormalizedSymmetry;
+        this.NormalizedFractalDimension =normalizedRecord.NormalizedFractalDimension;
+        this.Decision = normalizedRecord.Decision;
     }
-    public double getAttributeValue(String attributeName) {
+
+    public NormalizedRecord(Record record) {
+    }
+
+    public double[] getAttributeValue(String attributeName) {
         switch (attributeName) {
             case "radius":
                 return NormalizedRadius;
@@ -59,7 +63,7 @@ public class NormalizedRecord {
         }
     }
 
-    public void setAttributeValue(String attributeName, double normalizedValue) {
+    public void setAttributeValue(String attributeName, double[] normalizedValue) {
         switch (attributeName) {
             case "radius":
                 setNormalizedRadius(normalizedValue);
@@ -104,83 +108,83 @@ public class NormalizedRecord {
         this.ID = ID;
     }
 
-    public double getNormalizedRadius() {
+    public double[] getNormalizedRadius() {
         return NormalizedRadius;
     }
 
-    public void setNormalizedRadius(double normalizedRadius) {
+    public void setNormalizedRadius(double[] normalizedRadius) {
         NormalizedRadius = normalizedRadius;
     }
 
-    public double getNormalizedTexture() {
+    public double[] getNormalizedTexture() {
         return NormalizedTexture;
     }
 
-    public void setNormalizedTexture(double normalizedTexture) {
+    public void setNormalizedTexture(double[] normalizedTexture) {
         NormalizedTexture = normalizedTexture;
     }
 
-    public double getNormalizedPerimeter() {
+    public double[] getNormalizedPerimeter() {
         return NormalizedPerimeter;
     }
 
-    public void setNormalizedPerimeter(double normalizedPerimeter) {
+    public void setNormalizedPerimeter(double[] normalizedPerimeter) {
         NormalizedPerimeter = normalizedPerimeter;
     }
 
-    public double getNormalizedArea() {
+    public double[] getNormalizedArea() {
         return NormalizedArea;
     }
 
-    public void setNormalizedArea(double normalizedArea) {
+    public void setNormalizedArea(double[] normalizedArea) {
         NormalizedArea = normalizedArea;
     }
 
-    public double getNormalizedSmoothness() {
+    public double[] getNormalizedSmoothness() {
         return NormalizedSmoothness;
     }
 
-    public void setNormalizedSmoothness(double normalizedSmoothness) {
+    public void setNormalizedSmoothness(double[] normalizedSmoothness) {
         NormalizedSmoothness = normalizedSmoothness;
     }
 
-    public double getNormalizedCompactness() {
+    public double[] getNormalizedCompactness() {
         return NormalizedCompactness;
     }
 
-    public void setNormalizedCompactness(double normalizedCompactness) {
+    public void setNormalizedCompactness(double[] normalizedCompactness) {
         NormalizedCompactness = normalizedCompactness;
     }
 
-    public double getNormalizedConcavity() {
+    public double[] getNormalizedConcavity() {
         return NormalizedConcavity;
     }
 
-    public void setNormalizedConcavity(double normalizedConcavity) {
+    public void setNormalizedConcavity(double[] normalizedConcavity) {
         NormalizedConcavity = normalizedConcavity;
     }
 
-    public double getNormalizedConcavePoints() {
+    public double[] getNormalizedConcavePoints() {
         return NormalizedConcavePoints;
     }
 
-    public void setNormalizedConcavePoints(double normalizedConcavePoints) {
+    public void setNormalizedConcavePoints(double[] normalizedConcavePoints) {
         NormalizedConcavePoints = normalizedConcavePoints;
     }
 
-    public double getNormalizedSymmetry() {
+    public double[] getNormalizedSymmetry() {
         return NormalizedSymmetry;
     }
 
-    public void setNormalizedSymmetry(double normalizedSymmetry) {
+    public void setNormalizedSymmetry(double[] normalizedSymmetry) {
         NormalizedSymmetry = normalizedSymmetry;
     }
 
-    public double getNormalizedFractalDimension() {
+    public double[] getNormalizedFractalDimension() {
         return NormalizedFractalDimension;
     }
 
-    public void setNormalizedFractalDimension(double normalizedFractalDimension) {
+    public void setNormalizedFractalDimension(double[] normalizedFractalDimension) {
         NormalizedFractalDimension = normalizedFractalDimension;
     }
 
@@ -192,8 +196,8 @@ public class NormalizedRecord {
         Decision = decision;
     }
 
-    public double[] getAttributes() {
-        double[] attributes = {
+    public double[][] getAttributes() {
+        double[][] attributes = {
                 NormalizedRadius,
                 NormalizedTexture,
                 NormalizedPerimeter,
@@ -207,15 +211,18 @@ public class NormalizedRecord {
         };
         return attributes;
     }
+
     //sprawdz czy w rekodzie jest brakująca dana(bez nazw tylko wartosci)
-    public boolean containsMissingValue(double[] attributes) {
-        for (double attribute : attributes) {
-            if (attribute == -1) {
+    public boolean containsMissingValue(double[][] attributes) {
+        for (double[] attribute : attributes) {
+            if (Double.isNaN(attribute[0]) || Double.isNaN(attribute[1])) {
                 return true;
             }
         }
         return false;
+
     }
+
     //sprawdz w ktory atrybut jest brakujący i wypisz jego nazwe
     public String getMissingAttributeName() {
         String[] attributeNames = {
@@ -231,10 +238,10 @@ public class NormalizedRecord {
                 "fractalDimension"
         };
 
-        double[] attributes = getAttributes();
+        double[][] attributes = getAttributes();
 
         for (int i = 0; i < attributes.length; i++) {
-            if (attributes[i] == -1) {
+            if (Double.isNaN(attributes[i][0]) || Double.isNaN(attributes[i][1])) {
                 return attributeNames[i];
             }
         }

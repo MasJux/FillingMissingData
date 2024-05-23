@@ -1,14 +1,20 @@
 package com.example.hcvfuzzy.Holders;
 
-import com.example.hcvfuzzy.Constructors.NormalizedRecord;
+import com.example.hcvfuzzy.Objects.NormalizedRecord;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NormalizedDataAfterDeletingHolder {
-    private static final List<NormalizedRecord> afterDeletingPublicNormalizedDataList = new ArrayList<>();
+    private static final List<NormalizedRecord> listAfterDeleting = new ArrayList<>();
 
     public static List<NormalizedRecord> getAfterDeletingPublicNormalizedDataList() {
-        return afterDeletingPublicNormalizedDataList;
+        return listAfterDeleting;
+    }
+    public static void addNormalizedRecord(NormalizedRecord record) {
+        listAfterDeleting.add(record);
+    }
+    public static void clear() {
+        listAfterDeleting.clear();
     }
 }

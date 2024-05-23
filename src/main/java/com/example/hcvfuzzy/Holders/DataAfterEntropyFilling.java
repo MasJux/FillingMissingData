@@ -1,6 +1,6 @@
 package com.example.hcvfuzzy.Holders;
 
-import com.example.hcvfuzzy.Constructors.NormalizedRecord;
+import com.example.hcvfuzzy.Objects.NormalizedRecord;
 
 import java.util.ArrayList;
 import java.util.List;

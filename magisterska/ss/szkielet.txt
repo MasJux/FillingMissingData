@@ -1,6 +1,6 @@
 package com.example.hcvfuzzy.FillingMethods;
 
-import com.example.hcvfuzzy.Constructors.Record;
+import com.example.hcvfuzzy.Objects.Record;
 
 import java.util.List;
 

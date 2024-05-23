@@ -1,8 +1,11 @@
 package com.example.hcvfuzzy.Controllers;
 
-import com.example.hcvfuzzy.Constructors.NormalizedRecord;
-import com.example.hcvfuzzy.Holders.NormalizedDataAfterDeletingHolder;
+import com.example.hcvfuzzy.Holders.DataAfterDeleting;
+import com.example.hcvfuzzy.Holders.DataBeforeDeleting;
 import com.example.hcvfuzzy.Holders.NormalizedDataBeforeDeletingHolder;
+import com.example.hcvfuzzy.Objects.NormalizedRecord;
+import com.example.hcvfuzzy.Holders.NormalizedDataAfterDeletingHolder;
+import com.example.hcvfuzzy.Objects.Record;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -24,6 +27,9 @@ public class DeletingCellsController implements Initializable {
     @FXML
     private Button deleteButton;
     private TableView<NormalizedRecord> newTableView;
+    private TableView<Record> tableView;
+    NormalizedDataBeforeDeletingHolder normalizedDataBeforeDeletingHolder;
+    NormalizedDataAfterDeletingHolder normalizedDataAfterDeletingHolder;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -46,17 +52,24 @@ public class DeletingCellsController implements Initializable {
         this.secondMethodButton = secondMethodButton;
         this.thirdMethodButton = thirdMethodButton;
     }
-    public void setTableView(TableView<NormalizedRecord> newTableView) {
-        this.newTableView = newTableView;
+    public void setTableView(TableView<Record> tableView) {
+        this.tableView = tableView;
     }
     @FXML
     private void deleteRowsAndCells() {
-        int rowCount = newTableView.getItems().size();
+        int rowCount = tableView.getItems().size();
         int rowIndex;
         int columnIndex;
         deletionFlag = true;
         Random random = new Random();
         ArrayList<Integer> listOfRows = new ArrayList<>();
+        NormalizedDataBeforeDeletingHolder.clear();
+
+        // Copy records to NormalizedDataBeforeDeletingHolder
+        for (Record rec : tableView.getItems()) {
+            DataBeforeDeleting.addRecord(rec);
+        }
+
 
         for (int i = 0; i < amountRows; i++) {
             do {
@@ -65,7 +78,7 @@ public class DeletingCellsController implements Initializable {
             listOfRows.add(rowIndex);
         }
         for (int row : listOfRows) {
-            NormalizedRecord record = newTableView.getItems().get(row);
+            Record record = tableView.getItems().get(row);
             Set<Integer> usedColumnIndexes = new HashSet<>();
             for (int n = 0; n < amountCells; n++) {
                 do {
@@ -73,20 +86,21 @@ public class DeletingCellsController implements Initializable {
                 } while (usedColumnIndexes.contains(columnIndex));
 
                 usedColumnIndexes.add(columnIndex);
+
                 int newValue = -1;
                 switch (columnIndex) {
-                    case 1 -> record.setNormalizedRadius(newValue);
-                    case 2 -> record.setNormalizedTexture(newValue);
-                    case 3 -> record.setNormalizedPerimeter(newValue);
-                    case 4 -> record.setNormalizedArea(newValue);
-                    case 5 -> record.setNormalizedSmoothness(newValue);
-                    case 6 -> record.setNormalizedCompactness(newValue);
-                    case 7 -> record.setNormalizedConcavity(newValue);
-                    case 8 -> record.setNormalizedConcavePoints(newValue);
-                    case 9 -> record.setNormalizedSymmetry(newValue);
-                    case 10 -> record.setNormalizedFractalDimension(newValue);
+                    case 1 -> record.setRadius(newValue);
+                    case 2 -> record.setTexture(newValue);
+                    case 3 -> record.setPerimeter(newValue);
+                    case 4 -> record.setArea(newValue);
+                    case 5 -> record.setSmoothness(newValue);
+                    case 6 -> record.setCompactness(newValue);
+                    case 7 -> record.setConcavity(newValue);
+                    case 8 -> record.setConcavePoints(newValue);
+                    case 9 -> record.setSymmetry(newValue);
+                    case 10 -> record.setFractalDimension(newValue);
                 }
-                newTableView.refresh();
+                tableView.refresh();
             }
 
         }
@@ -104,22 +118,26 @@ public class DeletingCellsController implements Initializable {
         }
     }
     private void updateRecords() {
-        for (NormalizedRecord record : newTableView.getItems()) {
-            NormalizedRecord recordAfterDeleting = new NormalizedRecord();
+        for (Record record : tableView.getItems()) {
+            Record recordAfterDeleting = new Record();
             recordAfterDeleting.setID(record.getID());
-            recordAfterDeleting.setNormalizedRadius(record.getNormalizedRadius());
-            recordAfterDeleting.setNormalizedTexture(record.getNormalizedTexture());
-            recordAfterDeleting.setNormalizedPerimeter(record.getNormalizedPerimeter());
-            recordAfterDeleting.setNormalizedArea(record.getNormalizedArea());
-            recordAfterDeleting.setNormalizedSmoothness(record.getNormalizedSmoothness());
-            recordAfterDeleting.setNormalizedCompactness(record.getNormalizedCompactness());
-            recordAfterDeleting.setNormalizedConcavity(record.getNormalizedConcavity());
-            recordAfterDeleting.setNormalizedConcavePoints(record.getNormalizedConcavePoints());
-            recordAfterDeleting.setNormalizedSymmetry(record.getNormalizedSymmetry());
-            recordAfterDeleting.setNormalizedFractalDimension(record.getNormalizedFractalDimension());
+            recordAfterDeleting.setRadius(record.getRadius());
+            recordAfterDeleting.setTexture(record.getTexture());
+            recordAfterDeleting.setPerimeter(record.getPerimeter());
+            recordAfterDeleting.setArea(record.getArea());
+            recordAfterDeleting.setSmoothness(record.getSmoothness());
+            recordAfterDeleting.setCompactness(record.getCompactness());
+            recordAfterDeleting.setConcavity(record.getConcavity());
+            recordAfterDeleting.setConcavePoints(record.getConcavePoints());
+            recordAfterDeleting.setSymmetry(record.getSymmetry());
+            recordAfterDeleting.setFractalDimension(record.getFractalDimension());
             recordAfterDeleting.setDecision(record.getDecision());
 
-            NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList().add(recordAfterDeleting);
+            NormalizedDataAfterDeletingHolder.clear();
+
+            for (Record afterDeletingRecord : tableView.getItems()) {
+                DataAfterDeleting.addDeletedRecord(afterDeletingRecord);
+            }
         }
     }
 
@@ -133,4 +151,5 @@ public class DeletingCellsController implements Initializable {
     public Button getDeleteButton() {
         return deleteButton;
     }
+
 }

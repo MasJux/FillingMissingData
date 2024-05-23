@@ -1,6 +1,6 @@
 package com.example.hcvfuzzy.Controllers;
 
-import com.example.hcvfuzzy.Constructors.Record;
+import com.example.hcvfuzzy.Objects.Record;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;

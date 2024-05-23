@@ -1,66 +1,75 @@
 package com.example.hcvfuzzy.AlgorithmkNN;
 
-import com.example.hcvfuzzy.Constructors.NormalizedRecord;
+import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.FillingMethods.EntropyMethod;
-import com.example.hcvfuzzy.Holders.DataAfterEntropyFilling;
-import com.example.hcvfuzzy.Holders.NormalizedDataAfterDeletingHolder;
 
 import java.util.*;
 
 public class Metrics {
-    List<Integer> originalDecisionList = new ArrayList<>();
-    List<Integer> classifiedDecisionList = new ArrayList<>();
     public void evaluateKNNWithEntropy(List<NormalizedRecord> dataset) {
-        double totalACC;
-        double totalSENS;
-        double totalSPEC;
-        double totalPREC;
+        double totalACC = 0.0;
+        double totalSENS = 0.0;
+        double totalSPEC = 0.0;
+        double totalPREC = 0.0;
 
         // 10-krotna walidacja krzyżowa
 //        List<NormalizedRecord> dataAfterEntropyFilling = DataAfterEntropyFilling.getDataAfterEntropyFilling();
 //TODO mieszanie itr
-        double trainPercentage = 0.7;
-        List<NormalizedRecord> trainData = new ArrayList<>();
-        List<NormalizedRecord> testData = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            double trainPercentage = 0.7;
+            List<NormalizedRecord> trainData = new ArrayList<>();
+            List<NormalizedRecord> testData = new ArrayList<>();
 
-        long seed = System.nanoTime();
-        Random random = new Random(seed);
-        List<NormalizedRecord> shuffledData = new ArrayList<>(dataset);
+            long seed = System.nanoTime();
+            Random random = new Random(seed);
+            List<NormalizedRecord> shuffledData = new ArrayList<>(dataset);
 
-        for (int i = shuffledData.size() - 1; i > 0; i--) {
-            int index = random.nextInt(i + 1);
-            NormalizedRecord temp = shuffledData.get(index);
-            shuffledData.set(index, shuffledData.get(i));
-            shuffledData.set(i, temp);
-        }
-        int trainSize = (int) (shuffledData.size() * trainPercentage);
-        for (int i = 0; i < trainSize; i++) {
-            trainData.add(shuffledData.get(i));
-        }
-        for (int i = trainSize; i < shuffledData.size(); i++) {
-            testData.add(shuffledData.get(i));
-        }
+            for (int a = shuffledData.size() - 1; a > 0; a--) {
+                int index = random.nextInt(a + 1);
+                NormalizedRecord temp = shuffledData.get(index);
+                shuffledData.set(index, shuffledData.get(a));
+                shuffledData.set(a, temp);
+            }
+            int trainSize = (int) (shuffledData.size() * trainPercentage);
+            for (int x = 0; x < trainSize; x++) {
+                trainData.add(shuffledData.get(x));
+            }
+            for (int y = trainSize; y < shuffledData.size(); y++) {
+                testData.add(shuffledData.get(y));
+            }
 
-        // Uzupełnienie brakujących wartości danych treningowych za pomocą metody entropii
-        Classification classification = new Classification();
-        EntropyMethod entropyMethod = new EntropyMethod();
-        entropyMethod.completeMissingValue(trainData);
+            // Uzupełnienie brakujących wartości danych treningowych za pomocą metody entropii
+            EntropyMethod entropyMethod = new EntropyMethod();
+            entropyMethod.completeMissingValue(trainData);
 
-        // Klasyfikacja IV-kNN dla zbioru testowego danych uzupełnionych
-        for (NormalizedRecord testObject : testData) {
-            int originalDecision = testObject.getDecision();
-            originalDecisionList.add(originalDecision);
-            int classifiedDecision = classification.classifyNewObject(testObject, trainData, 5);
-            classifiedDecisionList.add(classifiedDecision);
+            Classification classification = new Classification();
+            List<Integer> originalDecisionList = new ArrayList<>();
+            List<Integer> classifiedDecisionList = new ArrayList<>();
+            // Klasyfikacja IV-kNN dla zbioru testowego danych uzupełnionych
+            for (NormalizedRecord testObject : testData) {
+                int originalDecision = testObject.getDecision();
+                originalDecisionList.add(originalDecision);
+                int classifiedDecision = classification.classifyNewObject(testObject, trainData, 5);
+                classifiedDecisionList.add(classifiedDecision);
+            }
+            double ACC = calculateAccuracy(originalDecisionList, classifiedDecisionList);
+            double SENS = calculateSensivity(originalDecisionList, classifiedDecisionList);
+            double SPEC = calculateSpecificity(originalDecisionList, classifiedDecisionList);
+            double PREC = calculatePrecision(originalDecisionList, classifiedDecisionList);
+
+            totalACC += ACC;
+            totalSENS += SENS;
+            totalSPEC += SPEC;
+            totalPREC += PREC;
         }
-        totalACC = calculateAccuracy(originalDecisionList, classifiedDecisionList);
-        totalSENS = calculateSensivity(originalDecisionList, classifiedDecisionList);
-        totalSPEC = calculateSpecificity(originalDecisionList, classifiedDecisionList);
-        totalPREC = calculatePrecision(originalDecisionList, classifiedDecisionList);
-        System.out.println("ACC: "+totalACC);
-        System.out.println("SENS: "+totalSENS);
-        System.out.println("SPEC: "+totalSPEC);
-        System.out.println("PREC: "+totalPREC);
+        double avgACC = totalACC / 10;
+        double avgSENS = totalSENS / 10;
+        double avgSPEC = totalSPEC / 10;
+        double avgPREC = totalPREC / 10;
+        System.out.println("ACC: "+avgACC);
+        System.out.println("SENS: "+avgSENS);
+        System.out.println("SPEC: "+avgSPEC);
+        System.out.println("PREC: "+avgPREC);
     }
 
     //metryka dokładności

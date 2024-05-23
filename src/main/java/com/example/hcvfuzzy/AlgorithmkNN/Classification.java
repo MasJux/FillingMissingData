@@ -1,6 +1,6 @@
 package com.example.hcvfuzzy.AlgorithmkNN;
 
-import com.example.hcvfuzzy.Constructors.NormalizedRecord;
+import com.example.hcvfuzzy.Objects.NormalizedRecord;
 
 import java.util.*;
 
@@ -32,15 +32,22 @@ public class Classification {
         return similarities;
     }
 
-    private double calculateEuclideanDistance(NormalizedRecord obj1, NormalizedRecord obj2) {
-        double sum = 0.0;
+    private static double calculateEuclideanDistance(NormalizedRecord objectWithMissingAttribute, NormalizedRecord objectWithoutMissingAttribute) {
+        double[][] attributesWithMissingValue = objectWithMissingAttribute.getAttributes();
+        double[][] attributesWithoutMissingValue = objectWithoutMissingAttribute.getAttributes();
+        double sumOfSquares = 0.0;
+        int n = attributesWithMissingValue.length;
 
-        for (String attributeName : ATTRIBUTES) {
-            double diff = obj1.getAttributeValue(attributeName) - obj2.getAttributeValue(attributeName);
-            sum += Math.pow(diff, 2);
+        for (int i = 0; i < n; i++) {
+            if (Arrays.equals(attributesWithMissingValue[i], new double[]{0, 0})) {
+                continue;
+            }
+            double lowerCompDiff = attributesWithMissingValue[i][0] - attributesWithoutMissingValue[i][0];
+            double upperCompDiff = attributesWithMissingValue[i][1] - attributesWithoutMissingValue[i][1];
+            double maxDiffSquared = Math.max(Math.pow(lowerCompDiff, 2), Math.pow(upperCompDiff, 2));
+            sumOfSquares += maxDiffSquared;
         }
-
-        return Math.sqrt(sum);
+        return Math.sqrt(sumOfSquares / n);
     }
 
     public int aggregateDecision(List<NormalizedRecord> nearestNeighbors, int k) {
