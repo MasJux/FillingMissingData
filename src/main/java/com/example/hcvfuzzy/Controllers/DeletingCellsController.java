@@ -2,9 +2,8 @@ package com.example.hcvfuzzy.Controllers;
 
 import com.example.hcvfuzzy.Holders.DataAfterDeleting;
 import com.example.hcvfuzzy.Holders.DataBeforeDeleting;
-import com.example.hcvfuzzy.Holders.NormalizedDataBeforeDeletingHolder;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
-import com.example.hcvfuzzy.Holders.NormalizedDataAfterDeletingHolder;
+import com.example.hcvfuzzy.Holders.NormalizedIntervalDataHolder;
 import com.example.hcvfuzzy.Objects.Record;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,8 +27,7 @@ public class DeletingCellsController implements Initializable {
     private Button deleteButton;
     private TableView<NormalizedRecord> newTableView;
     private TableView<Record> tableView;
-    NormalizedDataBeforeDeletingHolder normalizedDataBeforeDeletingHolder;
-    NormalizedDataAfterDeletingHolder normalizedDataAfterDeletingHolder;
+    NormalizedIntervalDataHolder normalizedIntervalDataHolder;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -63,13 +61,9 @@ public class DeletingCellsController implements Initializable {
         deletionFlag = true;
         Random random = new Random();
         ArrayList<Integer> listOfRows = new ArrayList<>();
-        NormalizedDataBeforeDeletingHolder.clear();
 
-        // Copy records to NormalizedDataBeforeDeletingHolder
-        for (Record rec : tableView.getItems()) {
-            DataBeforeDeleting.addRecord(rec);
-        }
-
+        // Copy records to DataBeforeDeleting
+        copyDataBeforeDeleting();
 
         for (int i = 0; i < amountRows; i++) {
             do {
@@ -117,6 +111,12 @@ public class DeletingCellsController implements Initializable {
             deleteButton.setDisable(false);
         }
     }
+
+    private void copyDataBeforeDeleting() {
+        for (Record rec : tableView.getItems()) {
+            DataBeforeDeleting.addRecord(rec.copy());
+        }
+    }
     private void updateRecords() {
         for (Record record : tableView.getItems()) {
             Record recordAfterDeleting = new Record();
@@ -133,13 +133,18 @@ public class DeletingCellsController implements Initializable {
             recordAfterDeleting.setFractalDimension(record.getFractalDimension());
             recordAfterDeleting.setDecision(record.getDecision());
 
-            NormalizedDataAfterDeletingHolder.clear();
-
-            for (Record afterDeletingRecord : tableView.getItems()) {
-                DataAfterDeleting.addDeletedRecord(afterDeletingRecord);
-            }
+        }
+        for (Record afterDeletingRecord : tableView.getItems()) {
+            DataAfterDeleting.addDeletedRecord(afterDeletingRecord);
         }
     }
+//        List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
+//        for(Record rec: dataAfterDeleting){
+//            System.out.println(rec.getID());
+//            System.out.println(rec.getRadius());
+//        }
+//        System.out.println(dataAfterDeleting.size()+" size()");
+
 
 //Blokowanie DeleteButton
     public boolean isDeletionPerformed() {

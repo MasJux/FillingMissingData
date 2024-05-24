@@ -27,7 +27,7 @@ public class loadDataBase extends TableView<String> {
     }
     private int parseCell(String cell) {
         if (cell.equals("?")) {
-            return 0; // Zamień znak "?" na 0
+            return 1; // Zamień znak "?" na 0
         } else {
             return Integer.parseInt(cell); // Konwertuj tekst na int
         }

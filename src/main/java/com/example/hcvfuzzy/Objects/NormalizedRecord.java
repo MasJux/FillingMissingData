@@ -1,5 +1,7 @@
 package com.example.hcvfuzzy.Objects;
 
+import java.util.Arrays;
+
 public class NormalizedRecord {
     private int ID;
     private double[] NormalizedRadius;
@@ -99,6 +101,58 @@ public class NormalizedRecord {
                 throw new IllegalArgumentException("Nieprawidłowa nazwa atrybutu: " + attributeName);
         }
     }
+    public double[][] getAttributes() {
+        double[][] attributes = {
+                NormalizedRadius,
+                NormalizedTexture,
+                NormalizedPerimeter,
+                NormalizedArea,
+                NormalizedSmoothness,
+                NormalizedCompactness,
+                NormalizedConcavity,
+                NormalizedConcavePoints,
+                NormalizedSymmetry,
+                NormalizedFractalDimension
+        };
+        return attributes;
+    }
+
+    //sprawdz czy w rekodzie jest brakująca dana(bez nazw tylko wartosci)
+    public boolean containsMissingValue(double[][] attributes) {
+        for (double[] attribute : attributes) {
+            if (attribute == null) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    //sprawdz w ktory atrybut jest brakujący i wypisz jego nazwe
+    public String getMissingAttributeName() {
+        String[] attributeNames = {
+                "radius",
+                "texture",
+                "perimeter",
+                "area",
+                "smoothness",
+                "compactness",
+                "concavity",
+                "concavePoints",
+                "symmetry",
+                "fractalDimension"
+        };
+
+        double[][] attributes = getAttributes();
+
+        for (int i = 0; i < attributes.length; i++) {
+            if (attributes[i] == null) {
+                return attributeNames[i];
+            }
+        }
+
+        return null; // Zwraca null, jeśli nie znaleziono brakującej danej
+    }
 
     public int getID() {
         return ID;
@@ -196,56 +250,4 @@ public class NormalizedRecord {
         Decision = decision;
     }
 
-    public double[][] getAttributes() {
-        double[][] attributes = {
-                NormalizedRadius,
-                NormalizedTexture,
-                NormalizedPerimeter,
-                NormalizedArea,
-                NormalizedSmoothness,
-                NormalizedCompactness,
-                NormalizedConcavity,
-                NormalizedConcavePoints,
-                NormalizedSymmetry,
-                NormalizedFractalDimension
-        };
-        return attributes;
-    }
-
-    //sprawdz czy w rekodzie jest brakująca dana(bez nazw tylko wartosci)
-    public boolean containsMissingValue(double[][] attributes) {
-        for (double[] attribute : attributes) {
-            if (Double.isNaN(attribute[0]) || Double.isNaN(attribute[1])) {
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    //sprawdz w ktory atrybut jest brakujący i wypisz jego nazwe
-    public String getMissingAttributeName() {
-        String[] attributeNames = {
-                "radius",
-                "texture",
-                "perimeter",
-                "area",
-                "smoothness",
-                "compactness",
-                "concavity",
-                "concavePoints",
-                "symmetry",
-                "fractalDimension"
-        };
-
-        double[][] attributes = getAttributes();
-
-        for (int i = 0; i < attributes.length; i++) {
-            if (Double.isNaN(attributes[i][0]) || Double.isNaN(attributes[i][1])) {
-                return attributeNames[i];
-            }
-        }
-
-        return null; // Zwraca null, jeśli nie znaleziono brakującej danej
-    }
 }

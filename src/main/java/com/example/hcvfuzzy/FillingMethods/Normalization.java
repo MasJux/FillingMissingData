@@ -1,10 +1,8 @@
 package com.example.hcvfuzzy.FillingMethods;
 
-import com.example.hcvfuzzy.Objects.IntervalsRecords;
+import com.example.hcvfuzzy.Holders.NormalizedIntervalDataHolder;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.Objects.Record;
-import com.example.hcvfuzzy.Holders.NormalizedDataBeforeDeletingHolder;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,7 +40,7 @@ public class Normalization {
         }
         System.out.println(minValues+" - "+maxValues);
         DecimalFormat df = new DecimalFormat("#.#####");
-        NormalizedDataBeforeDeletingHolder.clear();
+
         // Utwórz obiekty NormalizedRecord dla każdego rekordu i ustaw znormalizowane wartości atrybutów
         for (Record record : dataList) {
             NormalizedRecord normalizedRecord = new NormalizedRecord();
@@ -65,7 +63,7 @@ public class Normalization {
                 normalizedRecord.setDecision(decision);
             }
 
-            NormalizedDataBeforeDeletingHolder.addNormalizedRecord(normalizedRecord);
+            NormalizedIntervalDataHolder.addNormalizedRecord(normalizedRecord);
         }
     }
     public static double g(double a) {
@@ -121,9 +119,8 @@ public class Normalization {
 
         newTableView.setItems(FXCollections.observableArrayList(normalizeDataList));
         newTableView.getColumns().add(decisionColumn);
-        List<NormalizedRecord> normalizedDataList = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
-        System.out.println(normalizedDataList.size()+"ndl");
-        System.out.println(dataList.size()+"dl");
+        List<NormalizedRecord> normalizedDataList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
+
         for (int i = 0; i < normalizedDataList.size(); i++) {
             Record originalRecord = dataList.get(i);
             NormalizedRecord normalizedRecord = normalizedDataList.get(i);

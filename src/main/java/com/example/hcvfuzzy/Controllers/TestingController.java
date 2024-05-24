@@ -30,8 +30,7 @@ public class TestingController implements Initializable {
     private void generateButton(){
         List<Record> dataBeforeDeleting = DataBeforeDeleting.getListWithoutMissingValues();
         List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
-        List<NormalizedRecord> normalizedDataList = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
-        List<NormalizedRecord> normalizedDataListAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
+        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
         List<NormalizedRecord> dataAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
 
 
@@ -49,11 +48,14 @@ public class TestingController implements Initializable {
             Label label = new Label(id+ Arrays.toString(attributes) +decision);
             secondVBox.getChildren().add(label);
         }
-        for(NormalizedRecord nr: dataAfterEntropy){
+        for(NormalizedRecord nr: normalizedIntervalsList){
             int id  = nr.getID();
-            double [][] attributes = nr.getAttributes();
+            double[] radius = nr.getNormalizedRadius();
+            double[] texture = nr.getNormalizedTexture();
+            double[] perimeter = nr.getNormalizedPerimeter();
+            double[] area = nr.getNormalizedArea();
             int decision = nr.getDecision();
-            Label label = new Label(id+ Arrays.toString(attributes) +decision);
+            Label label = new Label(id +" "+ Arrays.toString(radius) +" "+ Arrays.toString(texture) +" "+ Arrays.toString(perimeter) +" "+ Arrays.toString(area) +" "+decision);
             thirdVBox.getChildren().add(label);
         }
     }

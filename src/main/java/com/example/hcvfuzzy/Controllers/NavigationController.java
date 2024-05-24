@@ -1,7 +1,7 @@
 package com.example.hcvfuzzy.Controllers;
 
 import com.example.hcvfuzzy.AlgorithmkNN.Metrics;
-import com.example.hcvfuzzy.Holders.DataAfterEntropyFilling;
+import com.example.hcvfuzzy.Holders.*;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.Objects.Record;
 import com.example.hcvfuzzy.Database.loadDataBase;
@@ -9,8 +9,6 @@ import com.example.hcvfuzzy.FillingMethods.EntropyMethod;
 import com.example.hcvfuzzy.FillingMethods.Normalization;
 //import com.example.hcvfuzzy.FillingMethods.SecondMethod;
 //import com.example.hcvfuzzy.FillingMethods.ThirdMethod;
-import com.example.hcvfuzzy.Holders.NormalizedDataAfterDeletingHolder;
-import com.example.hcvfuzzy.Holders.NormalizedDataBeforeDeletingHolder;
 import com.example.hcvfuzzy.main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -226,7 +224,7 @@ public class NavigationController implements Initializable {
     @FXML
     private void restoreSecondMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
-//        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
+//        List<NormalizedRecord> listAfterDeleting = NormalizedIntervalDataHolder.getAfterDeletingPublicNormalizedDataList();
 //        secondMethod.secondFillingMethod(listAfterDeleting);
 //        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
 //        secondMethod.resetCounts();
@@ -235,7 +233,7 @@ public class NavigationController implements Initializable {
     @FXML
     private void restoreThirdMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
-//        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
+//        List<NormalizedRecord> listAfterDeleting = NormalizedIntervalDataHolder.getAfterDeletingPublicNormalizedDataList();
 //        thirdMethod.thirdFillingMethod(listAfterDeleting);
 //        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
 //        thirdMethod.resetSumThirdMethod();
@@ -243,9 +241,9 @@ public class NavigationController implements Initializable {
     }
     @FXML
     private void normalizeData() throws ParseException {
-
+        List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
         if (!isDataNormalized) {
-            normalization.normalizeData(publicDataList);
+            normalization.normalizeData(dataAfterDeleting);
             isDataNormalized = true;
             test.setDisable(false);
             deletingPanelButton.setDisable(false);
@@ -254,7 +252,7 @@ public class NavigationController implements Initializable {
             System.out.println("wykonanie normalizeData()");
         }
         if(isDataNormalized && !isNormalizedTableViewExist){
-            newTableView = normalization.updateTableViewWithNormalizedData(publicDataList);
+            newTableView = normalization.updateTableViewWithNormalizedData(dataAfterDeleting);
             anchorPane.getChildren().remove(tableView);
             anchorPane.getChildren().add(newTableView);
             isNormalizedTableViewExist = true;
@@ -265,8 +263,7 @@ public class NavigationController implements Initializable {
         }
     @FXML
     private void testButton(){
-        List<NormalizedRecord> listBeforeDeleting = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
-        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
+
 //        for(NormalizedRecord rec: listAfterDeleting){
 //            System.out.println(rec.getID()+" - "+ rec.getNormalizedRadius());
 //        }
@@ -277,28 +274,43 @@ public class NavigationController implements Initializable {
 //        for(NormalizedRecord norm : listAfterEntropy){
 //           classification.classifyNewObject(norm, listAfterEntropy, 5);
 //        }
-
+        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
         Metrics metrics = new Metrics();
-        metrics.evaluateKNNWithEntropy(listAfterDeleting);
+        metrics.evaluateKNNWithEntropy(normalizedIntervalsList);
         //todo holdery do sprawdzenia pod panelem test
     }
     @FXML
     private void checkList(){
+        List<Record> dataBeforeDeleting = DataBeforeDeleting.getListWithoutMissingValues();
+        List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
         List<NormalizedRecord> listAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
-        List<NormalizedRecord> listAfterDeleting = NormalizedDataAfterDeletingHolder.getAfterDeletingPublicNormalizedDataList();
-        System.out.println("DELETING");
-        for(NormalizedRecord nr:listAfterDeleting){
-            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
+        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
+
+        System.out.println("before");
+        for(Record nr:dataBeforeDeleting){
+            System.out.println("ID: "+nr.getID()+" "+nr.getRadius());
         }
-        System.out.println("ENTROPY");
-        for(NormalizedRecord nr:listAfterEntropy){
-            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
+        System.out.println("after");
+        for(Record nr:dataAfterDeleting){
+            System.out.println("ID: "+nr.getID()+" "+nr.getRadius());
         }
+        System.out.println("normalized intervals");
+        for(NormalizedRecord nr:normalizedIntervalsList){
+            System.out.println("ID: "+nr.getID()+" "+ Arrays.toString(nr.getNormalizedRadius()));
+        }
+//        System.out.println("DELETING");
+//        for(NormalizedRecord nr:listAfterDeleting){
+//            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
+//        }
+//        System.out.println("ENTROPY");
+//        for(NormalizedRecord nr:listAfterEntropy){
+//            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
+//        }
 
     }
     @FXML
     private void showInitialData(){
-        List<NormalizedRecord> normalizedDataList = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
+        List<NormalizedRecord> normalizedDataList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
         System.out.println(normalizedDataList);
         for(int i = 0; i<699;i++){
             NormalizedRecord nr = normalizedDataList.get(i);

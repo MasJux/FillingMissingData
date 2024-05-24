@@ -16,6 +16,22 @@ public class Record {
 
     public Record() {
     }
+    public Record copy() {
+        Record copy = new Record();
+        copy.setID(this.getID());
+        copy.setRadius(this.getRadius());
+        copy.setTexture(this.getTexture());
+        copy.setPerimeter(this.getPerimeter());
+        copy.setArea(this.getArea());
+        copy.setSmoothness(this.getSmoothness());
+        copy.setCompactness(this.getCompactness());
+        copy.setConcavity(this.getConcavity());
+        copy.setConcavePoints(this.getConcavePoints());
+        copy.setSymmetry(this.getSymmetry());
+        copy.setFractalDimension(this.getFractalDimension());
+        copy.setDecision(this.getDecision());
+        return copy;
+    }
 
     public Record(int ID, int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension, int decision) {
         this.ID = ID;

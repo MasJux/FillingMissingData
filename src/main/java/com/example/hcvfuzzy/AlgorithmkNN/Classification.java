@@ -31,7 +31,7 @@ public class Classification {
         }
         return similarities;
     }
-
+    private static final double[] MISSING_VALUE = null;
     private static double calculateEuclideanDistance(NormalizedRecord objectWithMissingAttribute, NormalizedRecord objectWithoutMissingAttribute) {
         double[][] attributesWithMissingValue = objectWithMissingAttribute.getAttributes();
         double[][] attributesWithoutMissingValue = objectWithoutMissingAttribute.getAttributes();
@@ -39,7 +39,7 @@ public class Classification {
         int n = attributesWithMissingValue.length;
 
         for (int i = 0; i < n; i++) {
-            if (Arrays.equals(attributesWithMissingValue[i], new double[]{0, 0})) {
+            if (Arrays.equals(attributesWithMissingValue[i], MISSING_VALUE)) {
                 continue;
             }
             double lowerCompDiff = attributesWithMissingValue[i][0] - attributesWithoutMissingValue[i][0];

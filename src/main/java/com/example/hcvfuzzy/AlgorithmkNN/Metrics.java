@@ -15,7 +15,7 @@ public class Metrics {
         // 10-krotna walidacja krzyżowa
 //        List<NormalizedRecord> dataAfterEntropyFilling = DataAfterEntropyFilling.getDataAfterEntropyFilling();
 //TODO mieszanie itr
-        for (int i = 0; i < 10; i++) {
+      //  for (int i = 0; i < 10; i++) {
             double trainPercentage = 0.7;
             List<NormalizedRecord> trainData = new ArrayList<>();
             List<NormalizedRecord> testData = new ArrayList<>();
@@ -40,6 +40,7 @@ public class Metrics {
 
             // Uzupełnienie brakujących wartości danych treningowych za pomocą metody entropii
             EntropyMethod entropyMethod = new EntropyMethod();
+
             entropyMethod.completeMissingValue(trainData);
 
             Classification classification = new Classification();
@@ -61,7 +62,7 @@ public class Metrics {
             totalSENS += SENS;
             totalSPEC += SPEC;
             totalPREC += PREC;
-        }
+  //      }
         double avgACC = totalACC / 10;
         double avgSENS = totalSENS / 10;
         double avgSPEC = totalSPEC / 10;
