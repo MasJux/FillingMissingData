@@ -2,6 +2,8 @@ module com.example.hcvfuzzy {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.logging;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
 
 
     opens com.example.hcvfuzzy to javafx.fxml;

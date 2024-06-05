@@ -1,7 +1,9 @@
 package com.example.hcvfuzzy.Controllers;
 
 import com.example.hcvfuzzy.AlgorithmkNN.Metrics;
+import com.example.hcvfuzzy.ExportTableView;
 import com.example.hcvfuzzy.Holders.*;
+import com.example.hcvfuzzy.Objects.Interval;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.Objects.Record;
 import com.example.hcvfuzzy.Database.loadDataBase;
@@ -23,6 +25,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -59,6 +62,7 @@ public class NavigationController implements Initializable {
 //    SecondMethod secondMethod = new SecondMethod();
 //    ThirdMethod thirdMethod = new ThirdMethod();
     loadDataBase dataBase = new loadDataBase();
+    ExportTableView exportTableView;
     DeletingCellsController buttonsController = new DeletingCellsController();
     private DeletingCellsController deletingCellsController;
     private TestingController testingController;
@@ -224,7 +228,7 @@ public class NavigationController implements Initializable {
     @FXML
     private void restoreSecondMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
-//        List<NormalizedRecord> listAfterDeleting = NormalizedIntervalDataHolder.getAfterDeletingPublicNormalizedDataList();
+//        List<NormalizedRecord> listAfterDeleting = NormalizedIntervals.getAfterDeletingPublicNormalizedDataList();
 //        secondMethod.secondFillingMethod(listAfterDeleting);
 //        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
 //        secondMethod.resetCounts();
@@ -233,7 +237,7 @@ public class NavigationController implements Initializable {
     @FXML
     private void restoreThirdMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
-//        List<NormalizedRecord> listAfterDeleting = NormalizedIntervalDataHolder.getAfterDeletingPublicNormalizedDataList();
+//        List<NormalizedRecord> listAfterDeleting = NormalizedIntervals.getAfterDeletingPublicNormalizedDataList();
 //        thirdMethod.thirdFillingMethod(listAfterDeleting);
 //        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
 //        thirdMethod.resetSumThirdMethod();
@@ -274,30 +278,52 @@ public class NavigationController implements Initializable {
 //        for(NormalizedRecord norm : listAfterEntropy){
 //           classification.classifyNewObject(norm, listAfterEntropy, 5);
 //        }
-        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
+        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
         Metrics metrics = new Metrics();
         metrics.evaluateKNNWithEntropy(normalizedIntervalsList);
         //todo holdery do sprawdzenia pod panelem test
     }
-    @FXML
-    private void checkList(){
-        List<Record> dataBeforeDeleting = DataBeforeDeleting.getListWithoutMissingValues();
-        List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
-        List<NormalizedRecord> listAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
-        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
+    private void exportTable(TableView tableView) throws IOException {
 
-        System.out.println("before");
-        for(Record nr:dataBeforeDeleting){
-            System.out.println("ID: "+nr.getID()+" "+nr.getRadius());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+
+        File file = fileChooser.showSaveDialog(tableView.getScene().getWindow());
+
+        if (file != null) {
+            exportTableView.exportToExcel(tableView, "FXUserData", file.getAbsolutePath());
         }
-        System.out.println("after");
-        for(Record nr:dataAfterDeleting){
-            System.out.println("ID: "+nr.getID()+" "+nr.getRadius());
+    }
+    @FXML
+    private void checkList() throws IOException {
+//        exportTable(newTableView);
+//        List<Record> dataBeforeDeleting = DataBeforeDeleting.getListWithoutMissingValues();
+//        List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
+//        List<NormalizedRecord> listAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
+        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
+
+        for (NormalizedRecord nr : normalizedIntervalsList) {
+            Interval[] attributes = nr.getAttributes();
+
+            // Zakładając, że radius jest pierwszym elementem w tablicy
+            Interval radiusInterval = attributes[0];
+
+            System.out.println("ID: " + nr.getID());
+            System.out.println("Radius Interval: [" + radiusInterval.getLower() + ", " + radiusInterval.getUpper() + "]");
         }
-        System.out.println("normalized intervals");
-        for(NormalizedRecord nr:normalizedIntervalsList){
-            System.out.println("ID: "+nr.getID()+" "+ Arrays.toString(nr.getNormalizedRadius()));
-        }
+//
+//        System.out.println("before");
+//        for(Record nr:dataBeforeDeleting){
+//            System.out.println("ID: "+nr.getID()+" "+nr.getRadius());
+//        }
+//        System.out.println("after");
+//        for(Record nr:dataAfterDeleting){
+//            System.out.println("ID: "+nr.getID()+" "+nr.getRadius());
+//        }
+//        System.out.println("normalized intervals");
+//        for(NormalizedRecord nr:normalizedIntervalsList){
+//            System.out.println("ID: "+nr.getID()+" "+ Arrays.toString(nr.getNormalizedRadius()));
+//        }
 //        System.out.println("DELETING");
 //        for(NormalizedRecord nr:listAfterDeleting){
 //            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
@@ -310,7 +336,7 @@ public class NavigationController implements Initializable {
     }
     @FXML
     private void showInitialData(){
-        List<NormalizedRecord> normalizedDataList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
+        List<NormalizedRecord> normalizedDataList = NormalizedIntervals.getNormalizedIntervalsList();
         System.out.println(normalizedDataList);
         for(int i = 0; i<699;i++){
             NormalizedRecord nr = normalizedDataList.get(i);

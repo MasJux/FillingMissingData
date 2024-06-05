@@ -12,65 +12,62 @@ public class Metrics {
         double totalSPEC = 0.0;
         double totalPREC = 0.0;
 
-        // 10-krotna walidacja krzyżowa
-//        List<NormalizedRecord> dataAfterEntropyFilling = DataAfterEntropyFilling.getDataAfterEntropyFilling();
-//TODO mieszanie itr
-    for (int i = 0; i < 10; i++) {
-        double trainPercentage = 0.7;
-        List<NormalizedRecord> trainData = new ArrayList<>();
-        List<NormalizedRecord> testData = new ArrayList<>();
-
-        long seed = System.nanoTime();
-        Random random = new Random(seed);
-        List<NormalizedRecord> shuffledData = new ArrayList<>(dataset);
-
-        for (int a = shuffledData.size() - 1; a > 0; a--) {
-            int index = random.nextInt(a + 1);
-            NormalizedRecord temp = shuffledData.get(index);
-            shuffledData.set(index, shuffledData.get(a));
-            shuffledData.set(a, temp);
-        }
-        int trainSize = (int) (shuffledData.size() * trainPercentage);
-        for (int x = 0; x < trainSize; x++) {
-            trainData.add(shuffledData.get(x));
-        }
-        for (int y = trainSize; y < shuffledData.size(); y++) {
-            testData.add(shuffledData.get(y));
-        }
+        int k = 5;  // liczba najbliższych sąsiadów
 
         // Uzupełnienie brakujących wartości danych treningowych za pomocą metody entropii
         EntropyMethod entropyMethod = new EntropyMethod();
+        entropyMethod.completeMissingValue(dataset);
 
-        entropyMethod.completeMissingValue(trainData);
+        // 10-krotna walidacja krzyżowa
+        int folds = 10;
+        int foldSize = dataset.size() / folds;
+        long seed = System.nanoTime();
+        Collections.shuffle(dataset, new Random(seed));
 
-        Classification classification = new Classification();
-        List<Integer> originalDecisionList = new ArrayList<>();
-        List<Integer> classifiedDecisionList = new ArrayList<>();
-        // Klasyfikacja IV-kNN dla zbioru testowego danych uzupełnionych
-        for (NormalizedRecord testObject : testData) {
-            int originalDecision = testObject.getDecision();
-            originalDecisionList.add(originalDecision);
-            int classifiedDecision = classification.classifyNewObject(testObject, trainData, 5);
-            classifiedDecisionList.add(classifiedDecision);
+        for (int i = 0; i < folds; i++) {
+            List<NormalizedRecord> trainData = new ArrayList<>();
+            List<NormalizedRecord> testData = new ArrayList<>();
+
+            for (int j = 0; j < dataset.size(); j++) {
+                if (j >= i * foldSize && j < (i + 1) * foldSize) {
+                    testData.add(dataset.get(j));
+                } else {
+                    trainData.add(dataset.get(j));
+                }
+            }
+
+            Classification classification = new Classification();
+            List<Integer> originalDecisionList = new ArrayList<>();
+            List<Integer> classifiedDecisionList = new ArrayList<>();
+
+            // Klasyfikacja IV-kNN dla zbioru testowego
+            for (NormalizedRecord testObject : testData) {
+                int originalDecision = testObject.getDecision();
+                originalDecisionList.add(originalDecision);
+                int classifiedDecision = classification.classifyNewObject(testObject, trainData, k);
+                classifiedDecisionList.add(classifiedDecision);
+            }
+
+            double ACC = calculateAccuracy(originalDecisionList, classifiedDecisionList);
+            double SENS = calculateSensivity(originalDecisionList, classifiedDecisionList);
+            double SPEC = calculateSpecificity(originalDecisionList, classifiedDecisionList);
+            double PREC = calculatePrecision(originalDecisionList, classifiedDecisionList);
+
+            totalACC += ACC;
+            totalSENS += SENS;
+            totalSPEC += SPEC;
+            totalPREC += PREC;
         }
-        double ACC = calculateAccuracy(originalDecisionList, classifiedDecisionList);
-        double SENS = calculateSensivity(originalDecisionList, classifiedDecisionList);
-        double SPEC = calculateSpecificity(originalDecisionList, classifiedDecisionList);
-        double PREC = calculatePrecision(originalDecisionList, classifiedDecisionList);
 
-        totalACC += ACC;
-        totalSENS += SENS;
-        totalSPEC += SPEC;
-        totalPREC += PREC;
-      }
-        double avgACC = totalACC / 10;
-        double avgSENS = totalSENS / 10;
-        double avgSPEC = totalSPEC / 10;
-        double avgPREC = totalPREC / 10;
-        System.out.println("ACC: " + avgACC);
-        System.out.println("SENS: " + avgSENS);
-        System.out.println("SPEC: " + avgSPEC);
-        System.out.println("PREC: " + avgPREC);
+        double avgACC = totalACC / folds;
+        double avgSENS = totalSENS / folds;
+        double avgSPEC = totalSPEC / folds;
+        double avgPREC = totalPREC / folds;
+
+        System.out.println("srednia dokladnosc (ACC): " + avgACC);
+        System.out.println("srednia czulosc (SENS): " + avgSENS);
+        System.out.println("srednia swoistosc (SPEC): " + avgSPEC);
+        System.out.println("srednia precyzja (PREC): " + avgPREC);
     }
 
     //metryka dokładności
@@ -129,34 +126,3 @@ public class Metrics {
         return (double) tp / (tp + fp);
     }
 }
-
-
-
-
-
-
-
-
-//            // Obliczenie metryk klasyfikacji
-//            double ACC = calculateAccuracy(testingData);
-//            double SENS = calculateSensitivity(testingData);
-//            double SPEC = calculateSpecificity(testingData);
-//            double PREC = calculatePrecision(testingData);
-//
-//            // Dodanie wyników do sumy całkowitej
-//            totalACC += ACC;
-//            totalSENS += SENS;
-//            totalSPEC += SPEC;
-//            totalPREC += PREC;
-//        }
-//
-//        // Obliczenie średniej arytmetycznej metryk
-//        double avgACC = totalACC / 10;
-//        double avgSENS = totalSENS / 10;
-//        double avgSPEC = totalSPEC / 10;
-//        double avgPREC = totalPREC / 10;
-//
-//        // Wyświetlenie wyników w postaci tabeli
-//        displayResults(avgACC, avgSENS, avgSPEC, avgPREC);
-//    }
-//

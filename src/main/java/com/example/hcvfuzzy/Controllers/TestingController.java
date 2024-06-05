@@ -1,6 +1,7 @@
 package com.example.hcvfuzzy.Controllers;
 
 import com.example.hcvfuzzy.Holders.*;
+import com.example.hcvfuzzy.Objects.Interval;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.Objects.Record;
 import javafx.fxml.FXML;
@@ -30,8 +31,8 @@ public class TestingController implements Initializable {
     private void generateButton(){
         List<Record> dataBeforeDeleting = DataBeforeDeleting.getListWithoutMissingValues();
         List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
-        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
-        List<NormalizedRecord> dataAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
+        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
+
 
 
         for(Record nr: dataBeforeDeleting){
@@ -50,12 +51,12 @@ public class TestingController implements Initializable {
         }
         for(NormalizedRecord nr: normalizedIntervalsList){
             int id  = nr.getID();
-            double[] radius = nr.getNormalizedRadius();
-            double[] texture = nr.getNormalizedTexture();
-            double[] perimeter = nr.getNormalizedPerimeter();
-            double[] area = nr.getNormalizedArea();
+            Interval radius = nr.getNormalizedRadius();
+            Interval texture = nr.getNormalizedTexture();
+            Interval perimeter = nr.getNormalizedPerimeter();
+            Interval area = nr.getNormalizedArea();
             int decision = nr.getDecision();
-            Label label = new Label(id +" "+ Arrays.toString(radius) +" "+ Arrays.toString(texture) +" "+ Arrays.toString(perimeter) +" "+ Arrays.toString(area) +" "+decision);
+            Label label = new Label(id +" "+ radius +" "+ texture +" "+ perimeter +" "+ area +" "+decision);
             thirdVBox.getChildren().add(label);
         }
     }

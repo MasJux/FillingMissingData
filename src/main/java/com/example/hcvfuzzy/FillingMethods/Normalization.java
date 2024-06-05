@@ -1,6 +1,7 @@
 package com.example.hcvfuzzy.FillingMethods;
 
-import com.example.hcvfuzzy.Holders.NormalizedIntervalDataHolder;
+import com.example.hcvfuzzy.Holders.NormalizedIntervals;
+import com.example.hcvfuzzy.Objects.Interval;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.Objects.Record;
 import javafx.beans.property.SimpleStringProperty;
@@ -54,7 +55,7 @@ public class Normalization {
                     int maxAttributeValue = maxValues.get(attributeName);
 
                     double normalizedValue = df.parse(df.format((double) (attributeValue - minAttributeValue) / (maxAttributeValue - minAttributeValue))).doubleValue();
-                    double[] intervalAttribute = calculateInterval(normalizedValue);
+                    Interval intervalAttribute = calculateInterval(normalizedValue);
 
                     normalizedRecord.setAttributeValue(attributeName, intervalAttribute);
                 }
@@ -63,22 +64,23 @@ public class Normalization {
                 normalizedRecord.setDecision(decision);
             }
 
-            NormalizedIntervalDataHolder.addNormalizedRecord(normalizedRecord);
+            NormalizedIntervals.addNormalizedRecord(normalizedRecord);
         }
     }
     public static double g(double a) {
         return Math.min(a,1-a);
     }
-    private double[] calculateInterval(double x) {
+    private Interval calculateInterval(double x) {
         double lowerComp;
         double upperComp;
         lowerComp = x * (1 - 0.25 * 2 * g(x));
-        upperComp = x * (1 - 0.25 * 2 * g(x) + 0.25 * 2 * g(x));
+        upperComp = lowerComp + (0.25 * 2 * g(x));
 
         DecimalFormat df = new DecimalFormat("#.#####");
         lowerComp = Double.parseDouble(df.format(lowerComp).replace(',', '.'));
         upperComp = Double.parseDouble(df.format(upperComp).replace(',', '.'));
-        return new double[]{lowerComp, upperComp};
+
+        return new Interval(lowerComp, upperComp);
     }
 
     public TableView<NormalizedRecord> updateTableViewWithNormalizedData( List<Record> dataList) throws ParseException {
@@ -93,11 +95,10 @@ public class Normalization {
         List<String> attributeNames = Arrays.asList("radius", "texture", "perimeter", "area", "smoothness", "compactness", "concavity", "concavePoints", "symmetry", "fractalDimension");
         for (String attributeName : attributeNames) {
             TableColumn<NormalizedRecord, String> column = new TableColumn<>(attributeName);
-            //??
             column.setCellValueFactory(cellData -> {
                 NormalizedRecord record = cellData.getValue();
                 // Pobranie odpowiedniego atrybutu znormalizowanego na podstawie nazwy kolumny
-                double[] attributeValues = switch (attributeName) {
+                Interval attributeValues = switch (attributeName) {
                     case "radius" -> record.getNormalizedRadius();
                     case "texture" -> record.getNormalizedTexture();
                     case "perimeter" -> record.getNormalizedPerimeter();
@@ -108,10 +109,15 @@ public class Normalization {
                     case "concavePoints" -> record.getNormalizedConcavePoints();
                     case "symmetry" -> record.getNormalizedSymmetry();
                     case "fractalDimension" -> record.getNormalizedFractalDimension();
-                    default -> new double[0]; // Domyślna wartość, jeśli atrybut nie jest obsługiwany
+                    default -> null;
+                    // Domyślna wartość, jeśli atrybut nie jest obsługiwany
                 };
                 // Konwersja tablicy wartości na ciąg znaków do wyświetlenia w komórce
-                return new SimpleStringProperty(Arrays.toString(attributeValues));
+                if (attributeValues != null) {
+                    return new SimpleStringProperty("[" + attributeValues.getLower() + ", " + attributeValues.getUpper() + "]");
+                } else {
+                    return null;
+                }
             });
             newTableView.getColumns().add(column);
         }
@@ -119,7 +125,7 @@ public class Normalization {
 
         newTableView.setItems(FXCollections.observableArrayList(normalizeDataList));
         newTableView.getColumns().add(decisionColumn);
-        List<NormalizedRecord> normalizedDataList = NormalizedIntervalDataHolder.getNormalizedIntervalsList();
+        List<NormalizedRecord> normalizedDataList = NormalizedIntervals.getNormalizedIntervalsList();
 
         for (int i = 0; i < normalizedDataList.size(); i++) {
             Record originalRecord = dataList.get(i);

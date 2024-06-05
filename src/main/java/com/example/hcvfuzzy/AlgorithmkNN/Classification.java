@@ -1,5 +1,6 @@
 package com.example.hcvfuzzy.AlgorithmkNN;
 
+import com.example.hcvfuzzy.Objects.Interval;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
 
 import java.util.*;
@@ -8,14 +9,14 @@ public class Classification {
     private static final List<String> ATTRIBUTES = Arrays.asList("radius", "texture", "perimeter", "area", "smoothness", "compactness"
             , "concavity", "concavePoints", "symmetry", "fractalDimension");
 
-    public int classifyNewObject(NormalizedRecord normalizedObject,List<NormalizedRecord> normalizedDataset, int k) {
+    public int classifyNewObject(NormalizedRecord testObject, List<NormalizedRecord> trainingDataset, int k) {
 
         //obliczanie podobieństw
-        Map<NormalizedRecord, Double> similarities = calculateSimilarities(normalizedObject, normalizedDataset);
+        Map<NormalizedRecord, Double> similarities = calculateSimilarities(testObject, trainingDataset);
         //sortowanie sąsiadów względem odległości
         List<NormalizedRecord> nearestNeighbors = findNearestNeighbors(similarities, k);
         //agregacja
-        int classifiedDecision = aggregateDecision(nearestNeighbors, k);
+        int classifiedDecision = aggregateDecision(nearestNeighbors);
 
         return classifiedDecision;
     }
@@ -25,32 +26,67 @@ public class Classification {
 
         for (NormalizedRecord normalizedRecord : dataset) {
             if (normalizedRecord != newObject) {
-                double similarity = calculateEuclideanDistance(newObject, normalizedRecord);
+                double similarity = calculateSimilarity(newObject,normalizedRecord);
                 similarities.put(normalizedRecord, similarity);
             }
         }
         return similarities;
     }
-    private static final double[] MISSING_VALUE = null;
-    private static double calculateEuclideanDistance(NormalizedRecord objectWithMissingAttribute, NormalizedRecord objectWithoutMissingAttribute) {
-        double[][] attributesWithMissingValue = objectWithMissingAttribute.getAttributes();
-        double[][] attributesWithoutMissingValue = objectWithoutMissingAttribute.getAttributes();
-        double sumOfSquares = 0.0;
-        int n = attributesWithMissingValue.length;
 
-        for (int i = 0; i < n; i++) {
-            if (Arrays.equals(attributesWithMissingValue[i], MISSING_VALUE)) {
-                continue;
-            }
-            double lowerCompDiff = attributesWithMissingValue[i][0] - attributesWithoutMissingValue[i][0];
-            double upperCompDiff = attributesWithMissingValue[i][1] - attributesWithoutMissingValue[i][1];
+    private static double calculateEuclideanDistance(NormalizedRecord newObject,NormalizedRecord trainedRecord) {
+        Interval[] attributesNewObject = newObject.getAttributes();
+        Interval[] attributesTrainedRecord = trainedRecord.getAttributes();
+
+        double sumOfSquares = 0.0;
+        int n = 0;
+
+        List<Double> newObjectAttributesLowerList = new ArrayList<>();
+        List<Double> newObjectAttributesUpperList = new ArrayList<>();
+
+        List<Double> trainedRecordAttributesLowerList = new ArrayList<>();
+        List<Double> trainedRecordAttributesUpperList = new ArrayList<>();
+
+//wyciagniecie atrybutów nowego obiektu(testowego)
+        for(Interval firstInterval:attributesNewObject){
+
+            double newObjectAttributeLowerComp = firstInterval.getLower();
+            double newObjectAttributeUpperComp = firstInterval.getUpper();
+
+            newObjectAttributesLowerList.add(newObjectAttributeLowerComp);
+            newObjectAttributesUpperList.add(newObjectAttributeUpperComp);
+        }
+//wyciagniecie atrybutów z obiektu treninowego
+        for(Interval secondInterval:attributesTrainedRecord){
+
+            double trainedRecordAttributeLowerComp = secondInterval.negation().getLower();
+            double trainedRecordAttributeUpperComp = secondInterval.negation().getUpper();
+
+            trainedRecordAttributesLowerList.add(trainedRecordAttributeLowerComp);
+            trainedRecordAttributesUpperList.add(trainedRecordAttributeUpperComp);
+        }
+
+        for(int i = 0; i<newObjectAttributesLowerList.size();i++){
+
+            double lowerCompDiff = newObjectAttributesLowerList.get(i)-trainedRecordAttributesLowerList.get(i);
+            double upperCompDiff = newObjectAttributesUpperList.get(i)-trainedRecordAttributesUpperList.get(i);
             double maxDiffSquared = Math.max(Math.pow(lowerCompDiff, 2), Math.pow(upperCompDiff, 2));
             sumOfSquares += maxDiffSquared;
+            n++;
         }
-        return Math.sqrt(sumOfSquares / n);
+//        System.out.println("missingAttributeLowerList: "+missingAttributeLowerList);
+//        System.out.println("missingAttributeUpperList: "+missingAttributeUpperList);
+
+        return Math.sqrt(sumOfSquares/n);
+    }
+    private static double calculateSimilarity(NormalizedRecord newObject, NormalizedRecord trainedObject) {
+
+        double distance = calculateEuclideanDistance(newObject,trainedObject);
+
+        return 1 - distance;
     }
 
-    public int aggregateDecision(List<NormalizedRecord> nearestNeighbors, int k) {
+
+    public int aggregateDecision(List<NormalizedRecord> nearestNeighbors) {
         Map<Integer, Integer> decisionCounts = new HashMap<>();
 
         // liczenie wystąpień decyzji wśród k najbliższych sąsiadów
@@ -58,7 +94,6 @@ public class Classification {
             int decision = normalizedRecord.getDecision();
             decisionCounts.put(decision, decisionCounts.getOrDefault(decision, 0) + 1);
         }
-
         // wybór decyzji, która występuje najczęściej
         int maxCount = 0;
         int mostFrequentDecision = -1;

@@ -2,8 +2,8 @@ package com.example.hcvfuzzy.Controllers;
 
 import com.example.hcvfuzzy.Holders.DataAfterDeleting;
 import com.example.hcvfuzzy.Holders.DataBeforeDeleting;
+import com.example.hcvfuzzy.Holders.NormalizedIntervals;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
-import com.example.hcvfuzzy.Holders.NormalizedIntervalDataHolder;
 import com.example.hcvfuzzy.Objects.Record;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,7 +27,7 @@ public class DeletingCellsController implements Initializable {
     private Button deleteButton;
     private TableView<NormalizedRecord> newTableView;
     private TableView<Record> tableView;
-    NormalizedIntervalDataHolder normalizedIntervalDataHolder;
+    NormalizedIntervals normalizedIntervals;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

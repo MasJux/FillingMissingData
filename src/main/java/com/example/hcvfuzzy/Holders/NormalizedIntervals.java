@@ -5,7 +5,7 @@ import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NormalizedIntervalDataHolder {
+public class NormalizedIntervals {
     private static final List<NormalizedRecord> listOfNormalizedIntervals = new ArrayList<>();
 
     public static List<NormalizedRecord> getNormalizedIntervalsList() {

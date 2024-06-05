@@ -1,6 +1,9 @@
 package com.example.hcvfuzzy.FillingMethods;
+import com.example.hcvfuzzy.Holders.ComplementIntervals;
+import com.example.hcvfuzzy.Holders.DataBeforeDeleting;
+import com.example.hcvfuzzy.Objects.Interval;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
-import com.example.hcvfuzzy.Holders.DataAfterEntropyFilling;
+import com.example.hcvfuzzy.Objects.Record;
 
 import java.util.*;
 
@@ -21,10 +24,10 @@ public class EntropyMethod {
 
         NormalizedRecord objectWithMissingValue;
 
-            double[][] attributes = trainRecord.getAttributes();
+            Interval[] attributes = trainRecord.getAttributes();
             if (trainRecord.containsMissingValue(attributes)) {
                 objectWithMissingValue = trainRecord;
-                System.out.println("Empty: "+objectWithMissingValue.getID()+" - "+ Arrays.toString(objectWithMissingValue.getNormalizedRadius()));
+                System.out.println("Empty: "+objectWithMissingValue.getID()+" - "+ objectWithMissingValue.getNormalizedRadius());
                 return objectWithMissingValue;
             }
 
@@ -36,7 +39,6 @@ public class EntropyMethod {
         double minEntropy = Double.MAX_VALUE;
         NormalizedRecord winningRecord = null;
 
-        String nameOfMissingAttribute = objectWithMissingValue.getMissingAttributeName();
         int missingObjectDecision = objectWithMissingValue.getDecision();
 
         for (NormalizedRecord object : listObjectWithMissingValue) {
@@ -47,8 +49,8 @@ public class EntropyMethod {
             if (object.getDecision() != missingObjectDecision) {
                 continue; // pomijamy obiekty z różnymi decyzjami
             }
-            if (!object.containsMissingValue(object.getAttributes()) || object.getMissingAttributeName().equals(nameOfMissingAttribute)) {
-                double entropy = calculateEntropy(objectWithMissingValue, object);
+            if (!object.containsMissingValue(object.getAttributes())) {
+                double entropy = calculateEntropy(object);
                 // aktualizacja wartosci entropii
                 if (entropy < minEntropy) {
                     minEntropy = entropy;
@@ -58,57 +60,69 @@ public class EntropyMethod {
         }
         return winningRecord;
     }
-    private void fillMissingValues(NormalizedRecord recordWithMissingAttribute, NormalizedRecord bestRecordToFill){
-        String nameAttributeWithMissingAttribute = recordWithMissingAttribute.getMissingAttributeName();
-        double[] bestValueToFill = bestRecordToFill.getAttributeValue(nameAttributeWithMissingAttribute);
+    private static double calculateDistance(NormalizedRecord objectWithoutMissingAttribute) {
 
-        recordWithMissingAttribute.setAttributeValue(nameAttributeWithMissingAttribute,bestValueToFill);
-        System.out.println("Filled: "+recordWithMissingAttribute.getID()+ " - " + Arrays.toString(recordWithMissingAttribute.getNormalizedRadius()));
-    }
+        Interval[] attributesWithoutMissingValue = objectWithoutMissingAttribute.getAttributes();
 
-    private static final double[] MISSING_VALUE = null;
-    private static double calculateDistance(NormalizedRecord objectWithMissingAttribute, NormalizedRecord objectWithoutMissingAttribute) {
-        double[][] attributesWithMissingValue = objectWithMissingAttribute.getAttributes();
-        double[][] attributesWithoutMissingValue = objectWithoutMissingAttribute.getAttributes();
         double sumOfSquares = 0.0;
-        int n = attributesWithMissingValue.length;
+        int n = 0;
 
-        for (int i = 0; i < n; i++) {
-            if (Arrays.equals(attributesWithMissingValue[i], MISSING_VALUE)) {
-                continue;
-            }
-            double lowerCompDiff = attributesWithMissingValue[i][0] - attributesWithoutMissingValue[i][0];
-            double upperCompDiff = attributesWithMissingValue[i][1] - attributesWithoutMissingValue[i][1];
+        List<Double> withoutMissingAttributeLowerList = new ArrayList<>();
+        List<Double> withoutMissingAttributeUpperList = new ArrayList<>();
+
+        List<Double> withoutMissingAttributeNegationLowerList = new ArrayList<>();
+        List<Double> withoutMissingAttributeNegationUpperList = new ArrayList<>();
+
+//z pełnego rekordu wyciągnięcie przedziałow i wrzucenie ich do list
+        for(Interval firstInterval:attributesWithoutMissingValue){
+
+            double withoutMissingAttributeLowerComp = firstInterval.getLower();
+            double withoutMissingAttributeUpperComp = firstInterval.getUpper();
+
+            withoutMissingAttributeLowerList.add(withoutMissingAttributeLowerComp);
+            withoutMissingAttributeUpperList.add(withoutMissingAttributeUpperComp);
+        }
+//negacja pełnego rekordu i wrzucenie jej do listy
+        for(Interval secondInterval:attributesWithoutMissingValue){
+
+            double withoutMissingAttributeLowerComp = secondInterval.negation().getLower();
+            double withoutMissingAttributeUpperComp = secondInterval.negation().getUpper();
+
+            withoutMissingAttributeNegationLowerList.add(withoutMissingAttributeLowerComp);
+            withoutMissingAttributeNegationUpperList.add(withoutMissingAttributeUpperComp);
+        }
+//obliczenie znormalizowanej odl. euklidesowej
+        for(int i = 0; i<withoutMissingAttributeLowerList.size();i++){
+
+            double lowerCompDiff = withoutMissingAttributeLowerList.get(i)-withoutMissingAttributeNegationLowerList.get(i);
+            double upperCompDiff = withoutMissingAttributeUpperList.get(i)-withoutMissingAttributeNegationUpperList.get(i);
             double maxDiffSquared = Math.max(Math.pow(lowerCompDiff, 2), Math.pow(upperCompDiff, 2));
             sumOfSquares += maxDiffSquared;
+            n++;
         }
+
+//        System.out.println("withoutMissingAttributeLowerList: "+withoutMissingAttributeLowerList);
+//        System.out.println("withoutMissingAttributeUpperList: "+withoutMissingAttributeUpperList);
+
         return Math.sqrt(sumOfSquares / n);
     }
-    private static double calculateEntropy(NormalizedRecord missingAttributeObject, NormalizedRecord fullAttributesObject) {
+    private static double calculateEntropy(NormalizedRecord fullAttributesObject) {
 
-        double distance = calculateDistance(missingAttributeObject, fullAttributesObject);
+        double distance = calculateDistance(fullAttributesObject);
 
-        return 1 / distance;
+        return 1 - distance;
     }
-//    public void updateRecords(List<NormalizedRecord> listObjectWithMissingValue, NormalizedRecord missingObject, NormalizedRecord bestObjectToFill) {
-//
-//               String missingAttributeName = recordWithMissingValue.getMissingAttributeName();
-//               bestObjectToFill.getAttributeValue()
-//                recordWithMissingValueCopy.setAttributeValue(missingAttributeName, value);
-//
-//                DataAfterEntropyFilling.getDataAfterEntropyFilling().add(recordWithMissingValueCopy);
-//            }else{
-//                DataAfterEntropyFilling.getDataAfterEntropyFilling().add(recordWithMissingValueCopy);
-//
-//            }
-//        }
-//    }
-}
-/** TODO
- * Dac update listy po uzupełnieniu i przekazać ją w classifynewobject jako liste
- *
+    private void fillMissingValues(NormalizedRecord recordWithMissingAttribute, NormalizedRecord bestRecordToFill){
+        String nameAttributeWithMissingAttribute = recordWithMissingAttribute.getMissingAttributeName();
+        Interval bestValueToFill = bestRecordToFill.getAttributeValue(nameAttributeWithMissingAttribute);
 
- * TODO
+        recordWithMissingAttribute.setAttributeValue(nameAttributeWithMissingAttribute,bestValueToFill);
+        System.out.println("Filled: "+recordWithMissingAttribute.getID()+ " - " + recordWithMissingAttribute.getNormalizedRadius());
+    }
+
+}
+
+ /** TODO
  * uporządkować metody w normalizedRecord i wykonać:
  * (Jezeli mamy obiekt w ktorym brakuje radius to przy przeszukiwaniu odrzucamy wszystkie obiekty w których jest brak innych
  *      atrybutów np.

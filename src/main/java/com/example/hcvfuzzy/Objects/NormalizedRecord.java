@@ -1,19 +1,17 @@
 package com.example.hcvfuzzy.Objects;
 
-import java.util.Arrays;
-
 public class NormalizedRecord {
     private int ID;
-    private double[] NormalizedRadius;
-    private double[] NormalizedTexture;
-    private double[] NormalizedPerimeter;
-    private double[] NormalizedArea;
-    private double[] NormalizedSmoothness;
-    private double[] NormalizedCompactness;
-    private double[] NormalizedConcavity;
-    private double[] NormalizedConcavePoints;
-    private double[] NormalizedSymmetry;
-    private double[] NormalizedFractalDimension;
+    private Interval NormalizedRadius;
+    private Interval NormalizedTexture;
+    private Interval NormalizedPerimeter;
+    private Interval NormalizedArea;
+    private Interval NormalizedSmoothness;
+    private Interval NormalizedCompactness;
+    private Interval NormalizedConcavity;
+    private Interval NormalizedConcavePoints;
+    private Interval NormalizedSymmetry;
+    private Interval NormalizedFractalDimension;
     private int Decision;
 
     public NormalizedRecord() {
@@ -34,11 +32,27 @@ public class NormalizedRecord {
         this.NormalizedFractalDimension =normalizedRecord.NormalizedFractalDimension;
         this.Decision = normalizedRecord.Decision;
     }
+    public NormalizedRecord copy() {
+        NormalizedRecord copy = new NormalizedRecord();
+        copy.setID(this.getID());
+        copy.setNormalizedRadius(this.getNormalizedRadius());
+        copy.setNormalizedTexture(this.getNormalizedTexture());
+        copy.setNormalizedPerimeter(this.getNormalizedPerimeter());
+        copy.setNormalizedArea(this.getNormalizedArea());
+        copy.setNormalizedSmoothness(this.getNormalizedSmoothness());
+        copy.setNormalizedCompactness(this.getNormalizedCompactness());
+        copy.setNormalizedConcavity(this.getNormalizedConcavity());
+        copy.setNormalizedConcavePoints(this.getNormalizedConcavePoints());
+        copy.setNormalizedSymmetry(this.getNormalizedSymmetry());
+        copy.setNormalizedFractalDimension(this.getNormalizedFractalDimension());
+        copy.setDecision(this.getDecision());
+        return copy;
+    }
 
     public NormalizedRecord(Record record) {
     }
 
-    public double[] getAttributeValue(String attributeName) {
+    public Interval getAttributeValue(String attributeName) {
         switch (attributeName) {
             case "radius":
                 return NormalizedRadius;
@@ -65,7 +79,7 @@ public class NormalizedRecord {
         }
     }
 
-    public void setAttributeValue(String attributeName, double[] normalizedValue) {
+    public void setAttributeValue(String attributeName, Interval normalizedValue) {
         switch (attributeName) {
             case "radius":
                 setNormalizedRadius(normalizedValue);
@@ -101,8 +115,8 @@ public class NormalizedRecord {
                 throw new IllegalArgumentException("Nieprawidłowa nazwa atrybutu: " + attributeName);
         }
     }
-    public double[][] getAttributes() {
-        double[][] attributes = {
+    public Interval[] getAttributes() {
+        return new Interval[]{
                 NormalizedRadius,
                 NormalizedTexture,
                 NormalizedPerimeter,
@@ -114,12 +128,11 @@ public class NormalizedRecord {
                 NormalizedSymmetry,
                 NormalizedFractalDimension
         };
-        return attributes;
     }
 
     //sprawdz czy w rekodzie jest brakująca dana(bez nazw tylko wartosci)
-    public boolean containsMissingValue(double[][] attributes) {
-        for (double[] attribute : attributes) {
+    public boolean containsMissingValue(Interval[] attributes) {
+        for (Interval attribute : attributes) {
             if (attribute == null) {
                 return true;
             }
@@ -127,7 +140,28 @@ public class NormalizedRecord {
         return false;
 
     }
+    public NormalizedRecord complement(){
+        String[] attributeNames = {
+                "radius",
+                "texture",
+                "perimeter",
+                "area",
+                "smoothness",
+                "compactness",
+                "concavity",
+                "concavePoints",
+                "symmetry",
+                "fractalDimension"
+        };
+        NormalizedRecord newNormalizedRecord = new NormalizedRecord();
+        for(String name:attributeNames){
+            Interval intervalValues = getAttributeValue(name);
 
+//            System.out.println(Arrays.toString(intervalValues) + name);
+            newNormalizedRecord.setAttributeValue(name,intervalValues);
+        }
+        return newNormalizedRecord;
+    }
     //sprawdz w ktory atrybut jest brakujący i wypisz jego nazwe
     public String getMissingAttributeName() {
         String[] attributeNames = {
@@ -143,7 +177,7 @@ public class NormalizedRecord {
                 "fractalDimension"
         };
 
-        double[][] attributes = getAttributes();
+        Interval[] attributes = getAttributes();
 
         for (int i = 0; i < attributes.length; i++) {
             if (attributes[i] == null) {
@@ -162,83 +196,83 @@ public class NormalizedRecord {
         this.ID = ID;
     }
 
-    public double[] getNormalizedRadius() {
+    public Interval getNormalizedRadius() {
         return NormalizedRadius;
     }
 
-    public void setNormalizedRadius(double[] normalizedRadius) {
+    public void setNormalizedRadius(Interval normalizedRadius) {
         NormalizedRadius = normalizedRadius;
     }
 
-    public double[] getNormalizedTexture() {
+    public Interval getNormalizedTexture() {
         return NormalizedTexture;
     }
 
-    public void setNormalizedTexture(double[] normalizedTexture) {
+    public void setNormalizedTexture(Interval normalizedTexture) {
         NormalizedTexture = normalizedTexture;
     }
 
-    public double[] getNormalizedPerimeter() {
+    public Interval getNormalizedPerimeter() {
         return NormalizedPerimeter;
     }
 
-    public void setNormalizedPerimeter(double[] normalizedPerimeter) {
+    public void setNormalizedPerimeter(Interval normalizedPerimeter) {
         NormalizedPerimeter = normalizedPerimeter;
     }
 
-    public double[] getNormalizedArea() {
+    public Interval getNormalizedArea() {
         return NormalizedArea;
     }
 
-    public void setNormalizedArea(double[] normalizedArea) {
+    public void setNormalizedArea(Interval normalizedArea) {
         NormalizedArea = normalizedArea;
     }
 
-    public double[] getNormalizedSmoothness() {
+    public Interval getNormalizedSmoothness() {
         return NormalizedSmoothness;
     }
 
-    public void setNormalizedSmoothness(double[] normalizedSmoothness) {
+    public void setNormalizedSmoothness(Interval normalizedSmoothness) {
         NormalizedSmoothness = normalizedSmoothness;
     }
 
-    public double[] getNormalizedCompactness() {
+    public Interval getNormalizedCompactness() {
         return NormalizedCompactness;
     }
 
-    public void setNormalizedCompactness(double[] normalizedCompactness) {
+    public void setNormalizedCompactness(Interval normalizedCompactness) {
         NormalizedCompactness = normalizedCompactness;
     }
 
-    public double[] getNormalizedConcavity() {
+    public Interval getNormalizedConcavity() {
         return NormalizedConcavity;
     }
 
-    public void setNormalizedConcavity(double[] normalizedConcavity) {
+    public void setNormalizedConcavity(Interval normalizedConcavity) {
         NormalizedConcavity = normalizedConcavity;
     }
 
-    public double[] getNormalizedConcavePoints() {
+    public Interval getNormalizedConcavePoints() {
         return NormalizedConcavePoints;
     }
 
-    public void setNormalizedConcavePoints(double[] normalizedConcavePoints) {
+    public void setNormalizedConcavePoints(Interval normalizedConcavePoints) {
         NormalizedConcavePoints = normalizedConcavePoints;
     }
 
-    public double[] getNormalizedSymmetry() {
+    public Interval getNormalizedSymmetry() {
         return NormalizedSymmetry;
     }
 
-    public void setNormalizedSymmetry(double[] normalizedSymmetry) {
+    public void setNormalizedSymmetry(Interval normalizedSymmetry) {
         NormalizedSymmetry = normalizedSymmetry;
     }
 
-    public double[] getNormalizedFractalDimension() {
+    public Interval getNormalizedFractalDimension() {
         return NormalizedFractalDimension;
     }
 
-    public void setNormalizedFractalDimension(double[] normalizedFractalDimension) {
+    public void setNormalizedFractalDimension(Interval normalizedFractalDimension) {
         NormalizedFractalDimension = normalizedFractalDimension;
     }
 
@@ -249,5 +283,4 @@ public class NormalizedRecord {
     public void setDecision(int decision) {
         Decision = decision;
     }
-
 }
