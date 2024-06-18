@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<sim-project version="14.30" multi-file="no" uid="simp8d9b774c981e46bcb28464859fffc4fb" creation-date="06/13/2024 16:58:45">
+  <meta>
+    <name>(Project)</name>
+    <authors>m a</authors>
+    <description />
+  </meta>
+  <counters models="1">
+    <entity-names>
+      <counter>
+        <item-type type-id="flowchart-start-end" type="Start End" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="flowchart-process" type="Process" />
+        <value>4</value>
+      </counter>
+      <counter>
+        <item-type type-id="flowchart-data" type="Data" />
+        <value>5</value>
+      </counter>
+    </entity-names>
+    <entity-ids>
+      <counter>
+        <item-type type-id="diagram-reference" type="Diagram Reference" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="flowchart-start-end" type="Start End" />
+        <value>4</value>
+      </counter>
+      <counter>
+        <item-type type-id="flowchart-process" type="Process" />
+        <value>5</value>
+      </counter>
+      <counter>
+        <item-type type-id="flowchart-flow" type="Flow" />
+        <value>11</value>
+      </counter>
+      <counter>
+        <item-type type-id="flowchart-data" type="Data" />
+        <value>6</value>
+      </counter>
+      <counter>
+        <item-type type-id="universal-connector" type="Universal Connector" />
+        <value>7</value>
+      </counter>
+    </entity-ids>
+    <diagrams>
+      <counter>
+        <type>SoftwareIdeasModeler.Core.Diagrams.Other.FlowchartDiagram</type>
+        <value>1</value>
+      </counter>
+    </diagrams>
+    <fields />
+  </counters>
+  <alias-groups />
+  <management uid="md-7412c9c6ec0d4834baedbc9c6d9637d9" name="" task-id-sequence="0">
+    <persons>
+      <person id="">
+        <first-name>m</first-name>
+        <last-name>a</last-name>
+        <role />
+        <e-mail />
+        <phone-number />
+        <description />
+        <color>#00000000</color>
+      </person>
+    </persons>
+    <teams />
+    <sprints />
+    <projects />
+    <modules />
+    <tasks />
+    <to-dos />
+  </management>
+  <glossary id="glsr-8680234481e34b48aeb3d0a1e57b1283" name="" order-index="-1" />
+  <types default="UML">
+    <type-sets>
+      <type-set file="UmlTypes.xml" />
+    </type-sets>
+    <custom-types>
+      <parameters />
+      <types />
+    </custom-types>
+  </types>
+  <items />
+  <models>
+    <model id="p0082c62854394a1bb41c268ed26057c4_970671611" name="Model1" namespace="" order-index="1">
+      <meta>
+        <authors>
+          <author> </author>
+        </authors>
+        <description />
+        <creation-date>06/13/2024 16:59:01</creation-date>
+        <change-date>01/01/0001 00:00:00</change-date>
+        <revision-count>0</revision-count>
+        <version />
+      </meta>
+      <abstract-items />
+      <sub-models />
+      <diagram type="flowchart" id="p9985eff9e2e647e49515cf2e5b53838f_360892472" name="FlowchartDiagram1" order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default">
+        <style>
+          <background-color index="1" color="#FFFFFFFF" />
+          <background-color index="2" color="#FFFFFFFF" />
+          <background-type type="solid" />
+        </style>
+        <meta>
+          <authors>
+            <author> </author>
+          </authors>
+          <description />
+          <creation-date>06/13/2024 16:59:01</creation-date>
+          <change-date>06/13/2024 17:42:18</change-date>
+          <revision-count>0</revision-count>
+          <version />
+        </meta>
+        <abstract-items>
+          <item id="6a60b382ff0849d8a789e28b076f4e4e" cid="ELEM003" type="flowchart-start-end" name="STOP" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:26:51" />
+          <item id="26abb0a4f0ff4f6582fef6eb7d8b414a" cid="FCF005" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:25:27" from="0effe9f8b36345368ca8fad63a2a1dd0" to="1f6ef4978b3e48198a855f47df395430" />
+          <item id="48164ad6ac8c450f852f0b4577d9156c" cid="FCF008" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:31:35" from="9b969db6937c43e1a9652a026975c2f7" to="15fc3cdbce72499590ea1dd6e7a9a8d4" />
+          <item id="dc3f26a2a97b45b9b2b5e82a838972a8" cid="FCDT005" type="flowchart-data" name="Zaktualizuj atrybut w rekordzie" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:41:52" />
+          <item id="decdee6f5c1f464e8046680b5f0ec019" cid="FCP004" type="flowchart-process" name="normalizacja = (wartość - min wartość)/(max wartość - min wartość)" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:39:31" />
+          <item id="69b402aa2ebb4cdcbd3f38b5f9cc70e8" cid="FCDT004" type="flowchart-data" name="Wczytaj atrybut" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:37:24" />
+          <item id="f67eb01d84ee432a920e72bd86e68dcd" cid="ELEM001" type="flowchart-start-end" name="START" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 16:59:09" />
+          <item id="14e0e435c6d74a3795bfe282a28d771b" cid="FCF001" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:01:18" from="f67eb01d84ee432a920e72bd86e68dcd" to="0effe9f8b36345368ca8fad63a2a1dd0" />
+          <item id="9b969db6937c43e1a9652a026975c2f7" cid="FCDT001" type="flowchart-data" name="Inicjalizuj listę i mapę" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:07:34" />
+          <item id="93f759ef31ee4a119eb3d036585f258a" cid="FCF006" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:27:10" from="dc3f26a2a97b45b9b2b5e82a838972a8" to="6a60b382ff0849d8a789e28b076f4e4e" />
+          <item id="1b4ade5237a9486f91e1b83affa2a657" cid="FCF002" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:06:27" from="f67eb01d84ee432a920e72bd86e68dcd" to="69b402aa2ebb4cdcbd3f38b5f9cc70e8" />
+          <item id="1f6ef4978b3e48198a855f47df395430" cid="FCDT002" type="flowchart-data" name="Wpisz je w HashMap" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:25:10" />
+          <item id="0effe9f8b36345368ca8fad63a2a1dd0" cid="FCP001" type="flowchart-process" name="Znajdź minimalną i maksymalną wartość dla każdego atrybutu" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:00:45" />
+          <item id="32e467f1253548318592f903707a26f8" cid="DR001" type="diagram-reference" creator="" creation-date="06/13/2024 16:59:04">
+            <owned-items />
+          </item>
+          <item id="15fc3cdbce72499590ea1dd6e7a9a8d4" cid="FCDT003" type="flowchart-data" name="Wczytaj rekord" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:31:06" />
+          <item id="e732e884d32140ca9fc44e2a8c00f538" cid="FCF003" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:06:31" from="afe22daa20204bf3b53839040769f329" to="0effe9f8b36345368ca8fad63a2a1dd0" />
+          <item id="60fe6d43060e417cbef2cb7e4fa49941" cid="FCF010" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:42:18" from="decdee6f5c1f464e8046680b5f0ec019" to="dc3f26a2a97b45b9b2b5e82a838972a8" />
+          <item id="165b3d51ae8b4470b942cf365180736d" cid="FCF004" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:06:45" from="9b969db6937c43e1a9652a026975c2f7" to="0effe9f8b36345368ca8fad63a2a1dd0" />
+          <item id="afe22daa20204bf3b53839040769f329" cid="FCP002" type="flowchart-process" name="Utwórz listę atrybutów" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:05:43" />
+          <item id="1587ba0f4c1e480aa294baecb873279c" cid="FCF009" type="flowchart-flow" owner="32e467f1253548318592f903707a26f8" creator="" creation-date="06/13/2024 17:41:24" from="69b402aa2ebb4cdcbd3f38b5f9cc70e8" to="decdee6f5c1f464e8046680b5f0ec019" />
+        </abstract-items>
+        <layer id="b4c11e1d24a941f3b38a9a1052ab642f" name="Default" visible="true" enabled="true" locked="false">
+          <item id="32e467f1253548318592f903707a26f8" iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 16:59:04" order-index="0" type="entity">
+            <layout ax="377" ay="173" awidth="729" aheight="498" x="377" y="173" width="729" height="498" expanded="377,173,729,498" collapsed="0,0,0,0" />
+          </item>
+          <item id="f67eb01d84ee432a920e72bd86e68dcd" iid="dd3c6569f64b4307bc541196ad04192a" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 16:59:09" order-index="1" type="entity">
+            <layout ax="686.5" ay="194" awidth="110" aheight="38" x="686.5" y="194" width="110" height="38" />
+          </item>
+          <item id="1b4ade5237a9486f91e1b83affa2a657" iid="be663c3ce751445f86345268d9bbc1ac" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 17:06:27" order-index="4" type="relation">
+            <layout line-style="oblique" lock-start-point="true" lock-end-point="true" lock-to-fields="false" auto-path="" x1="742" y1="232" x2="742" y2="274" start-border-pos="0.6238636363636364" end-border-pos="0.12552742660045624" start-local-pos="55.5" end-local-pos="119" name-position="1,20">
+              <points>
+                <point x="742" y="232" />
+                <point x="742" y="274" />
+              </points>
+            </layout>
+            <relation from="f67eb01d84ee432a920e72bd86e68dcd" from-iid="dd3c6569f64b4307bc541196ad04192a" to="69b402aa2ebb4cdcbd3f38b5f9cc70e8" to-iid="70e15aababca47fb8747c016c79a052b" />
+          </item>
+          <item id="6a60b382ff0849d8a789e28b076f4e4e" iid="fb9c5fa181f743959c886b3eb86bcb37" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 17:26:51" order-index="9" type="entity">
+            <layout ax="666.5" ay="590" awidth="150" aheight="58" x="666.5" y="590" width="150" height="60" />
+          </item>
+          <item id="93f759ef31ee4a119eb3d036585f258a" iid="74e9772333264235a19011d92187e264" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 17:27:10" order-index="10" type="relation">
+            <layout line-style="oblique" lock-start-point="true" lock-end-point="true" lock-to-fields="false" auto-path="" x1="742" y1="548" x2="742" y2="590" start-border-pos="0.6245874613523483" end-border-pos="0.12583333333333332" start-local-pos="152" end-local-pos="75.5" name-position="0,20">
+              <points>
+                <point x="742" y="548" />
+                <point x="742" y="590" />
+              </points>
+            </layout>
+            <relation from="dc3f26a2a97b45b9b2b5e82a838972a8" from-iid="2703e5ddd1b14d03af35c69b9d432172" to="6a60b382ff0849d8a789e28b076f4e4e" to-iid="fb9c5fa181f743959c886b3eb86bcb37" />
+          </item>
+          <item id="decdee6f5c1f464e8046680b5f0ec019" iid="3b02b930f5ba4a138133fb792317c21b" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 17:39:31" order-index="12" type="entity">
+            <layout ax="589.75" ay="374" awidth="303.5" aheight="74" x="589.75" y="374" width="303.5" height="74" />
+          </item>
+          <item id="69b402aa2ebb4cdcbd3f38b5f9cc70e8" iid="70e15aababca47fb8747c016c79a052b" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 17:37:24" order-index="11" type="entity">
+            <layout ax="623" ay="274" awidth="237" aheight="58" x="623" y="274" width="237" height="58" />
+          </item>
+          <item id="dc3f26a2a97b45b9b2b5e82a838972a8" iid="2703e5ddd1b14d03af35c69b9d432172" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 17:41:52" order-index="14" type="entity">
+            <layout ax="590" ay="490" awidth="303" aheight="58" x="590" y="490" width="303" height="58" />
+          </item>
+          <item id="1587ba0f4c1e480aa294baecb873279c" iid="f59c020b5493465e988defdb5f26d503" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 17:41:24" order-index="13" type="relation">
+            <layout line-style="oblique" lock-start-point="true" lock-end-point="true" lock-to-fields="false" auto-path="" x1="742" y1="332" x2="742" y2="374" start-border-pos="0.6244725738396625" end-border-pos="0.12541186161449752" start-local-pos="119" end-local-pos="152.25" name-position="0,20">
+              <points>
+                <point x="742" y="332" />
+                <point x="742" y="374" />
+              </points>
+            </layout>
+            <relation from="69b402aa2ebb4cdcbd3f38b5f9cc70e8" from-iid="70e15aababca47fb8747c016c79a052b" to="decdee6f5c1f464e8046680b5f0ec019" to-iid="3b02b930f5ba4a138133fb792317c21b" />
+          </item>
+          <item id="60fe6d43060e417cbef2cb7e4fa49941" iid="ce96050a3d5e44b58b91e5950f8bbb58" container="32e467f1253548318592f903707a26f8" container-iid="7cc079d7fb44487e94435a29b43aed4c" creation-date="06/13/2024 17:42:18" order-index="15" type="relation">
+            <layout line-style="oblique" lock-start-point="true" lock-end-point="true" lock-to-fields="false" auto-path="" x1="742" y1="448" x2="742" y2="490" start-border-pos="0.6245881383855024" end-border-pos="0.1254125412541254" start-local-pos="152.25" end-local-pos="152" name-position="0,20">
+              <points>
+                <point x="742" y="448" />
+                <point x="742" y="490" />
+              </points>
+            </layout>
+            <relation from="decdee6f5c1f464e8046680b5f0ec019" from-iid="3b02b930f5ba4a138133fb792317c21b" to="dc3f26a2a97b45b9b2b5e82a838972a8" to-iid="2703e5ddd1b14d03af35c69b9d432172" />
+          </item>
+        </layer>
+      </diagram>
+    </model>
+  </models>
+</sim-project>

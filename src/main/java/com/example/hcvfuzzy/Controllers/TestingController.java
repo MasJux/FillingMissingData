@@ -33,9 +33,12 @@ public class TestingController implements Initializable {
         List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
         List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
 
-
+        firstVBox.getChildren().clear();
+        secondVBox.getChildren().clear();
+        thirdVBox.getChildren().clear();
 
         for(Record nr: dataBeforeDeleting){
+
             int id  = nr.getID();
             int[] attributes = nr.getRecordAttributes();
             int decision = nr.getDecision();
@@ -52,12 +55,22 @@ public class TestingController implements Initializable {
         for(NormalizedRecord nr: normalizedIntervalsList){
             int id  = nr.getID();
             Interval radius = nr.getNormalizedRadius();
+
             Interval texture = nr.getNormalizedTexture();
             Interval perimeter = nr.getNormalizedPerimeter();
             Interval area = nr.getNormalizedArea();
             int decision = nr.getDecision();
-            Label label = new Label(id +" "+ radius +" "+ texture +" "+ perimeter +" "+ area +" "+decision);
+
+            Label label = new Label(id + " "
+                    + (radius != null ? radius.getLower() : "null") + " "
+                    + (radius != null ? radius.getUpper() : "null")
+                    + ", decision: " + decision);
+
+            // Wyświetlanie etykiety (przykładowo w konsoli)
+            System.out.println(label.getText());
             thirdVBox.getChildren().add(label);
         }
+        System.out.println("data before deleting size: "+dataBeforeDeleting.size());
+        System.out.println("data after deleting size: "+dataAfterDeleting.size());
     }
 }

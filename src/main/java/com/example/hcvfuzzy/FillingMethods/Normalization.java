@@ -7,15 +7,18 @@ import com.example.hcvfuzzy.Objects.Record;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.*;
 
 public class Normalization {
-    private final ObservableList<NormalizedRecord> normalizeDataList = FXCollections.observableArrayList();
+    private ObservableList<NormalizedRecord> normalizeDataList = FXCollections.observableArrayList();
     //public List<NormalizedRecord> defaultPublicNormalizedDataList = new ArrayList<>();
     private static final List<String> ATTRIBUTES = Arrays.asList("radius", "texture", "perimeter", "area", "smoothness", "compactness"
             , "concavity", "concavePoints", "symmetry", "fractalDimension");
@@ -31,6 +34,8 @@ public class Normalization {
         for (Record record : dataList) {
             for (String attributeName : ATTRIBUTES) {
                 int attributeValue = record.getAttributeValue(attributeName);
+//                System.out.println("ID:"+ record.getID());
+//                System.out.println(attributeName+" "+attributeValue);
                 if (attributeValue >= 0) {
                     int minAttributeValue = minValues.get(attributeName);
                     int maxAttributeValue = maxValues.get(attributeName);
@@ -39,9 +44,8 @@ public class Normalization {
                 }
             }
         }
-        System.out.println(minValues+" - "+maxValues);
         DecimalFormat df = new DecimalFormat("#.#####");
-
+        NormalizedIntervals.clear();
         // Utwórz obiekty NormalizedRecord dla każdego rekordu i ustaw znormalizowane wartości atrybutów
         for (Record record : dataList) {
             NormalizedRecord normalizedRecord = new NormalizedRecord();
@@ -116,9 +120,32 @@ public class Normalization {
                 if (attributeValues != null) {
                     return new SimpleStringProperty("[" + attributeValues.getLower() + ", " + attributeValues.getUpper() + "]");
                 } else {
-                    return null;
+                    return new SimpleStringProperty("null");
                 }
             });
+            column.setCellFactory(new Callback<TableColumn<NormalizedRecord, String>, TableCell<NormalizedRecord, String>>() {
+                @Override
+                public TableCell<NormalizedRecord, String> call(TableColumn<NormalizedRecord, String> param) {
+                    return new TableCell<NormalizedRecord, String>() {
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (item == null || empty) {
+                                setText(null);
+                                setStyle("");
+                            } else {
+                                setText(item);
+                                if ("null".equals(item)) {
+                                    setStyle("-fx-background-color: #BFBFBF; -fx-text-fill: FF0000;");
+                                } else {
+                                    setStyle("");
+                                }
+                            }
+                        }
+                    };
+                }
+            });
+
             newTableView.getColumns().add(column);
         }
 

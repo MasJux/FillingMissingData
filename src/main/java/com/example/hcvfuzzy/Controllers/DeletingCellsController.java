@@ -7,6 +7,7 @@ import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.Objects.Record;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,43 +19,73 @@ public class DeletingCellsController implements Initializable {
     private boolean deletionFlag = false;
     int amountRows;
     int amountCells;
-    private Button secondMethodButton, thirdMethodButton;
+    private Button secondMethodButton, thirdMethodButton, normalizeButton;
     @FXML
-    private Slider rowSlider, cellSlider;
-    @FXML
-    private Label rowLabel, cellLabel;
+    private Label infoLabel;
     @FXML
     private Button deleteButton;
+
+
     private TableView<NormalizedRecord> newTableView;
     private TableView<Record> tableView;
     NormalizedIntervals normalizedIntervals;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        rowSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                amountRows = (int) rowSlider.getValue();
-                rowLabel.setText(Integer.toString(amountRows));
-            }
-        });
-        cellSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                amountCells = (int) cellSlider.getValue();
-                cellLabel.setText(Integer.toString(amountCells));
-            }
-        });
+
     }
+    public void setNormalizeButton(Button normalizeButton) {
+        this.normalizeButton = normalizeButton;
+    }
+
     public void setMethodButton(Button secondMethodButton, Button thirdMethodButton) {
         this.secondMethodButton = secondMethodButton;
         this.thirdMethodButton = thirdMethodButton;
+
     }
     public void setTableView(TableView<Record> tableView) {
         this.tableView = tableView;
     }
     @FXML
     private void deleteRowsAndCells() {
+        // Utwórz listę opcji procentowych
+        List<String> choices = FXCollections.observableArrayList("5%", "25%", "50%");
+
+        // Utwórz okno dialogowe z wyboru opcji
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("5%", choices);
+        dialog.setTitle("Wybierz procent danych do usunięcia");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Wybierz procent:");
+
+        // Otrzymaj wybór użytkownika
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            String choice = result.get();
+            double percentage = 0;
+            switch (choice) {
+                case "5%":
+                    percentage = 0.05;
+                    infoLabel.setText("You have removed 5% of attributes");
+                    break;
+                case "25%":
+                    percentage = 0.25;
+                    infoLabel.setText("You have removed 25% of attributes");
+                    break;
+                case "50%":
+                    percentage = 0.50;
+                    infoLabel.setText("You have removed 50% of attributes");
+                    break;
+            }
+
+            // Oblicz ilość wierszy do usunięcia na podstawie procentu
+            int rowCount = tableView.getItems().size();
+            amountRows = (int) (rowCount * percentage);
+            amountCells = 1;
+            // Przejdź do usuwania wierszy i komórek
+            executeDeletion();
+        }
+    }
+    private void executeDeletion() {
         int rowCount = tableView.getItems().size();
         int rowIndex;
         int columnIndex;
@@ -100,8 +131,8 @@ public class DeletingCellsController implements Initializable {
         }
         updateRecords();
         deleteButton.setDisable(isDeletionPerformed());
-        secondMethodButton.setDisable(false);
-        thirdMethodButton.setDisable(false);
+
+
         if(amountRows == 0 || amountCells==0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Warning!");
@@ -109,6 +140,9 @@ public class DeletingCellsController implements Initializable {
             alert.setContentText("You need to fill in the number of rows and cells to delete.");
             alert.showAndWait();
             deleteButton.setDisable(false);
+        }
+        if (normalizeButton != null) {
+            normalizeButton.setDisable(false);
         }
     }
 
@@ -134,6 +168,7 @@ public class DeletingCellsController implements Initializable {
             recordAfterDeleting.setDecision(record.getDecision());
 
         }
+
         for (Record afterDeletingRecord : tableView.getItems()) {
             DataAfterDeleting.addDeletedRecord(afterDeletingRecord);
         }

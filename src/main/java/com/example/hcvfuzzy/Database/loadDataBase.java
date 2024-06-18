@@ -25,13 +25,32 @@ public class loadDataBase extends TableView<String> {
     public void setTableView(TableView<Record> tableView) {
         this.tableView = tableView;
     }
-    private int parseCell(String cell) {
+    public static double calculateMean(List<String[]> data, int columnIndex) {
+        double sum = 0;
+        int count = 0;
+        for (String[] row : data) {
+            if (!row[columnIndex].equals("?")) {
+                sum += Double.parseDouble(row[columnIndex]);
+                count++;
+            }
+        }
+        return sum / count;
+    }
+    private int parseCellOrMean(String cell, double mean) {
         if (cell.equals("?")) {
-            return 1; // Zamień znak "?" na 0
+            return (int) mean; // Zastąp brakującą wartość średnią z kolumny
         } else {
             return Integer.parseInt(cell); // Konwertuj tekst na int
         }
     }
+
+//    private int parseCell(String cell) {
+//        if (cell.equals("?")) {
+//            return 1; // Zamień znak "?" na 0
+//        } else {
+//            return Integer.parseInt(cell); // Konwertuj tekst na int
+//        }
+//    }
     public List<Record> getPublicDataList() {
         return publicDataList;
     }
@@ -53,22 +72,33 @@ public class loadDataBase extends TableView<String> {
             tableView.getColumns().add(column);
             column.setCellValueFactory(new PropertyValueFactory<>(columnName));
         }
+        List<String[]> rawData = new ArrayList<>();
+        for (int i = 1; i < lines.size(); i++) {
+            String[] cells = lines.get(i).split(delimiter);
+            rawData.add(cells);
+        }
+
+        int numberOfColumns = firstRow.length;
+        double[] columnMeans = new double[numberOfColumns];
+        for (int col = 0; col < numberOfColumns; col++) {
+            columnMeans[col] = calculateMean(rawData, col);
+        }
 
         for (int i = 1; i < lines.size(); i++) {
             String[] cells = lines.get(i).split(delimiter);
             Record record = new Record(
                     i,
-                    parseCell(cells[0]),
-                    parseCell(cells[1]),
-                    parseCell(cells[2]),
-                    parseCell(cells[3]),
-                    parseCell(cells[4]),
-                    parseCell(cells[5]),
-                    parseCell(cells[6]),
-                    parseCell(cells[7]),
-                    parseCell(cells[8]),
-                    parseCell(cells[9]),
-                    parseCell(cells[10])
+                    parseCellOrMean(cells[0], columnMeans[0]),
+                    parseCellOrMean(cells[1], columnMeans[1]),
+                    parseCellOrMean(cells[2], columnMeans[2]),
+                    parseCellOrMean(cells[3], columnMeans[3]),
+                    parseCellOrMean(cells[4], columnMeans[4]),
+                    parseCellOrMean(cells[5], columnMeans[5]),
+                    parseCellOrMean(cells[6], columnMeans[6]),
+                    parseCellOrMean(cells[7], columnMeans[7]),
+                    parseCellOrMean(cells[8], columnMeans[8]),
+                    parseCellOrMean(cells[9], columnMeans[9]),
+                    parseCellOrMean(cells[10], columnMeans[10])
             );
             record.getRadius();
             record.getTexture();

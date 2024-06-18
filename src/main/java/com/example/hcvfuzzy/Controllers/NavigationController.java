@@ -20,11 +20,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.TilePane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -32,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -44,7 +47,7 @@ public class NavigationController implements Initializable {
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    Button test;
+    Button efficiencyButton;
     @FXML
     Button deletingPanelButton;
     @FXML
@@ -59,8 +62,6 @@ public class NavigationController implements Initializable {
     boolean isDataNormalized = false;
     boolean isNormalizedTableViewExist = false;
     Normalization normalization = new Normalization();
-//    SecondMethod secondMethod = new SecondMethod();
-//    ThirdMethod thirdMethod = new ThirdMethod();
     loadDataBase dataBase = new loadDataBase();
     ExportTableView exportTableView;
     DeletingCellsController buttonsController = new DeletingCellsController();
@@ -76,6 +77,8 @@ public class NavigationController implements Initializable {
     private int radius, texture, perimeter, area, smoothness, compactness, concavity, concavePoints, symmetry, fractalDimension;
     private Parent deletingPaneRoot;
     private Parent testingPane;
+    @FXML
+    private ChoiceBox<String> choiceDistanceType;
     public NavigationController() {
     }
 
@@ -93,6 +96,9 @@ public class NavigationController implements Initializable {
                 }
             }
         });
+        // Inicjalizacja ChoiceBox i dodanie opcji
+        choiceDistanceType.getItems().addAll("euclidean", "hamming");
+        choiceDistanceType.setValue("euclidean");
     }
 
     private void loadData() {
@@ -130,6 +136,7 @@ public class NavigationController implements Initializable {
         System.out.println("fractal: " + fractalDimension);
     }
     private void getElementsFromNormalizedRecordAndSetInTableView(List<NormalizedRecord> listAfterDeleting){
+        updateDataInTableView.clear();
         for (int i = 0; i < listAfterDeleting.size(); i++) {
             NormalizedRecord normalizedRecord = listAfterDeleting.get(i);
             NormalizedRecord updateNormalizedRecord = new NormalizedRecord();
@@ -166,6 +173,7 @@ public class NavigationController implements Initializable {
                 deletingCellsController.setMethodButton(secondMethodButton, thirdMethodButton);
                 deletingCellsController.setTableView(tableView);
                 borderPane.setCenter(deletingPaneRoot);
+                deletingCellsController.setNormalizeButton(normalizeButton);
             }else{
                 borderPane.setCenter(deletingPaneRoot);
             }
@@ -178,7 +186,6 @@ public class NavigationController implements Initializable {
         try {
             if(testingController == null){
                 FXMLLoader loader = new FXMLLoader(main.class.getResource("testing-pane.fxml"));
-                TestingController controller = new TestingController();
                 testingPane = loader.load();
                 testingController = loader.getController();
                 borderPane.setCenter(testingPane);
@@ -207,6 +214,14 @@ public class NavigationController implements Initializable {
     @FXML
     private void resetTableView() {
         tableView.getItems().clear();
+        newTableView.getItems().clear();
+        newTableView.refresh();
+        tableView.refresh();
+        DataAfterDeleting.clear();
+        DataBeforeDeleting.clear();
+        NormalizedIntervals.clear();
+        isNormalizedTableViewExist = false;
+        isDataNormalized = false;
         loadData();
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -223,36 +238,46 @@ public class NavigationController implements Initializable {
             deletingCellsController.setDeletionPerformed(false);
             Button deleteButton = deletingCellsController.getDeleteButton();
             deleteButton.setDisable(false);
+            efficiencyButton.setDisable(true);
+            newTableView.getColumns().clear();
+            normalizeButton.setDisable(true);
+            if(isNormalizedTableViewExist){
+                borderPane.getChildren().remove(newTableView);
+                isNormalizedTableViewExist = false;
+            }
         }
     }
-    @FXML
-    private void restoreSecondMethod(){
+//    @FXML
+//    private void restoreSecondMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
 //        List<NormalizedRecord> listAfterDeleting = NormalizedIntervals.getAfterDeletingPublicNormalizedDataList();
 //        secondMethod.secondFillingMethod(listAfterDeleting);
 //        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
 //        secondMethod.resetCounts();
 //        secondMethod.resetSum();
-    }
-    @FXML
-    private void restoreThirdMethod(){
+//    }
+//    @FXML
+//    private void restoreThirdMethod(){
         //List<Record> publicDataList = dataBase.getPublicDataList();
 //        List<NormalizedRecord> listAfterDeleting = NormalizedIntervals.getAfterDeletingPublicNormalizedDataList();
 //        thirdMethod.thirdFillingMethod(listAfterDeleting);
 //        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
 //        thirdMethod.resetSumThirdMethod();
 //        thirdMethod.resetCountsThirdMethod();
-    }
+//
+
     @FXML
     private void normalizeData() throws ParseException {
+
         List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
         if (!isDataNormalized) {
             normalization.normalizeData(dataAfterDeleting);
             isDataNormalized = true;
-            test.setDisable(false);
+            efficiencyButton.setDisable(false);
             deletingPanelButton.setDisable(false);
             showInitialDataButton.setDisable(false);
             normalizeButton.setDisable(true);
+            efficiencyButton.setDisable(false);
             System.out.println("wykonanie normalizeData()");
         }
         if(isDataNormalized && !isNormalizedTableViewExist){
@@ -261,27 +286,19 @@ public class NavigationController implements Initializable {
             anchorPane.getChildren().add(newTableView);
             isNormalizedTableViewExist = true;
             System.out.println("dodano newTableView");
+            newTableView.refresh();
+
             }else{
                 System.out.println("newTableView juz istnieje");
             }
         }
     @FXML
-    private void testButton(){
-
-//        for(NormalizedRecord rec: listAfterDeleting){
-//            System.out.println(rec.getID()+" - "+ rec.getNormalizedRadius());
-//        }
-//        entropyMethod.completeMissingValue(listAfterDeleting);
-//        trainingTestingData.splitTrainAndTestData();
-//        List<NormalizedRecord> listAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
-//        Classification classification = new Classification();
-//        for(NormalizedRecord norm : listAfterEntropy){
-//           classification.classifyNewObject(norm, listAfterEntropy, 5);
-//        }
-        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
+    private void calculateEfficiency(){
         Metrics metrics = new Metrics();
-        metrics.evaluateKNNWithEntropy(normalizedIntervalsList);
-        //todo holdery do sprawdzenia pod panelem test
+        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
+        String choosedDistanceType= choiceDistanceType.getValue();
+        metrics.evaluateKNNWithEntropy(normalizedIntervalsList,choosedDistanceType,newTableView);
+
     }
     private void exportTable(TableView tableView) throws IOException {
 
@@ -296,21 +313,24 @@ public class NavigationController implements Initializable {
     }
     @FXML
     private void checkList() throws IOException {
-//        exportTable(newTableView);
+        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
+        Metrics metrics = new Metrics();
+        newTableView.refresh();
+//        exportTable(tableView);
 //        List<Record> dataBeforeDeleting = DataBeforeDeleting.getListWithoutMissingValues();
 //        List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
 //        List<NormalizedRecord> listAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
-        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
-
-        for (NormalizedRecord nr : normalizedIntervalsList) {
-            Interval[] attributes = nr.getAttributes();
-
-            // Zakładając, że radius jest pierwszym elementem w tablicy
-            Interval radiusInterval = attributes[0];
-
-            System.out.println("ID: " + nr.getID());
-            System.out.println("Radius Interval: [" + radiusInterval.getLower() + ", " + radiusInterval.getUpper() + "]");
-        }
+//        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
+//
+//        for (NormalizedRecord nr : normalizedIntervalsList) {
+//            Interval[] attributes = nr.getAttributes();
+//
+//            // Zakładając, że radius jest pierwszym elementem w tablicy
+//            Interval radiusInterval = attributes[0];
+//
+//            System.out.println("ID: " + nr.getID());
+//            System.out.println("Radius Interval: [" + radiusInterval.getLower() + ", " + radiusInterval.getUpper() + "]");
+//        }
 //
 //        System.out.println("before");
 //        for(Record nr:dataBeforeDeleting){

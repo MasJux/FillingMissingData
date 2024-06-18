@@ -1,12 +1,19 @@
 package com.example.hcvfuzzy.AlgorithmkNN;
 
+import com.example.hcvfuzzy.Controllers.NavigationController;
+import com.example.hcvfuzzy.FillingMethods.Normalization;
+import com.example.hcvfuzzy.Objects.Interval;
 import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.FillingMethods.EntropyMethod;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 
 import java.util.*;
 
 public class Metrics {
-    public void evaluateKNNWithEntropy(List<NormalizedRecord> dataset) {
+
+    public void evaluateKNNWithEntropy(List<NormalizedRecord> dataset, String distanceType,TableView<NormalizedRecord> tableView) {
         double totalACC = 0.0;
         double totalSENS = 0.0;
         double totalSPEC = 0.0;
@@ -14,25 +21,38 @@ public class Metrics {
 
         int k = 5;  // liczba najbliższych sąsiadów
 
+        List<NormalizedRecord> datasetCopy = new ArrayList<>();
+        for (NormalizedRecord record : dataset) {
+            datasetCopy.add(record.copy());
+        }
+//        System.out.println("------- BEFORE COMPLETE-------");
+//        for (NormalizedRecord record : datasetCopy) {
+//            printRecord(record);
+//        }
+
+
         // Uzupełnienie brakujących wartości danych treningowych za pomocą metody entropii
         EntropyMethod entropyMethod = new EntropyMethod();
-        entropyMethod.completeMissingValue(dataset);
-
+        entropyMethod.completeMissingValue(datasetCopy,distanceType);
+//        System.out.println("------- AFTER COMPLETE-------");
+//        for (NormalizedRecord record : datasetCopy) {
+//            printRecord(record);
+//        }
         // 10-krotna walidacja krzyżowa
         int folds = 10;
-        int foldSize = dataset.size() / folds;
+        int foldSize = datasetCopy.size() / folds;
         long seed = System.nanoTime();
-        Collections.shuffle(dataset, new Random(seed));
+        Collections.shuffle(datasetCopy, new Random(seed));
 
         for (int i = 0; i < folds; i++) {
             List<NormalizedRecord> trainData = new ArrayList<>();
             List<NormalizedRecord> testData = new ArrayList<>();
 
-            for (int j = 0; j < dataset.size(); j++) {
+            for (int j = 0; j < datasetCopy.size(); j++) {
                 if (j >= i * foldSize && j < (i + 1) * foldSize) {
-                    testData.add(dataset.get(j));
+                    testData.add(datasetCopy.get(j));
                 } else {
-                    trainData.add(dataset.get(j));
+                    trainData.add(datasetCopy.get(j));
                 }
             }
 
@@ -44,7 +64,7 @@ public class Metrics {
             for (NormalizedRecord testObject : testData) {
                 int originalDecision = testObject.getDecision();
                 originalDecisionList.add(originalDecision);
-                int classifiedDecision = classification.classifyNewObject(testObject, trainData, k);
+                int classifiedDecision = classification.classifyNewObject(testObject, trainData,distanceType ,k);
                 classifiedDecisionList.add(classifiedDecision);
             }
 
@@ -124,5 +144,16 @@ public class Metrics {
             }
         }
         return (double) tp / (tp + fp);
+    }
+    private void updateTableView(TableView<NormalizedRecord> tableView, List<NormalizedRecord> datasetCopy) {
+        ObservableList<NormalizedRecord> updatedList = FXCollections.observableArrayList(datasetCopy);
+        tableView.setItems(updatedList);
+    }
+    private void printRecord(NormalizedRecord record) {
+        Interval radius = record.getNormalizedRadius();
+        String radiusInfo = (radius != null)
+                ? "Radius Lower: " + radius.getLower() + ", Radius Upper: " + radius.getUpper()
+                : "Radius: null";
+        System.out.println("ID: " + record.getID() + ", " + radiusInfo + ", Decision: " + record.getDecision());
     }
 }
