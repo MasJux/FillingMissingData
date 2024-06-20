@@ -13,13 +13,12 @@ import java.util.*;
 
 public class Metrics {
 
-    public void evaluateKNNWithEntropy(List<NormalizedRecord> dataset, String distanceType,TableView<NormalizedRecord> tableView) {
+    public void evaluateKNNWithEntropy(List<NormalizedRecord> dataset, String distanceType, int k) {
         double totalACC = 0.0;
         double totalSENS = 0.0;
         double totalSPEC = 0.0;
         double totalPREC = 0.0;
 
-        int k = 5;  // liczba najbliższych sąsiadów
 
         List<NormalizedRecord> datasetCopy = new ArrayList<>();
         for (NormalizedRecord record : dataset) {
@@ -55,12 +54,10 @@ public class Metrics {
                     trainData.add(datasetCopy.get(j));
                 }
             }
-
             Classification classification = new Classification();
             List<Integer> originalDecisionList = new ArrayList<>();
             List<Integer> classifiedDecisionList = new ArrayList<>();
 
-            // Klasyfikacja IV-kNN dla zbioru testowego
             for (NormalizedRecord testObject : testData) {
                 int originalDecision = testObject.getDecision();
                 originalDecisionList.add(originalDecision);
@@ -69,7 +66,7 @@ public class Metrics {
             }
 
             double ACC = calculateAccuracy(originalDecisionList, classifiedDecisionList);
-            double SENS = calculateSensivity(originalDecisionList, classifiedDecisionList);
+            double SENS = calculateSensitivity(originalDecisionList, classifiedDecisionList);
             double SPEC = calculateSpecificity(originalDecisionList, classifiedDecisionList);
             double PREC = calculatePrecision(originalDecisionList, classifiedDecisionList);
 
@@ -84,10 +81,12 @@ public class Metrics {
         double avgSPEC = totalSPEC / folds;
         double avgPREC = totalPREC / folds;
 
+        System.out.println("Miara odleglosci: "+distanceType+" || Ilosc sasiadow: "+k);
         System.out.println("srednia dokladnosc (ACC): " + avgACC);
         System.out.println("srednia czulosc (SENS): " + avgSENS);
         System.out.println("srednia swoistosc (SPEC): " + avgSPEC);
         System.out.println("srednia precyzja (PREC): " + avgPREC);
+        System.out.println("--------------------------------------");
     }
 
     //metryka dokładności
@@ -108,7 +107,7 @@ public class Metrics {
     }
 
     //metryka czułości
-    public static double calculateSensivity(List<Integer> originalDecisionList, List<Integer> classifiedDecisionList) {
+    public static double calculateSensitivity(List<Integer> originalDecisionList, List<Integer> classifiedDecisionList) {
         int tp = 0, fn = 0;
         for (int i = 0; i < originalDecisionList.size(); i++) {
             if (originalDecisionList.get(i) == 2 && classifiedDecisionList.get(i) == 2) {
@@ -120,7 +119,7 @@ public class Metrics {
         return (double) tp / (tp + fn);
     }
 
-    //metryka specyficzności
+    //metryka swoistości
     public static double calculateSpecificity(List<Integer> originalDecisionList, List<Integer> classifiedDecisionList) {
         int tn = 0, fp = 0;
         for (int i = 0; i < originalDecisionList.size(); i++) {

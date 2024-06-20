@@ -66,22 +66,15 @@ public class EntropyMethod {
         List<Double> upperList = new ArrayList<>();
         List<Double> negationLowerList = new ArrayList<>();
         List<Double> negationUpperList = new ArrayList<>();
-        int id = objectWithoutMissingAttribute.getID();
-        System.out.println("---------------------------------");
-        System.out.println("---------------------------------");
-        System.out.println("ID obiektu: "+id);
+
 //z pełnego rekordu wyciągnięcie przedziałow i wrzucenie ich do list
         for (Interval interval : attributesWithoutMissingValue) {
             lowerList.add(interval.getLower());
             upperList.add(interval.getUpper());
-            System.out.println("---------------------------------");
-            System.out.println("Przed negacja:");
-            System.out.println("["+interval.getLower()+"; "+ interval.getUpper()+"]");
+
             Interval negation = interval.negation();
             negationLowerList.add(negation.getLower());
             negationUpperList.add(negation.getUpper());
-            System.out.println("Po negacji:");
-            System.out.println("["+interval.negation().getLower()+"; "+ interval.negation().getUpper()+"]");
         }
 //obliczenie znormalizowanej odl. euklidesowej
         for (int i = 0; i < n; i++) {

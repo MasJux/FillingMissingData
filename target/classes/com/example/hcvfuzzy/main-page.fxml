@@ -25,7 +25,7 @@
             <Insets />
          </BorderPane.margin>
          <children>
-            <Button layoutX="562.0" layoutY="463.0" mnemonicParsing="false" onAction="#resetTableView" prefHeight="30.0" prefWidth="80.0" text="Reset">
+            <Button layoutX="611.0" layoutY="447.0" mnemonicParsing="false" onAction="#resetTableView" prefHeight="30.0" prefWidth="80.0" text="Reset">
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -34,11 +34,10 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="normalizeButton" disable="true" layoutX="36.0" layoutY="449.0" mnemonicParsing="false" onAction="#normalizeData" prefHeight="60.0" prefWidth="120.0" text="Normalize Data" />
-            <Button fx:id="efficiencyButton" disable="true" layoutX="183.0" layoutY="448.0" mnemonicParsing="false" onAction="#calculateEfficiency" prefHeight="60.0" prefWidth="120.0" text="Calculate efficiency" />
-            <Button fx:id="showInitialDataButton" disable="true" layoutX="544.0" layoutY="436.0" mnemonicParsing="false" onAction="#showInitialData" text="Show initial data" />
-            <Button layoutX="570.0" layoutY="509.0" mnemonicParsing="false" onAction="#checkList" text="check list" />
-            <ChoiceBox fx:id="choiceDistanceType" layoutX="329.0" layoutY="449.0" prefWidth="150.0" />
+            <Button fx:id="normalizeButton" disable="true" layoutX="24.0" layoutY="448.0" mnemonicParsing="false" onAction="#normalizeData" prefHeight="60.0" prefWidth="120.0" text="Normalize Data" />
+            <Button fx:id="efficiencyButton" disable="true" layoutX="163.0" layoutY="448.0" mnemonicParsing="false" onAction="#calculateEfficiency" prefHeight="60.0" prefWidth="120.0" text="Calculate efficiency" />
+            <ChoiceBox fx:id="choiceDistanceType" layoutX="297.0" layoutY="450.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="choiceNeighbors" layoutX="481.0" layoutY="450.0" prefHeight="25.0" prefWidth="98.0" />
          </children></AnchorPane>
    </center>
 </BorderPane>

@@ -79,6 +79,8 @@ public class NavigationController implements Initializable {
     private Parent testingPane;
     @FXML
     private ChoiceBox<String> choiceDistanceType;
+    @FXML
+    private ChoiceBox<Integer> choiceNeighbors;
     public NavigationController() {
     }
 
@@ -99,6 +101,9 @@ public class NavigationController implements Initializable {
         // Inicjalizacja ChoiceBox i dodanie opcji
         choiceDistanceType.getItems().addAll("euclidean", "hamming");
         choiceDistanceType.setValue("euclidean");
+
+        choiceNeighbors.getItems().addAll(5,6,7,8,9,10,11,12,13,14,15);
+        choiceNeighbors.setValue(5);
     }
 
     private void loadData() {
@@ -275,7 +280,7 @@ public class NavigationController implements Initializable {
             isDataNormalized = true;
             efficiencyButton.setDisable(false);
             deletingPanelButton.setDisable(false);
-            showInitialDataButton.setDisable(false);
+//            showInitialDataButton.setDisable(false);
             normalizeButton.setDisable(true);
             efficiencyButton.setDisable(false);
             System.out.println("wykonanie normalizeData()");
@@ -296,8 +301,9 @@ public class NavigationController implements Initializable {
     private void calculateEfficiency(){
         Metrics metrics = new Metrics();
         List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
-        String choosedDistanceType= choiceDistanceType.getValue();
-        metrics.evaluateKNNWithEntropy(normalizedIntervalsList,choosedDistanceType,newTableView);
+        String choosedDistanceType = choiceDistanceType.getValue();
+        Integer choiceCountOfNeighbors = choiceNeighbors.getValue();
+        metrics.evaluateKNNWithEntropy(normalizedIntervalsList,choosedDistanceType,choiceCountOfNeighbors);
 
     }
     private void exportTable(TableView tableView) throws IOException {
