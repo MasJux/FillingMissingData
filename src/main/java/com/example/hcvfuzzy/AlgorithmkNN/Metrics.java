@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Metrics {
 
-    public void evaluateKNNWithEntropy(List<NormalizedRecord> dataset, String distanceType, int k) {
+    public void evaluateKNNWithEntropy(List<NormalizedRecord> dataset, String completeMissingValuesDistanceType, String classificationDistanceType, int k) {
         double totalACC = 0.0;
         double totalSENS = 0.0;
         double totalSPEC = 0.0;
@@ -24,19 +24,11 @@ public class Metrics {
         for (NormalizedRecord record : dataset) {
             datasetCopy.add(record.copy());
         }
-//        System.out.println("------- BEFORE COMPLETE-------");
-//        for (NormalizedRecord record : datasetCopy) {
-//            printRecord(record);
-//        }
-
 
         // Uzupełnienie brakujących wartości danych treningowych za pomocą metody entropii
         EntropyMethod entropyMethod = new EntropyMethod();
-        entropyMethod.completeMissingValue(datasetCopy,distanceType);
-//        System.out.println("------- AFTER COMPLETE-------");
-//        for (NormalizedRecord record : datasetCopy) {
-//            printRecord(record);
-//        }
+        entropyMethod.completeMissingValue(datasetCopy,completeMissingValuesDistanceType);
+
         // 10-krotna walidacja krzyżowa
         int folds = 10;
         int foldSize = datasetCopy.size() / folds;
@@ -61,7 +53,7 @@ public class Metrics {
             for (NormalizedRecord testObject : testData) {
                 int originalDecision = testObject.getDecision();
                 originalDecisionList.add(originalDecision);
-                int classifiedDecision = classification.classifyNewObject(testObject, trainData,distanceType ,k);
+                int classifiedDecision = classification.classifyNewObject(testObject, trainData, classificationDistanceType ,k);
                 classifiedDecisionList.add(classifiedDecision);
             }
 
@@ -81,11 +73,12 @@ public class Metrics {
         double avgSPEC = totalSPEC / folds;
         double avgPREC = totalPREC / folds;
 
-        System.out.println("Miara odleglosci: "+distanceType+" || Ilosc sasiadow: "+k);
-        System.out.println("srednia dokladnosc (ACC): " + avgACC);
-        System.out.println("srednia czulosc (SENS): " + avgSENS);
-        System.out.println("srednia swoistosc (SPEC): " + avgSPEC);
-        System.out.println("srednia precyzja (PREC): " + avgPREC);
+        System.out.println("Liczba sąsiadów: "+k);
+        System.out.println("Miara odleglosci(uzupełnianie): "+completeMissingValuesDistanceType+" || Miara odleglosci(klasyfikacja): "+classificationDistanceType);
+        System.out.println("średnia dokładność (ACC): " + String.format("%.7f", avgACC));
+        System.out.println("średnia czułość (SENS): " + String.format("%.7f", avgSENS));
+        System.out.println("średnia swoistość (SPEC): " + String.format("%.7f", avgSPEC));
+        System.out.println("średnia precyzja (PREC): " + String.format("%.7f", avgPREC));
         System.out.println("--------------------------------------");
     }
 
@@ -143,16 +136,5 @@ public class Metrics {
             }
         }
         return (double) tp / (tp + fp);
-    }
-    private void updateTableView(TableView<NormalizedRecord> tableView, List<NormalizedRecord> datasetCopy) {
-        ObservableList<NormalizedRecord> updatedList = FXCollections.observableArrayList(datasetCopy);
-        tableView.setItems(updatedList);
-    }
-    private void printRecord(NormalizedRecord record) {
-        Interval radius = record.getNormalizedRadius();
-        String radiusInfo = (radius != null)
-                ? "Radius Lower: " + radius.getLower() + ", Radius Upper: " + radius.getUpper()
-                : "Radius: null";
-        System.out.println("ID: " + record.getID() + ", " + radiusInfo + ", Decision: " + record.getDecision());
     }
 }

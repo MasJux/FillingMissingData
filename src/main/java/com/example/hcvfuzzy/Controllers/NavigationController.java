@@ -63,22 +63,19 @@ public class NavigationController implements Initializable {
     boolean isNormalizedTableViewExist = false;
     Normalization normalization = new Normalization();
     loadDataBase dataBase = new loadDataBase();
-    ExportTableView exportTableView;
-    DeletingCellsController buttonsController = new DeletingCellsController();
     private DeletingCellsController deletingCellsController;
     private TestingController testingController;
-    private EntropyMethod entropyMethod = new EntropyMethod();
     TableView<Record> tableView;
     TableView<NormalizedRecord> newTableView;
-    List<Record> publicDataList = dataBase.getPublicDataList();
-    private final ObservableList<NormalizedRecord> updateDataInTableView = FXCollections.observableArrayList();
     private Record selectedRecord;
     private int id;
     private int radius, texture, perimeter, area, smoothness, compactness, concavity, concavePoints, symmetry, fractalDimension;
     private Parent deletingPaneRoot;
     private Parent testingPane;
     @FXML
-    private ChoiceBox<String> choiceDistanceType;
+    private ChoiceBox<String> missingValuesDistanceType;
+    @FXML
+    private ChoiceBox<String> classificationDistanceType;
     @FXML
     private ChoiceBox<Integer> choiceNeighbors;
     public NavigationController() {
@@ -99,10 +96,13 @@ public class NavigationController implements Initializable {
             }
         });
         // Inicjalizacja ChoiceBox i dodanie opcji
-        choiceDistanceType.getItems().addAll("euclidean", "hamming");
-        choiceDistanceType.setValue("euclidean");
+        missingValuesDistanceType.getItems().addAll("euclidean", "hamming");
+        missingValuesDistanceType.setValue("euclidean");
 
-        choiceNeighbors.getItems().addAll(5,6,7,8,9,10,11,12,13,14,15);
+        classificationDistanceType.getItems().addAll("euclidean", "hamming");
+        classificationDistanceType.setValue("euclidean");
+
+        choiceNeighbors.getItems().addAll(5,7,9,11,13,15);
         choiceNeighbors.setValue(5);
     }
 
@@ -140,30 +140,6 @@ public class NavigationController implements Initializable {
         System.out.println("symmetry: " + symmetry);
         System.out.println("fractal: " + fractalDimension);
     }
-    private void getElementsFromNormalizedRecordAndSetInTableView(List<NormalizedRecord> listAfterDeleting){
-        updateDataInTableView.clear();
-        for (int i = 0; i < listAfterDeleting.size(); i++) {
-            NormalizedRecord normalizedRecord = listAfterDeleting.get(i);
-            NormalizedRecord updateNormalizedRecord = new NormalizedRecord();
-
-            updateNormalizedRecord.setID(normalizedRecord.getID());
-            updateNormalizedRecord.setNormalizedRadius(normalizedRecord.getNormalizedRadius());
-            updateNormalizedRecord.setNormalizedTexture(normalizedRecord.getNormalizedTexture());
-            updateNormalizedRecord.setNormalizedPerimeter(normalizedRecord.getNormalizedPerimeter());
-            updateNormalizedRecord.setNormalizedArea(normalizedRecord.getNormalizedArea());
-            updateNormalizedRecord.setNormalizedSmoothness(normalizedRecord.getNormalizedSmoothness());
-            updateNormalizedRecord.setNormalizedCompactness(normalizedRecord.getNormalizedCompactness());
-            updateNormalizedRecord.setNormalizedConcavity(normalizedRecord.getNormalizedConcavity());
-            updateNormalizedRecord.setNormalizedConcavePoints(normalizedRecord.getNormalizedConcavePoints());
-            updateNormalizedRecord.setNormalizedSymmetry(normalizedRecord.getNormalizedSymmetry());
-            updateNormalizedRecord.setNormalizedFractalDimension(normalizedRecord.getNormalizedFractalDimension());
-            updateNormalizedRecord.setDecision(normalizedRecord.getDecision());
-
-            updateDataInTableView.add(updateNormalizedRecord);
-        }
-        newTableView.setItems(updateDataInTableView);
-        newTableView.refresh();
-    }
     @FXML
     private void home(MouseEvent event) {
         borderPane.setCenter(anchorPane);
@@ -175,7 +151,6 @@ public class NavigationController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(main.class.getResource("deleting-pane.fxml"));
                 deletingPaneRoot = loader.load();
                 deletingCellsController = loader.getController();
-                deletingCellsController.setMethodButton(secondMethodButton, thirdMethodButton);
                 deletingCellsController.setTableView(tableView);
                 borderPane.setCenter(deletingPaneRoot);
                 deletingCellsController.setNormalizeButton(normalizeButton);
@@ -252,24 +227,6 @@ public class NavigationController implements Initializable {
             }
         }
     }
-//    @FXML
-//    private void restoreSecondMethod(){
-        //List<Record> publicDataList = dataBase.getPublicDataList();
-//        List<NormalizedRecord> listAfterDeleting = NormalizedIntervals.getAfterDeletingPublicNormalizedDataList();
-//        secondMethod.secondFillingMethod(listAfterDeleting);
-//        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
-//        secondMethod.resetCounts();
-//        secondMethod.resetSum();
-//    }
-//    @FXML
-//    private void restoreThirdMethod(){
-        //List<Record> publicDataList = dataBase.getPublicDataList();
-//        List<NormalizedRecord> listAfterDeleting = NormalizedIntervals.getAfterDeletingPublicNormalizedDataList();
-//        thirdMethod.thirdFillingMethod(listAfterDeleting);
-//        getElementsFromNormalizedRecordAndSetInTableView(listAfterDeleting);
-//        thirdMethod.resetSumThirdMethod();
-//        thirdMethod.resetCountsThirdMethod();
-//
 
     @FXML
     private void normalizeData() throws ParseException {
@@ -301,63 +258,10 @@ public class NavigationController implements Initializable {
     private void calculateEfficiency(){
         Metrics metrics = new Metrics();
         List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
-        String choosedDistanceType = choiceDistanceType.getValue();
+        String completingValuesDistanceType = missingValuesDistanceType.getValue();
+        String classificateDistanceType = classificationDistanceType.getValue();
         Integer choiceCountOfNeighbors = choiceNeighbors.getValue();
-        metrics.evaluateKNNWithEntropy(normalizedIntervalsList,choosedDistanceType,choiceCountOfNeighbors);
-
-    }
-    private void exportTable(TableView tableView) throws IOException {
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
-
-        File file = fileChooser.showSaveDialog(tableView.getScene().getWindow());
-
-        if (file != null) {
-            exportTableView.exportToExcel(tableView, "FXUserData", file.getAbsolutePath());
-        }
-    }
-    @FXML
-    private void checkList() throws IOException {
-        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
-        Metrics metrics = new Metrics();
-        newTableView.refresh();
-//        exportTable(tableView);
-//        List<Record> dataBeforeDeleting = DataBeforeDeleting.getListWithoutMissingValues();
-//        List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
-//        List<NormalizedRecord> listAfterEntropy = DataAfterEntropyFilling.getDataAfterEntropyFilling();
-//        List<NormalizedRecord> normalizedIntervalsList = NormalizedIntervals.getNormalizedIntervalsList();
-//
-//        for (NormalizedRecord nr : normalizedIntervalsList) {
-//            Interval[] attributes = nr.getAttributes();
-//
-//            // Zakładając, że radius jest pierwszym elementem w tablicy
-//            Interval radiusInterval = attributes[0];
-//
-//            System.out.println("ID: " + nr.getID());
-//            System.out.println("Radius Interval: [" + radiusInterval.getLower() + ", " + radiusInterval.getUpper() + "]");
-//        }
-//
-//        System.out.println("before");
-//        for(Record nr:dataBeforeDeleting){
-//            System.out.println("ID: "+nr.getID()+" "+nr.getRadius());
-//        }
-//        System.out.println("after");
-//        for(Record nr:dataAfterDeleting){
-//            System.out.println("ID: "+nr.getID()+" "+nr.getRadius());
-//        }
-//        System.out.println("normalized intervals");
-//        for(NormalizedRecord nr:normalizedIntervalsList){
-//            System.out.println("ID: "+nr.getID()+" "+ Arrays.toString(nr.getNormalizedRadius()));
-//        }
-//        System.out.println("DELETING");
-//        for(NormalizedRecord nr:listAfterDeleting){
-//            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
-//        }
-//        System.out.println("ENTROPY");
-//        for(NormalizedRecord nr:listAfterEntropy){
-//            System.out.println("ID: "+nr.getID()+" "+Arrays.deepToString(nr.getAttributes()));
-//        }
+        metrics.evaluateKNNWithEntropy(normalizedIntervalsList,completingValuesDistanceType, classificateDistanceType, choiceCountOfNeighbors);
 
     }
     @FXML
@@ -366,28 +270,10 @@ public class NavigationController implements Initializable {
         System.out.println(normalizedDataList);
         for(int i = 0; i<699;i++){
             NormalizedRecord nr = normalizedDataList.get(i);
-            System.out.println(nr.getID());
-            System.out.println(nr.getNormalizedRadius());
+
             System.out.println(nr.getNormalizedTexture());
         }
     }
-    /**
-     * ustawienie metod uzupełniania pod znormalizowane dane (done)
-     * ew. dać opcje dla normalnych i znormalizowanych
-     * działanie resetowania
-     * najprawdopodobniej usunięcie edytowania
-     * ustawienie unikalnych randomów dla usuwania
-     * metoda wyliczania entropii dla usuwania (artykuł)
-     * druga metoda entropii
-     * podłączenie 3 Pane'a pod wykresy (kolumny, liniowe)
-     * ew. analiza odchylenia standardowego 
-     */
-
-    /**
-     *         List<NormalizedRecord> normalizedDataList = NormalizedDataBeforeDeletingHolder.getDefaultPublicNormalizedDataList();
-     *         System.out.println(normalizedDataList); - lista obiektów zawierająca znormalizowane wartości BEZ USUNIĘĆ.
-     * deletingCellsController.getAfterDeletingPublicNormalizedDataList(); - lista obiektów zaweirająca znormalizowane wartości Z USUNIĘCIAMI.
-     */
 }
 
 

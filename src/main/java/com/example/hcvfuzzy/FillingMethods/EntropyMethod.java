@@ -119,14 +119,3 @@ public class EntropyMethod {
     }
 
 }
-
- /** TODO
- * uporządkować metody w normalizedRecord i wykonać:
- * (Jezeli mamy obiekt w ktorym brakuje radius to przy przeszukiwaniu odrzucamy wszystkie obiekty w których jest brak innych
- *      atrybutów np.
- *      obiekt z brakiem radius - 0
- *      odrzucamy obiekt z brakiem concavity - 0)
- * Różne entropie lub rozne miary (jako element badawczy) mozna odwrocic ten distance zeby nie szukalo najmniejszego tylko
- * najwieksze pradopodobienstwo
- *
- */

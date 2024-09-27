@@ -1,8 +1,7 @@
 package com.example.hcvfuzzy.Objects;
 
 public class NormalizedRecord {
-    private int ID;
-    private Interval NormalizedRadius;
+    private int Radius;
     private Interval NormalizedTexture;
     private Interval NormalizedPerimeter;
     private Interval NormalizedArea;
@@ -19,8 +18,6 @@ public class NormalizedRecord {
     }
 
     public NormalizedRecord(NormalizedRecord normalizedRecord) {
-        this.ID = normalizedRecord.ID;
-        this.NormalizedRadius = normalizedRecord.NormalizedRadius;
         this.NormalizedTexture = normalizedRecord.NormalizedTexture;
         this.NormalizedPerimeter = normalizedRecord.NormalizedPerimeter;
         this.NormalizedArea = normalizedRecord.NormalizedArea;
@@ -34,8 +31,6 @@ public class NormalizedRecord {
     }
     public NormalizedRecord copy() {
         NormalizedRecord copy = new NormalizedRecord();
-        copy.setID(this.getID());
-        copy.setNormalizedRadius(this.getNormalizedRadius());
         copy.setNormalizedTexture(this.getNormalizedTexture());
         copy.setNormalizedPerimeter(this.getNormalizedPerimeter());
         copy.setNormalizedArea(this.getNormalizedArea());
@@ -54,8 +49,6 @@ public class NormalizedRecord {
 
     public Interval getAttributeValue(String attributeName) {
         switch (attributeName) {
-            case "radius":
-                return NormalizedRadius;
             case "texture":
                 return NormalizedTexture;
             case "perimeter":
@@ -81,9 +74,6 @@ public class NormalizedRecord {
 
     public void setAttributeValue(String attributeName, Interval normalizedValue) {
         switch (attributeName) {
-            case "radius":
-                setNormalizedRadius(normalizedValue);
-                break;
             case "texture":
                 setNormalizedTexture(normalizedValue);
                 break;
@@ -117,7 +107,6 @@ public class NormalizedRecord {
     }
     public Interval[] getAttributes() {
         return new Interval[]{
-                NormalizedRadius,
                 NormalizedTexture,
                 NormalizedPerimeter,
                 NormalizedArea,
@@ -140,32 +129,9 @@ public class NormalizedRecord {
         return false;
 
     }
-    public NormalizedRecord complement(){
-        String[] attributeNames = {
-                "radius",
-                "texture",
-                "perimeter",
-                "area",
-                "smoothness",
-                "compactness",
-                "concavity",
-                "concavePoints",
-                "symmetry",
-                "fractalDimension"
-        };
-        NormalizedRecord newNormalizedRecord = new NormalizedRecord();
-        for(String name:attributeNames){
-            Interval intervalValues = getAttributeValue(name);
-
-//            System.out.println(Arrays.toString(intervalValues) + name);
-            newNormalizedRecord.setAttributeValue(name,intervalValues);
-        }
-        return newNormalizedRecord;
-    }
     //sprawdz w ktory atrybut jest brakujący i wypisz jego nazwe
     public String getMissingAttributeName() {
         String[] attributeNames = {
-                "radius",
                 "texture",
                 "perimeter",
                 "area",
@@ -188,20 +154,12 @@ public class NormalizedRecord {
         return null; // Zwraca null, jeśli nie znaleziono brakującej danej
     }
 
-    public int getID() {
-        return ID;
+    public int getRadius() {
+        return Radius;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public Interval getNormalizedRadius() {
-        return NormalizedRadius;
-    }
-
-    public void setNormalizedRadius(Interval normalizedRadius) {
-        NormalizedRadius = normalizedRadius;
+    public void setRadius(int radius) {
+        Radius = radius;
     }
 
     public Interval getNormalizedTexture() {

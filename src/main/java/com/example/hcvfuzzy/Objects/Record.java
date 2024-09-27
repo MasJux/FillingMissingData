@@ -18,7 +18,6 @@ public class Record {
     }
     public Record copy() {
         Record copy = new Record();
-        copy.setID(this.getID());
         copy.setRadius(this.getRadius());
         copy.setTexture(this.getTexture());
         copy.setPerimeter(this.getPerimeter());
@@ -33,8 +32,7 @@ public class Record {
         return copy;
     }
 
-    public Record(int ID, int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension, int decision) {
-        this.ID = ID;
+    public Record(int radius, int texture, int perimeter, int area, int smoothness, int compactness, int concavity, int concavePoints, int symmetry, int fractalDimension, int decision) {
         this.Radius = radius;
         this.Texture = texture;
         this.Perimeter = perimeter;
@@ -48,7 +46,6 @@ public class Record {
         this.Decision = decision;
     }
     public Record(Record record)    {
-        this.ID = record.ID;
         this.Radius = record.Radius;
         this.Texture = record.Texture;
         this.Perimeter = record.Perimeter;
@@ -190,48 +187,7 @@ public class Record {
         FractalDimension = fractalDimension;
     }
 }
-//    public void normalizeData(List<Record> dataList) throws IllegalAccessException, NoSuchFieldException {
-//
-//        List<String> FieldsArray = new ArrayList<>(Arrays.asList("Radius","Texture"));
-//
-//        Class<?> objClass = getClass();
-//
-//        // Get all fields of the class including private fields
-//        Field[] fields = objClass.getDeclaredFields();
-//
-//        // Iterate over the fields
-//        for (Field field : fields) {
-//            int minRecordObject= Integer.MAX_VALUE;
-//            int maxRecordObject= Integer.MIN_VALUE;
-//            field.setAccessible(true); // Make the private field accessible
-//            if(FieldsArray.contains(field.getName())){
-//                Field field1 = objClass.getDeclaredField("Normalized"+field.getName());
-//                int value = Integer.parseInt(field.get(this).toString();
-//                if (value < minRecordObject) {
-//                    minRecordObject = value;
-//                }
-//                if (value > maxRecordObject) {
-//                    maxRecordObject = value;
-//                }
-//            }
-//            Object value = field.get(this); // Get the value of the field from the object
-//            System.out.println(field.getName() + ": " + value);
-//        }
-//
-//
-//
-//
-//        for (int i = 0; i < dataList.size(); i++) {
-//            Record record = dataList.get(i);
-//
-//            int recordObject = extractor.apply(dataList.get(i));
-//            //System.out.println("recordObject: "+recordObject);
-//            System.out.println("Max: " + maxRecordObject + " - Min: " + minRecordObject);
-//            double normalized = (((double) recordObject - minRecordObject) / (maxRecordObject - minRecordObject));
-//            String formattedValue = String.format("%.5f", normalized);
-//            System.out.println(i + 1 + " - " + formattedValue);
-//        }
-//    }
+
 
 
 

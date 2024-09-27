@@ -71,9 +71,6 @@ public class Classification {
             sumOfSquares += maxDiffSquared;
             n++;
         }
-//        System.out.println("missingAttributeLowerList: "+missingAttributeLowerList);
-//        System.out.println("missingAttributeUpperList: "+missingAttributeUpperList);
-
         return Math.sqrt(sumOfSquares/n);
     }
     private static double calculateHammingDistance(NormalizedRecord newObject,NormalizedRecord trainedRecord) {

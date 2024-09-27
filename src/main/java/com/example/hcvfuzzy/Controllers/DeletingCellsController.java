@@ -2,11 +2,7 @@ package com.example.hcvfuzzy.Controllers;
 
 import com.example.hcvfuzzy.Holders.DataAfterDeleting;
 import com.example.hcvfuzzy.Holders.DataBeforeDeleting;
-import com.example.hcvfuzzy.Holders.NormalizedIntervals;
-import com.example.hcvfuzzy.Objects.NormalizedRecord;
 import com.example.hcvfuzzy.Objects.Record;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,16 +15,13 @@ public class DeletingCellsController implements Initializable {
     private boolean deletionFlag = false;
     int amountRows;
     int amountCells;
-    private Button secondMethodButton, thirdMethodButton, normalizeButton;
+    private Button normalizeButton;
     @FXML
     private Label infoLabel;
     @FXML
     private Button deleteButton;
-
-
-    private TableView<NormalizedRecord> newTableView;
     private TableView<Record> tableView;
-    NormalizedIntervals normalizedIntervals;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -38,11 +31,6 @@ public class DeletingCellsController implements Initializable {
         this.normalizeButton = normalizeButton;
     }
 
-    public void setMethodButton(Button secondMethodButton, Button thirdMethodButton) {
-        this.secondMethodButton = secondMethodButton;
-        this.thirdMethodButton = thirdMethodButton;
-
-    }
     public void setTableView(TableView<Record> tableView) {
         this.tableView = tableView;
     }
@@ -57,7 +45,6 @@ public class DeletingCellsController implements Initializable {
         dialog.setHeaderText(null);
         dialog.setContentText("Wybierz procent:");
 
-        // Otrzymaj wybór użytkownika
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             String choice = result.get();
@@ -93,7 +80,6 @@ public class DeletingCellsController implements Initializable {
         Random random = new Random();
         ArrayList<Integer> listOfRows = new ArrayList<>();
 
-        // Copy records to DataBeforeDeleting
         copyDataBeforeDeleting();
 
         for (int i = 0; i < amountRows; i++) {
@@ -114,7 +100,6 @@ public class DeletingCellsController implements Initializable {
 
                 int newValue = -1;
                 switch (columnIndex) {
-                    case 1 -> record.setRadius(newValue);
                     case 2 -> record.setTexture(newValue);
                     case 3 -> record.setPerimeter(newValue);
                     case 4 -> record.setArea(newValue);
@@ -154,8 +139,6 @@ public class DeletingCellsController implements Initializable {
     private void updateRecords() {
         for (Record record : tableView.getItems()) {
             Record recordAfterDeleting = new Record();
-            recordAfterDeleting.setID(record.getID());
-            recordAfterDeleting.setRadius(record.getRadius());
             recordAfterDeleting.setTexture(record.getTexture());
             recordAfterDeleting.setPerimeter(record.getPerimeter());
             recordAfterDeleting.setArea(record.getArea());
@@ -168,18 +151,10 @@ public class DeletingCellsController implements Initializable {
             recordAfterDeleting.setDecision(record.getDecision());
 
         }
-
         for (Record afterDeletingRecord : tableView.getItems()) {
             DataAfterDeleting.addDeletedRecord(afterDeletingRecord);
         }
     }
-//        List<Record> dataAfterDeleting = DataAfterDeleting.getListWithMissingValues();
-//        for(Record rec: dataAfterDeleting){
-//            System.out.println(rec.getID());
-//            System.out.println(rec.getRadius());
-//        }
-//        System.out.println(dataAfterDeleting.size()+" size()");
-
 
 //Blokowanie DeleteButton
     public boolean isDeletionPerformed() {

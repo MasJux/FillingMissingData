@@ -53,17 +53,16 @@ public class TestingController implements Initializable {
             secondVBox.getChildren().add(label);
         }
         for(NormalizedRecord nr: normalizedIntervalsList){
-            int id  = nr.getID();
-            Interval radius = nr.getNormalizedRadius();
+
 
             Interval texture = nr.getNormalizedTexture();
             Interval perimeter = nr.getNormalizedPerimeter();
             Interval area = nr.getNormalizedArea();
             int decision = nr.getDecision();
 
-            Label label = new Label(id + " "
-                    + (radius != null ? radius.getLower() : "null") + " "
-                    + (radius != null ? radius.getUpper() : "null")
+            Label label = new Label( " "
+                    + (texture != null ? texture.getLower() : "null") + " "
+                    + (texture != null ? texture.getUpper() : "null")
                     + ", decision: " + decision);
 
             // Wyświetlanie etykiety (przykładowo w konsoli)

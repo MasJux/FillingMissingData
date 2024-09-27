@@ -44,13 +44,6 @@ public class loadDataBase extends TableView<String> {
         }
     }
 
-//    private int parseCell(String cell) {
-//        if (cell.equals("?")) {
-//            return 1; // Zamień znak "?" na 0
-//        } else {
-//            return Integer.parseInt(cell); // Konwertuj tekst na int
-//        }
-//    }
     public List<Record> getPublicDataList() {
         return publicDataList;
     }
@@ -62,13 +55,14 @@ public class loadDataBase extends TableView<String> {
 
         setTableView(tableView);
 
-        TableColumn<Record, Integer> idColumn = new TableColumn<>("ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        tableView.getColumns().add(idColumn);
+        String[] columnLabels = {"ID", "Clump Thickness", "Uniformity of Cell Size", "Uniformity of Cell Shape",
+                                "Marginal Adhesion", "Single Epithelial Cell Size", "Bare Nuclei", "Bland Chromatin",
+                                "Normal Nucleoli", "Mitoses", "Decision"};
 
         //ustawienie nazwy kolumny z pierwszego wiersza
-        for (String columnName : firstRow) {
-            TableColumn<Record, String> column = new TableColumn<>(columnName);
+        for (int i = 0; i < firstRow.length; i++) {
+            String columnName = firstRow[i];
+            TableColumn<Record, String> column = new TableColumn<>(columnLabels[i]);
             tableView.getColumns().add(column);
             column.setCellValueFactory(new PropertyValueFactory<>(columnName));
         }
@@ -87,7 +81,6 @@ public class loadDataBase extends TableView<String> {
         for (int i = 1; i < lines.size(); i++) {
             String[] cells = lines.get(i).split(delimiter);
             Record record = new Record(
-                    i,
                     parseCellOrMean(cells[0], columnMeans[0]),
                     parseCellOrMean(cells[1], columnMeans[1]),
                     parseCellOrMean(cells[2], columnMeans[2]),
@@ -100,7 +93,6 @@ public class loadDataBase extends TableView<String> {
                     parseCellOrMean(cells[9], columnMeans[9]),
                     parseCellOrMean(cells[10], columnMeans[10])
             );
-            record.getRadius();
             record.getTexture();
             record.getPerimeter();
             record.getArea();
